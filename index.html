@@ -397,6 +397,19 @@
   .letterwrap .tip{color:var(--muted)}
   #hotMail::after{animation-delay:-.9s}
 
+  /* musique */
+  .musicbtn{position:fixed;top:calc(env(safe-area-inset-top) + 10px);right:calc(env(safe-area-inset-right) + 10px);z-index:85;width:42px;height:42px;border-radius:50%;
+    border:1px solid rgba(232,190,104,.45);background:rgba(14,38,33,.82);font-size:19px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.35);display:grid;place-items:center;
+    animation:mbeat 1.2s ease-in-out infinite}
+  .musicbtn.off{animation:none;opacity:.75}
+  @keyframes mbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+  .songname{position:fixed;top:calc(env(safe-area-inset-top) + 58px);right:calc(env(safe-area-inset-right) + 10px);z-index:85;pointer-events:none;
+    font-size:12px;font-weight:700;color:var(--gold2);background:rgba(14,38,33,.85);border:1px solid rgba(232,190,104,.3);padding:5px 10px;border-radius:999px;opacity:0}
+  .songname.show{animation:songIn 3.6s ease forwards}
+  @keyframes songIn{0%{opacity:0;transform:translateY(-6px)}12%,80%{opacity:1;transform:none}100%{opacity:0}}
+  .moon{right:70px !important}
+  .room-title{margin-right:56px}
+
   @media (prefers-reduced-motion:reduce){.tile.today{animation:none;box-shadow:0 0 0 3px var(--gold)}#snow{display:none}}
 </style>
 </head>
@@ -659,6 +672,7 @@
 </div>
 <div class="room" id="room"><div class="room-bar"><button id="roomBack">← Retour</button><div class="room-title" id="roomTitle"></div></div><div class="room-body" id="roomBody"></div></div>
 <button class="homebtn" id="homeBtn" aria-label="Retour à la maison">🏠</button>
+<button class="musicbtn" id="musicBtn" aria-label="Musique">🎵</button><div class="songname" id="songName"></div>
 <div class="toast" id="toast"></div>
 <div class="backdrop" id="modal" role="dialog" aria-modal="true">
   <div class="sheet" id="sheet"></div>
@@ -1553,6 +1567,105 @@ function roomLettre(body){
     hearts(b); toast(ukoN % 10 === 0 ? "Uko t'adore. Officiellement. 💕" : UKO[Math.floor(Math.random() * UKO.length)]);
   });
   if(location.hash === "#apercu"){ alive = false; intro.classList.add("gone"); document.body.classList.remove("intro-on"); }
+})();
+
+/* ================= musique de Noël (airs traditionnels du domaine public, joués par la page) ================= */
+const Music = (() => {
+  const SONGS = [
+    {t: "Jingle Bells", bpm: 132, bar: 4, bells: true,
+     chords: "C C C C F C D G C C C C F C G C",
+     m: "E4:1 E4:1 E4:2 E4:1 E4:1 E4:2 E4:1 G4:1 C4:1.5 D4:.5 E4:4 F4:1 F4:1 F4:1.5 F4:.5 F4:1 E4:1 E4:1 E4:.5 E4:.5 E4:1 D4:1 D4:1 E4:1 D4:2 G4:2 E4:1 E4:1 E4:2 E4:1 E4:1 E4:2 E4:1 G4:1 C4:1.5 D4:.5 E4:4 F4:1 F4:1 F4:1.5 F4:.5 F4:1 E4:1 E4:1 E4:.5 E4:.5 G4:1 G4:1 F4:1 D4:1 C4:4"},
+    {t: "Douce nuit", bpm: 92, bar: 3,
+     chords: "C C C C G G C C F F C C F F C C G G C C C G C C",
+     m: "G4:1.5 A4:.5 G4:1 E4:3 G4:1.5 A4:.5 G4:1 E4:3 D5:2 D5:1 B4:3 C5:2 C5:1 G4:3 A4:2 A4:1 C5:1.5 B4:.5 A4:1 G4:1.5 A4:.5 G4:1 E4:3 A4:2 A4:1 C5:1.5 B4:.5 A4:1 G4:1.5 A4:.5 G4:1 E4:3 D5:2 D5:1 F5:1.5 D5:.5 B4:1 C5:3 E5:3 C5:1 G4:1 E4:1 G4:1.5 F4:.5 D4:1 C4:6"},
+    {t: "We Wish You a Merry Christmas", bpm: 150, bar: 3, pickup: 1,
+     chords: "G C A D B Em C G G C A D B Em C G",
+     m: "D4:1 G4:1 G4:.5 A4:.5 G4:.5 F#4:.5 E4:1 E4:1 E4:1 A4:1 A4:.5 B4:.5 A4:.5 G4:.5 F#4:1 D4:1 D4:1 B4:1 B4:.5 C5:.5 B4:.5 A4:.5 G4:1 E4:1 D4:.5 D4:.5 E4:1 A4:1 F#4:1 G4:2 D4:1 " +
+        "G4:1 G4:.5 A4:.5 G4:.5 F#4:.5 E4:1 E4:1 E4:1 A4:1 A4:.5 B4:.5 A4:.5 G4:.5 F#4:1 D4:1 D4:1 B4:1 B4:.5 C5:.5 B4:.5 A4:.5 G4:1 E4:1 D4:.5 D4:.5 E4:1 A4:1 F#4:1 G4:3"},
+    {t: "Deck the Halls", bpm: 120, bar: 4,
+     chords: "C C G C C C G C G C D G C C F C",
+     m: "G4:1.5 F4:.5 E4:1 D4:1 C4:1 D4:1 E4:1 C4:1 D4:.5 E4:.5 F4:.5 D4:.5 E4:1.5 D4:.5 C4:1 B3:1 C4:2 " +
+        "G4:1.5 F4:.5 E4:1 D4:1 C4:1 D4:1 E4:1 C4:1 D4:.5 E4:.5 F4:.5 D4:.5 E4:1.5 D4:.5 C4:1 B3:1 C4:2 " +
+        "D4:1.5 E4:.5 F4:1 D4:1 E4:1.5 F4:.5 G4:1 D4:1 E4:.5 F#4:.5 G4:1 A4:.5 B4:.5 C5:1 B4:1 A4:1 G4:2 " +
+        "G4:1.5 F4:.5 E4:1 D4:1 C4:1 D4:1 E4:1 C4:1 A4:.5 A4:.5 A4:.5 A4:.5 G4:1.5 F4:.5 E4:1 D4:1 C4:2"}
+  ];
+  const SEMI = {C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11};
+  const midiOf = n => { const m = n.match(/^([A-G])(#|b)?(\d)$/); return (+m[3] + 1) * 12 + SEMI[m[1]] + (m[2] === "#" ? 1 : m[2] === "b" ? -1 : 0); };
+  const hz = midi => 440 * Math.pow(2, (midi - 69) / 12);
+  let ctx = null, master, wet, noiseBuf, idx = 0, songEnd = 0, on = store.get("avent-music", true), loop = null;
+  const btn = document.getElementById("musicBtn"), label = document.getElementById("songName");
+
+  function setup(){
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    master = ctx.createGain(); master.gain.value = .6;
+    const comp = ctx.createDynamicsCompressor(); master.connect(comp); comp.connect(ctx.destination);
+    const len = Math.floor(ctx.sampleRate * 2.6), ir = ctx.createBuffer(2, len, ctx.sampleRate);
+    for(let c = 0; c < 2; c++){ const d = ir.getChannelData(c); for(let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+    const conv = ctx.createConvolver(); conv.buffer = ir; wet = ctx.createGain(); wet.gain.value = .3; wet.connect(conv); conv.connect(master);
+    noiseBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * .2), ctx.sampleRate); const nd = noiseBuf.getChannelData(0); for(let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+  }
+  const out = node => { node.connect(master); node.connect(wet); };
+  function env(t, v, len, att){ const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + (att || .006)); g.gain.exponentialRampToValueAtTime(.0006, t + len); out(g); return g; }
+  function musicBox(f, t, v, len){ // timbre de boîte à musique / célesta
+    const g = env(t, v, len);
+    [[1, 1, "sine"], [2, .3, "sine"], [3.01, .07, "triangle"], [5.4, .025, "sine"]].forEach(([k, a, type]) => {
+      const o = ctx.createOscillator(); o.type = type; o.frequency.value = f * k; o.detune.value = (Math.random() - .5) * 6;
+      const og = ctx.createGain(); og.gain.value = a; o.connect(og); og.connect(g); o.start(t); o.stop(t + len + .05);
+    });
+  }
+  function soft(f, t, v, len, type){ const g = env(t, v, len, .03); const o = ctx.createOscillator(); o.type = type || "triangle"; o.frequency.value = f; o.connect(g); o.start(t); o.stop(t + len + .05); }
+  function jingle(t, v){ const s = ctx.createBufferSource(); s.buffer = noiseBuf; s.playbackRate.value = .9 + Math.random() * .2;
+    const hp = ctx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 7000; const g = ctx.createGain();
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.0004, t + .11); s.connect(hp); hp.connect(g); out(g); s.start(t); s.stop(t + .14); }
+  function chordOf(name){ const m = name.match(/^([A-G])(#|b)?(m)?/); const r = SEMI[m[1]] + (m[2] === "#" ? 1 : m[2] === "b" ? -1 : 0); return {r, third: m[3] ? 3 : 4}; }
+
+  function play(song){
+    const b = 60 / song.bpm, pick = song.pickup || 0, t0 = ctx.currentTime + .2;
+    let t = t0, beat = -pick;
+    song.m.trim().split(/\s+/).forEach(tok => {
+      const [n, d] = tok.split(":"), dur = +d;
+      if(n !== "R"){ const accent = ((beat % song.bar) + song.bar) % song.bar === 0 ? 1.15 : 1;
+        musicBox(hz(midiOf(n)), t + (Math.random() - .5) * .012, .2 * accent * (.92 + Math.random() * .16), Math.max(1.1, dur * b * 2.4)); }
+      t += dur * b; beat += dur;
+    });
+    const chords = song.chords.split(" ");
+    chords.forEach((ch, i) => {
+      const c = chordOf(ch), tb = t0 + (pick + i * song.bar) * b, root = 48 + c.r;
+      soft(hz(root), tb, .17, song.bar * b * .95);
+      soft(hz(root - 12), tb, .08, song.bar * b * .9, "sine");
+      const dy = [60 + c.r + c.third, 60 + c.r + 7];
+      const offs = song.bar === 3 ? [1, 2] : [1, 3];
+      offs.forEach(o => dy.forEach(m => soft(hz(m), tb + o * b, .035, b * .9, "sine")));
+    });
+    const total = (pick + chords.length * song.bar) * b;
+    if(song.bells) for(let x = 0; x < total; x += b / 2) jingle(t0 + x, x % b === 0 ? .06 : .03);
+    songEnd = t0 + total + 1.6;
+    if(label){ label.textContent = "♪ " + song.t; label.classList.remove("show"); void label.offsetWidth; label.classList.add("show"); }
+  }
+  function tick(){ if(ctx && on && ctx.state === "running" && ctx.currentTime >= songEnd){ play(SONGS[idx]); idx = (idx + 1) % SONGS.length; } }
+  function ui(){ if(!btn) return; btn.classList.toggle("off", !on); btn.textContent = on ? "🎵" : "🔇"; btn.setAttribute("aria-label", on ? "Couper la musique" : "Mettre la musique"); }
+  function start(){
+    try{ if(navigator.audioSession) navigator.audioSession.type = "playback"; }catch(e){}
+    if(!ctx){ try{ setup(); }catch(e){ return; } }
+    if(ctx.state !== "running") ctx.resume();
+    if(!loop) loop = setInterval(tick, 300);
+    setTimeout(tick, 60);
+  }
+  function toggle(){
+    on = !on; store.set("avent-music", on); ui();
+    if(on){ start(); toast("🎵 Musique de Noël"); } else if(ctx){ ctx.suspend(); toast("🔇 Musique coupée"); }
+  }
+  ui();
+  if(btn) btn.addEventListener("click", e => { e.stopPropagation(); unlockDone = true; toggle(); });
+  let unlockDone = false;
+  const unlock = e => {
+    if(unlockDone || (btn && btn.contains(e.target))) return;
+    unlockDone = true; ["touchend", "click"].forEach(ev => document.removeEventListener(ev, unlock, true));
+    if(on){ start(); if(!store.get("avent-music-tip", false)){ store.set("avent-music-tip", true); setTimeout(() => toast("🎵 Musique de Noël · touche 🎵 pour la couper"), 600); } }
+  };
+  ["touchend", "click"].forEach(ev => document.addEventListener(ev, unlock, true));
+  document.addEventListener("visibilitychange", () => { if(!ctx) return; if(document.hidden) ctx.suspend(); else if(on) ctx.resume(); });
+  return {toggle};
 })();
 
 /* ---------- démarrage ---------- */
