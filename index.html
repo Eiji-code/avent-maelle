@@ -8,8 +8,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Avent ❤️">
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0e2621">
+<link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,14 +26,14 @@
   html,body{margin:0;min-height:100%;background:var(--night)}
   body{
     font-family:"DM Sans",system-ui,-apple-system,sans-serif;color:var(--paper);
-    background:
-      radial-gradient(120% 60% at 50% -10%, #23493f 0%, transparent 60%),
-      radial-gradient(80% 50% at 100% 100%, #1b3a33 0%, transparent 70%),
-      var(--night);
-    background-attachment:fixed;
+    background:var(--night);
     padding:calc(env(safe-area-inset-top) + 18px) calc(env(safe-area-inset-right) + 16px) calc(env(safe-area-inset-bottom) + 28px) calc(env(safe-area-inset-left) + 16px);
     -webkit-user-select:none;user-select:none;overscroll-behavior:none;
   }
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+      radial-gradient(120% 60% at 50% -10%, #23493f 0%, transparent 60%),
+      radial-gradient(80% 50% at 100% 100%, #1b3a33 0%, transparent 70%),
+      var(--night)}
   #snow{position:fixed;inset:0;pointer-events:none;z-index:0}
   .wrap{position:relative;z-index:1;max-width:520px;margin:0 auto}
   header{text-align:center;margin:8px 0 18px}
@@ -48,10 +48,12 @@
   .grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;gap:13px;grid-auto-flow:dense;position:relative}
   #lights{position:absolute;left:-16px;top:-16px;pointer-events:none;z-index:4;overflow:visible}
   #toplights{position:absolute;left:0;right:0;top:0;height:70px;width:100%;pointer-events:none;z-index:2;overflow:visible}
-  .bulb{animation:twinkle var(--d,2.4s) ease-in-out infinite;animation-delay:var(--dl,0s)}
-  @keyframes twinkle{0%,100%{opacity:1}50%{opacity:.45}}
-  .glow{animation:halo var(--d,2.4s) ease-in-out infinite;animation-delay:var(--dl,0s)}
-  @keyframes halo{0%,100%{opacity:.75}50%{opacity:.15}}
+  #lights,#toplights{will-change:transform}
+  .glow{opacity:.85}
+  html[data-ph="0"] .b0 .bulb,html[data-ph="1"] .b1 .bulb,html[data-ph="2"] .b2 .bulb{opacity:.42}
+  html[data-ph="0"] .b0 .glow,html[data-ph="1"] .b1 .glow,html[data-ph="2"] .b2 .glow{opacity:.08}
+  html[data-ph="0"] .tl.b0,html[data-ph="1"] .tl.b1,html[data-ph="2"] .tl.b2,
+  html[data-ph="0"] .tli.b0,html[data-ph="1"] .tli.b1,html[data-ph="2"] .tli.b2{opacity:.28}
 
   /* ---- les cases = des paquets cadeaux ---- */
   .tile{--rib:#c8333c;--rw:6px;--base:#c79a68;--pat:none;
@@ -80,19 +82,20 @@
   .big .badge .n{font-size:clamp(40px,13vw,58px)}
   .bow{position:absolute;left:50%;bottom:78%;width:92%;transform:translateX(-50%);color:var(--rib);filter:drop-shadow(0 2px 2px rgba(0,0,0,.35));pointer-events:none}
   .big .bow{width:80%;bottom:84%}
-  .star{position:absolute;top:8%;right:8%;width:16%;fill:#ffe39a;filter:drop-shadow(0 0 6px rgba(255,220,140,.8));animation:spin 9s linear infinite}
+  .star{position:absolute;top:8%;right:8%;width:16%;fill:#ffe39a;filter:drop-shadow(0 0 6px rgba(255,220,140,.8));animation:spin 9s linear infinite;will-change:transform}
   @keyframes spin{to{transform:rotate(360deg)}}
   .lock{position:absolute;right:-3px;bottom:-3px;width:16px;height:16px;padding:3px;border-radius:50%;background:#2b1d16;color:#f6dca0;fill:#f6dca0;box-sizing:border-box}
   .big .lock{width:22px;height:22px;padding:4px}
 
   .tile.locked{filter:saturate(.7) brightness(.8)}
   .tile.ready{filter:none}
-  .tile.ready::after{content:"";position:absolute;inset:0;border-radius:14px;pointer-events:none;
+  .tile.today::after{content:"";position:absolute;inset:0;border-radius:14px;pointer-events:none;
     background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.35) 45%,transparent 60%) -150% 0/250% 100% no-repeat;animation:shine 3.2s ease-in-out infinite}
   @keyframes shine{0%,40%{background-position:-150% 0}100%{background-position:150% 0}}
-  .tile.today{animation:glow 2.2s ease-in-out infinite,wiggle 3.6s ease-in-out infinite;z-index:5}
-  @keyframes glow{0%,100%{box-shadow:0 0 0 2px var(--gold),0 0 18px 3px rgba(232,190,104,.55)}50%{box-shadow:0 0 0 3px var(--gold2),0 0 32px 10px rgba(232,190,104,.8)}}
-  @keyframes wiggle{0%,78%,100%{transform:rotate(0)}82%{transform:rotate(-3deg)}86%{transform:rotate(3deg)}90%{transform:rotate(-2deg)}94%{transform:rotate(1deg)}}
+  .tile.today{animation:wiggle 3.6s ease-in-out infinite;z-index:5;box-shadow:0 0 0 2px var(--gold),0 8px 16px rgba(0,0,0,.35)}
+  .tile.today::before{content:"";position:absolute;inset:-2px;border-radius:16px;pointer-events:none;will-change:opacity;box-shadow:0 0 0 2px var(--gold2),0 0 22px 6px rgba(246,214,140,.7),0 0 46px 14px rgba(232,190,104,.35);animation:tglow 2.4s ease-in-out infinite}
+  @keyframes tglow{0%,100%{opacity:.3}50%{opacity:1}}
+    @keyframes wiggle{0%,78%,100%{transform:rotate(0)}82%{transform:rotate(-3deg)}86%{transform:rotate(3deg)}90%{transform:rotate(-2deg)}94%{transform:rotate(1deg)}}
 
   .tile.opened{--rib:transparent;--pat:radial-gradient(circle,#e8be68 1.3px,transparent 1.8px) 3px 5px/19px 21px,radial-gradient(circle,#c8333c 1.3px,transparent 1.8px) 12px 14px/23px 19px;--base:#fffaf1;
     box-shadow:inset 0 0 0 2px rgba(232,190,104,.55),0 6px 12px rgba(0,0,0,.3)}
@@ -166,15 +169,17 @@
   #nata{transform:rotate(-10deg)} #cake{transform:rotate(9deg);width:52px}
   .sticker.pop,.greycat.pop{animation:pop .5s}
   @keyframes pop{40%{scale:1.25}100%{scale:1}}
-  #angel{position:absolute;left:0;top:0;width:92px;z-index:6;pointer-events:none;will-change:transform;
-    filter:drop-shadow(0 0 6px rgba(255,236,190,.55)) drop-shadow(0 0 14px rgba(255,236,190,.25))}
+  #angel{position:absolute;left:0;top:0;width:92px;z-index:6;pointer-events:none;will-change:transform}
+  #angel::before,.intro-angel::before{content:"";position:absolute;left:-6%;top:-14%;width:112%;height:128%;border-radius:50%;pointer-events:none;
+    background:radial-gradient(closest-side,rgba(255,240,205,.34),rgba(255,236,190,.12) 55%,transparent)}
+  #angel svg,.intro-angel svg{position:relative}
   #angel svg{display:block;width:100%;height:auto;overflow:visible}
   .wing{transform-box:fill-box;transform-origin:100% 100%;animation:flap .55s ease-in-out infinite alternate}
   .wing-b{animation-delay:-.08s}
   @keyframes flap{from{transform:rotate(-14deg) scaleY(1.05)}to{transform:rotate(16deg) scaleY(.78)}}
   footer{display:flex;align-items:flex-end;gap:10px;text-align:left}
   footer p{margin:0 0 10px;flex:1}
-  .greycat{border:0;background:none;padding:0;cursor:pointer;width:74px;flex:0 0 auto;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
+  .greycat{border:0;padding:0;cursor:pointer;width:74px;flex:0 0 auto;background:radial-gradient(42% 7% at 50% 95%,rgba(0,0,0,.4),transparent)}
   .greycat svg{display:block;width:100%;height:auto}
   .tail{transform-box:fill-box;transform-origin:0% 100%;animation:sway 2.6s ease-in-out infinite alternate}
   @keyframes sway{from{transform:rotate(-8deg)}to{transform:rotate(10deg)}}
@@ -213,7 +218,7 @@
   .doorglow{position:absolute;left:50%;top:58%;width:50%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scale(0);
     background:radial-gradient(circle,#fffbe6 0%,rgba(255,214,120,.85) 40%,rgba(255,190,90,0) 70%);transition:transform 1.6s ease-in .35s;pointer-events:none}
   #intro.opening .doorglow{transform:translate(-50%,-50%) scale(16)}
-  .uko{position:absolute;left:65.5%;top:72.5%;width:17%;pointer-events:none;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+  .uko{position:absolute;left:65.5%;top:72.5%;width:17%;pointer-events:none;background:radial-gradient(42% 7% at 50% 95%,rgba(0,0,0,.4),transparent)}
   .uko svg{display:block;width:100%;height:auto}
   .knock{position:absolute;left:50%;top:34%;transform:translate(-50%,0) scale(.6);opacity:0;font-family:Fraunces,Georgia,serif;font-style:italic;font-weight:700;
     font-size:20px;color:var(--gold2);text-shadow:0 2px 8px rgba(0,0,0,.6);transition:all .35s ease;white-space:nowrap;pointer-events:none}
@@ -222,20 +227,29 @@
     padding:9px 16px;border-radius:999px;animation:bob 1.6s ease-in-out infinite;transition:opacity .3s}
   .hint.hide{opacity:0}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-  .intro-angel{position:absolute;left:0;top:0;width:78px;z-index:3;pointer-events:none;filter:drop-shadow(0 0 6px rgba(255,236,190,.55)) drop-shadow(0 0 14px rgba(255,236,190,.25))}
+  .intro-angel{position:absolute;left:0;top:0;width:78px;z-index:3;pointer-events:none;will-change:transform}
   .intro-angel svg{display:block;width:100%;height:auto;overflow:visible}
-  .smoke circle{fill:rgba(225,233,238,.5);transform-box:fill-box;transform-origin:center;animation:smoke 4.5s linear infinite}
-  .smoke circle:nth-child(2){animation-delay:-1.5s}.smoke circle:nth-child(3){animation-delay:-3s}
-  @keyframes smoke{0%{transform:translate(0,22px) scale(.4);opacity:0}20%{opacity:.8}100%{transform:translate(10px,-26px) scale(1.4);opacity:0}}
-  .flicker{animation:flick 2.2s ease-in-out infinite}.flicker.f2{animation-duration:2.9s}
   @keyframes flick{0%,100%{opacity:.95}30%{opacity:.6}45%{opacity:.9}70%{opacity:.7}}
-  .win{animation:flick 3.4s ease-in-out infinite}
-  .tl{animation:tw 1.8s ease-in-out infinite}.tl.d2{animation-delay:-.5s}.tl.d3{animation-delay:-1s}.tl.d4{animation-delay:-1.4s}
-  .tstar{transform-box:fill-box;transform-origin:center;animation:pulse 2.4s ease-in-out infinite}
-  @keyframes pulse{0%,100%{transform:scale(1);filter:drop-shadow(0 0 2px #ffd166)}50%{transform:scale(1.25);filter:drop-shadow(0 0 6px #ffd166)}}
+  .scene-over{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+  .fx{position:absolute;inset:0;pointer-events:none}
+  .fx i{position:absolute;display:block;border-radius:50%;transform:translate(-50%,-50%);will-change:transform,opacity}
+  .fx .puff{left:68.2%;top:7.6%;width:5.5%;aspect-ratio:1;background:radial-gradient(closest-side,rgba(232,240,245,.75),rgba(232,240,245,.35) 60%,transparent);opacity:0;animation:puff 5.4s linear infinite}
+  .fx .puff.p2{animation-delay:-1.8s}.fx .puff.p3{animation-delay:-3.6s}
+  @keyframes puff{0%{transform:translate(-50%,-30%) scale(.5);opacity:0}15%{opacity:.85}100%{transform:translate(10%,-330%) scale(1.9);opacity:0}}
+  .fx .lglow{top:56.8%;width:24%;aspect-ratio:1;background:radial-gradient(closest-side,rgba(255,220,140,.5),rgba(255,180,80,.16) 55%,transparent);animation:flick 2.4s ease-in-out infinite}
+  .fx .lglow.f2{animation-duration:3.1s;animation-delay:-1s}
+  .fx .wglow{left:50%;top:23.6%;width:17%;aspect-ratio:1;background:radial-gradient(closest-side,rgba(255,226,150,.55),rgba(255,190,90,.15) 60%,transparent);animation:flick 3.6s ease-in-out infinite}
+  .fx .sglo{width:8%;aspect-ratio:1;background:radial-gradient(closest-side,rgba(255,226,130,.9),rgba(255,209,102,.25) 50%,transparent);animation:spulse 2.6s ease-in-out infinite}
+  .fx .sglo.s2{animation-delay:-1.3s}
+  @keyframes spulse{0%,100%{transform:translate(-50%,-50%) scale(.75);opacity:.55}50%{transform:translate(-50%,-50%) scale(1.25);opacity:1}}
+  .fx .pool{left:50%;top:90.5%;width:58%;aspect-ratio:3.4;border-radius:50%;background:radial-gradient(closest-side,rgba(255,206,120,.42),rgba(255,190,100,.12) 60%,transparent);animation:flick 4.2s ease-in-out infinite}
+  .rays{position:absolute;left:50%;top:58%;width:330%;aspect-ratio:1;transform:translate(-50%,-50%) scale(.2);opacity:0;pointer-events:none;border-radius:50%;
+    background:repeating-conic-gradient(from 0deg,rgba(255,236,180,.0) 0deg 7deg,rgba(255,236,180,.42) 9deg 12deg,rgba(255,236,180,0) 14deg 22deg);
+    -webkit-mask:radial-gradient(closest-side,#000 18%,transparent 70%);mask:radial-gradient(closest-side,#000 18%,transparent 70%);transition:opacity .8s ease .3s,transform 1.8s ease-out .3s}
+  #intro.opening .rays{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(25deg)}
   .wave{transform-box:fill-box;transform-origin:0% 100%;animation:waveArm 1.4s ease-in-out infinite alternate}
   @keyframes waveArm{from{transform:rotate(-10deg)}to{transform:rotate(18deg)}}
-  @media (prefers-reduced-motion:reduce){.stars i,.shoot,.smoke circle,.flicker,.tl,.tstar,.wave,.hint{animation:none}}
+  @media (prefers-reduced-motion:reduce){.stars i,.shoot,.fx i,.wave,.hint{animation:none}}
 
   /* ---------- la maison : endroits à explorer ---------- */
   .toast{z-index:95}
@@ -281,7 +295,6 @@
   .row-l{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:8px 0 6px}
   .opts{display:flex;gap:8px;flex-wrap:wrap}
   .opts .sw{width:30px;height:30px}
-  .tli{animation:tw 1.6s ease-in-out infinite}
   #tLights.off{display:none}
   .orn-pop{animation:ornPop .35s cubic-bezier(.3,1.6,.5,1)}
   @keyframes ornPop{from{transform:scale(0)}to{transform:scale(1)}}
@@ -337,7 +350,7 @@
   #winSnow.storm circle{animation-duration:1.6s !important}
   .embers circle{animation:ember 1.8s ease-out infinite}.embers circle:nth-child(2){animation-delay:-.6s}.embers circle:nth-child(3){animation-delay:-1.2s}
   @keyframes ember{0%{transform:translateY(20px);opacity:0}30%{opacity:1}100%{transform:translateY(-30px);opacity:0}}
-  .aur{animation:aur 7s ease-in-out infinite alternate}.aur.a2{animation-duration:9s}
+  .aur{opacity:.9}
   @keyframes aur{from{transform:translateX(-12px) skewX(-4deg);opacity:.8}to{transform:translateX(12px) skewX(4deg);opacity:1}}
   .stocking{cursor:pointer}
 
@@ -400,8 +413,9 @@
   /* musique */
   .musicbtn{position:fixed;top:calc(env(safe-area-inset-top) + 10px);right:calc(env(safe-area-inset-right) + 10px);z-index:85;width:42px;height:42px;border-radius:50%;
     border:1px solid rgba(232,190,104,.45);background:rgba(14,38,33,.82);font-size:19px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.35);display:grid;place-items:center;
-    animation:mbeat 1.2s ease-in-out infinite}
-  .musicbtn.off{animation:none;opacity:.75}
+    transition:opacity .3s}
+  .musicbtn.playing{animation:mbeat 1.25s ease-in-out infinite;box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 2px rgba(232,190,104,.25)}
+  .musicbtn.off{opacity:.75}
   @keyframes mbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
   .songname{position:fixed;top:calc(env(safe-area-inset-top) + 58px);right:calc(env(safe-area-inset-right) + 10px);z-index:85;pointer-events:none;
     font-size:12px;font-weight:700;color:var(--gold2);background:rgba(14,38,33,.85);border:1px solid rgba(232,190,104,.3);padding:5px 10px;border-radius:999px;opacity:0}
@@ -410,11 +424,25 @@
   .moon{right:70px !important}
   .room-title{margin-right:56px}
 
+  /* ---- fluidité : ce qui est caché n'est plus dessiné ---- */
+  body.intro-on .wrap,body.intro-on #toplights,body.intro-on .bokeh{visibility:hidden}
+  body.room-on .wrap,body.room-on #toplights,body.room-on #intro,body.room-on #snow,body.room-on .bokeh,body.room-on #homeBtn{visibility:hidden}
+  body.intro-on .wing,body.room-on .wing{animation-play-state:paused}
+  body.room-on .room .wing{animation-play-state:running}
+
+  /* ---- finitions : bokeh doré derrière le calendrier ---- */
+  .bokeh{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .bokeh i{position:absolute;border-radius:50%;opacity:.0;will-change:transform,opacity;
+    background:radial-gradient(closest-side,var(--c) 0%,rgba(0,0,0,0) 100%);animation:bok var(--t) ease-in-out infinite alternate;animation-delay:var(--dl)}
+  @keyframes bok{0%{transform:translate3d(0,0,0) scale(.85);opacity:.0}35%{opacity:var(--o)}100%{transform:translate3d(var(--dx),var(--dy),0) scale(1.15);opacity:calc(var(--o) * .6)}}
+  @media (prefers-reduced-motion:reduce){.bokeh i{animation:none;opacity:.25}}
+
   @media (prefers-reduced-motion:reduce){.tile.today{animation:none;box-shadow:0 0 0 3px var(--gold)}#snow{display:none}}
 </style>
 </head>
 <body class="intro-on">
 <canvas id="snow"></canvas>
+<div class="bokeh" id="bokeh" aria-hidden="true"></div>
 <svg id="toplights" aria-hidden="true"></svg>
 <div class="wrap">
   <div id="banner"></div>
@@ -542,7 +570,6 @@
   <!-- cheminée + fumée -->
   <rect x="232" y="44" width="26" height="52" fill="#6b3a2a"/><rect x="228" y="38" width="34" height="10" rx="2" fill="#7d4532"/>
   <path d="M228 40 q8 -8 17 -2 q8 -7 17 2 v4 h-34 z" fill="#f4f8fb"/>
-  <g class="smoke"><circle cx="245" cy="28" r="7"/><circle cx="249" cy="16" r="9"/><circle cx="244" cy="2" r="11"/></g>
   <!-- toit -->
   <path d="M40 128 L180 26 L320 128 Z" fill="url(#roof)"/>
   <path d="M40 128 L180 26 L320 128" fill="none" stroke="#14261f" stroke-width="3"/>
@@ -552,30 +579,30 @@
   <rect x="64" y="126" width="232" height="262" fill="url(#wall)"/>
   <g stroke="#331b13" stroke-width="2" opacity=".55"><path d="M64 156 H296 M64 186 H296 M64 216 H296 M64 246 H296 M64 276 H296 M64 306 H296 M64 336 H296 M64 366 H296"/></g>
   <!-- fenêtre ronde -->
-  <circle cx="180" cy="104" r="16" fill="#1b130f"/><circle cx="180" cy="104" r="13" fill="url(#warm)" class="win"/>
+  <circle cx="180" cy="104" r="16" fill="#1b130f"/><circle cx="180" cy="104" r="13" fill="url(#warm)"/>
   <path d="M180 91 V117 M167 104 H193" stroke="#5b3426" stroke-width="3"/>
   <!-- encadrement de porte + lumière derrière -->
   <path d="M124 388 V244 A56 56 0 0 1 236 244 V388 Z" fill="#d9c7a0"/>
   <path d="M130 388 V244 A50 50 0 0 1 230 244 V388 Z" fill="url(#warm)"/>
   <!-- lanternes -->
-  <g class="lantern"><circle cx="104" cy="250" r="26" fill="url(#lantglow)" class="flicker"/><path d="M98 232 h12 l3 6 h-18 z" fill="#1f1a17"/><rect x="97" y="238" width="14" height="22" rx="2" fill="#ffd77a" stroke="#1f1a17" stroke-width="2.5"/><path d="M95 260 h18 l-3 5 h-12 z" fill="#1f1a17"/><path d="M104 226 v6" stroke="#1f1a17" stroke-width="2"/></g>
-  <g class="lantern"><circle cx="256" cy="250" r="26" fill="url(#lantglow)" class="flicker f2"/><path d="M250 232 h12 l3 6 h-18 z" fill="#1f1a17"/><rect x="249" y="238" width="14" height="22" rx="2" fill="#ffd77a" stroke="#1f1a17" stroke-width="2.5"/><path d="M247 260 h18 l-3 5 h-12 z" fill="#1f1a17"/><path d="M256 226 v6" stroke="#1f1a17" stroke-width="2"/></g>
+  <g class="lantern"><circle cx="104" cy="250" r="26" fill="url(#lantglow)"/><path d="M98 232 h12 l3 6 h-18 z" fill="#1f1a17"/><rect x="97" y="238" width="14" height="22" rx="2" fill="#ffd77a" stroke="#1f1a17" stroke-width="2.5"/><path d="M95 260 h18 l-3 5 h-12 z" fill="#1f1a17"/><path d="M104 226 v6" stroke="#1f1a17" stroke-width="2"/></g>
+  <g class="lantern"><circle cx="256" cy="250" r="26" fill="url(#lantglow)"/><path d="M250 232 h12 l3 6 h-18 z" fill="#1f1a17"/><rect x="249" y="238" width="14" height="22" rx="2" fill="#ffd77a" stroke="#1f1a17" stroke-width="2.5"/><path d="M247 260 h18 l-3 5 h-12 z" fill="#1f1a17"/><path d="M256 226 v6" stroke="#1f1a17" stroke-width="2"/></g>
   <!-- sapins -->
   <g transform="translate(26 268)">
     <path d="M24 0 L46 34 H36 L52 62 H40 L58 96 H-10 L8 62 H-4 L12 34 H2 Z" fill="#1f5a44"/>
     <path d="M24 0 L46 34 H36 L52 62 H40 L58 96 H24 Z" fill="#174a37"/>
     <rect x="19" y="96" width="10" height="14" fill="#5b3426"/>
-    <path d="M24 -9 l2.6 5.6 6 .6 -4.5 4 1.3 6 -5.4 -3.1 -5.4 3.1 1.3 -6 -4.5 -4 6 -.6 z" fill="#ffd166" class="tstar"/>
-    <circle cx="18" cy="28" r="2.6" fill="#ff4d5a" class="tl"/><circle cx="32" cy="44" r="2.6" fill="#ffd166" class="tl d2"/><circle cx="12" cy="56" r="2.6" fill="#6cc6ff" class="tl d3"/>
-    <circle cx="36" cy="74" r="2.6" fill="#58e08a" class="tl d4"/><circle cx="6" cy="86" r="2.6" fill="#ff8fd0" class="tl d2"/><circle cx="44" cy="88" r="2.6" fill="#ff4d5a" class="tl d3"/><circle cx="22" cy="70" r="2.6" fill="#fff1c4" class="tl"/>
+    <path d="M24 -9 l2.6 5.6 6 .6 -4.5 4 1.3 6 -5.4 -3.1 -5.4 3.1 1.3 -6 -4.5 -4 6 -.6 z" fill="#ffd166"/>
+    <circle cx="18" cy="28" r="2.6" fill="#ff4d5a" class="tl b0"/><circle cx="32" cy="44" r="2.6" fill="#ffd166" class="tl b1"/><circle cx="12" cy="56" r="2.6" fill="#6cc6ff" class="tl b2"/>
+    <circle cx="36" cy="74" r="2.6" fill="#58e08a" class="tl b0"/><circle cx="6" cy="86" r="2.6" fill="#ff8fd0" class="tl b1"/><circle cx="44" cy="88" r="2.6" fill="#ff4d5a" class="tl b2"/><circle cx="22" cy="70" r="2.6" fill="#fff1c4" class="tl b0"/>
   </g>
   <g transform="translate(290 282) scale(.85)">
     <path d="M24 0 L46 34 H36 L52 62 H40 L58 96 H-10 L8 62 H-4 L12 34 H2 Z" fill="#1f5a44"/>
     <path d="M24 0 L46 34 H36 L52 62 H40 L58 96 H24 Z" fill="#174a37"/>
     <rect x="19" y="96" width="10" height="14" fill="#5b3426"/>
-    <path d="M24 -9 l2.6 5.6 6 .6 -4.5 4 1.3 6 -5.4 -3.1 -5.4 3.1 1.3 -6 -4.5 -4 6 -.6 z" fill="#ffd166" class="tstar"/>
-    <circle cx="18" cy="28" r="2.8" fill="#6cc6ff" class="tl d3"/><circle cx="32" cy="44" r="2.8" fill="#ff4d5a" class="tl"/><circle cx="12" cy="56" r="2.8" fill="#ffd166" class="tl d4"/>
-    <circle cx="36" cy="74" r="2.8" fill="#ff8fd0" class="tl d2"/><circle cx="6" cy="86" r="2.8" fill="#58e08a" class="tl"/><circle cx="44" cy="88" r="2.8" fill="#fff1c4" class="tl d3"/>
+    <path d="M24 -9 l2.6 5.6 6 .6 -4.5 4 1.3 6 -5.4 -3.1 -5.4 3.1 1.3 -6 -4.5 -4 6 -.6 z" fill="#ffd166"/>
+    <circle cx="18" cy="28" r="2.8" fill="#6cc6ff" class="tl b2"/><circle cx="32" cy="44" r="2.8" fill="#ff4d5a" class="tl b0"/><circle cx="12" cy="56" r="2.8" fill="#ffd166" class="tl b0"/>
+    <circle cx="36" cy="74" r="2.8" fill="#ff8fd0" class="tl b1"/><circle cx="6" cy="86" r="2.8" fill="#58e08a" class="tl b0"/><circle cx="44" cy="88" r="2.8" fill="#fff1c4" class="tl b2"/>
   </g>
   <!-- boîte aux lettres -->
   <g class="mailbox">
@@ -593,13 +620,14 @@
   <rect x="140" y="388" width="80" height="14" rx="4" fill="#9b2a2f"/><rect x="144" y="391" width="72" height="8" rx="2" fill="none" stroke="#e8be68" stroke-width="1" stroke-dasharray="3 2"/>
   <text x="180" y="398" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-size="7.5" font-weight="700" fill="#f6dca0" letter-spacing="1.5">MAËLLE</text>
   <!-- bonhomme de neige -->
-  <g class="snowman" id="mainSnowman" transform="translate(18 318)"></g>
   <!-- garland sur l'encadrement (ampoules ajoutées par le script) -->
   <path id="doorArc" d="M118 330 V244 A62 62 0 0 1 242 244 V330" fill="none" stroke="#1b2a24" stroke-width="2"/>
   <g id="doorBulbs"></g>
 </svg>
+    <div class="fx" aria-hidden="true"><i class="pool"></i><i class="wglow"></i><i class="lglow" style="left:28.9%"></i><i class="lglow f2" style="left:71.1%"></i><i class="sglo" style="left:13.9%;top:60.2%"></i><i class="sglo s2" style="left:86.2%;top:63.5%"></i><i class="puff"></i><i class="puff p2"></i><i class="puff p3"></i></div>
+    <svg class="scene-over" viewBox="0 0 360 440" aria-hidden="true"><g class="snowman" id="mainSnowman" transform="translate(18 318)"></g></svg>
 
-    <div class="doorway"><div class="doorglow"></div><button class="door" id="door" aria-label="Ouvrir la porte"><svg viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <div class="doorway"><div class="rays"></div><div class="doorglow"></div><button class="door" id="door" aria-label="Ouvrir la porte"><svg viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
   <defs><linearGradient id="dred" x1="0" x2="1"><stop offset="0" stop-color="#7d151b"/><stop offset=".5" stop-color="#a3242c"/><stop offset="1" stop-color="#861a20"/></linearGradient></defs>
   <path d="M0 50 A50 50 0 0 1 100 50 V200 H0 Z" fill="url(#dred)"/>
   <path d="M10 52 A40 40 0 0 1 90 52 V100 H10 Z" fill="none" stroke="#5e0f14" stroke-width="2.5" opacity=".7"/>
@@ -773,8 +801,12 @@ function reveal(day){
 
 /* ---------- rendu ---------- */
 const grid = document.getElementById("grid");
+let lastSig = "";
 function render(){
   const t = today();
+  const sig = t + "|" + preview + "|" + [...opened].sort().join(",");
+  if(sig === lastSig && grid.children.length){ renderStatus(t); return; }
+  lastSig = sig;
   grid.innerHTML = "";
   ORDER.forEach(day => {
     const b = document.createElement("button");
@@ -888,34 +920,73 @@ function burst(el){
   }
 }
 
-/* ---------- neige ---------- */
+/* ---------- bokeh : quelques halos dorés qui dérivent lentement (composités, quasi gratuits) ---------- */
+(function(){
+  const b = document.getElementById("bokeh"); if(!b) return;
+  const C = ["rgba(255,214,130,.55)", "rgba(255,170,120,.45)", "rgba(150,230,190,.35)", "rgba(255,236,190,.5)", "rgba(255,120,130,.35)", "rgba(140,200,255,.32)"];
+  for(let i = 0; i < 8; i++){
+    const e = document.createElement("i"), sz = 70 + Math.random() * 120;
+    e.style.cssText = "width:" + sz + "px;height:" + sz + "px;left:" + (Math.random() * 100 - 10).toFixed(1) + "%;top:" + (Math.random() * 100 - 10).toFixed(1) + "%;--c:" + C[i % C.length] +
+      ";--o:" + (.35 + Math.random() * .35).toFixed(2) + ";--t:" + (9 + Math.random() * 8).toFixed(1) + "s;--dl:" + (-Math.random() * 12).toFixed(1) + "s;--dx:" + (Math.random() * 80 - 40).toFixed(0) + "px;--dy:" + (Math.random() * 80 - 40).toFixed(0) + "px";
+    b.appendChild(e);
+  }
+})();
+
+/* ---------- horloge des guirlandes : toutes les ampoules changent ensemble (très léger) ---------- */
+(function(){
+  const r = document.documentElement; let p = 0; r.dataset.ph = "0";
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  setInterval(() => { if(!document.hidden){ p = (p + 1) % 3; r.dataset.ph = p; } }, 760);
+})();
+
+/* ---------- neige (deux plans : flocons lointains + quelques gros flocons proches et doux) ---------- */
 (function snow(){
-  const c = document.getElementById("snow"), x = c.getContext("2d");
+  const c = document.getElementById("snow"), x = c.getContext("2d"), room = document.getElementById("room");
   let W, H, flakes = [];
-  function size(){ const dpr = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; c.width = W * dpr; c.height = H * dpr; x.setTransform(dpr,0,0,dpr,0,0); }
+  const soft = document.createElement("canvas"); soft.width = soft.height = 24;
+  (() => { const s = soft.getContext("2d"), g = s.createRadialGradient(12, 12, 0, 12, 12, 12);
+    g.addColorStop(0, "rgba(255,255,255,.95)"); g.addColorStop(.35, "rgba(255,255,255,.55)"); g.addColorStop(1, "rgba(255,255,255,0)"); s.fillStyle = g; s.fillRect(0, 0, 24, 24); })();
+  function size(){ W = innerWidth; H = innerHeight; c.width = W; c.height = H; }
   size(); addEventListener("resize", size);
-  for(let i = 0; i < 55; i++) flakes.push({ x: Math.random() * W, y: Math.random() * H, r: .6 + Math.random() * 2, s: .2 + Math.random() * .6, w: Math.random() * 6 });
-  (function loop(){
-    x.clearRect(0, 0, W, H); x.fillStyle = "rgba(255,255,255,.75)";
-    flakes.forEach(f => { f.y += f.s; f.w += .01; f.x += Math.sin(f.w) * .3; if(f.y > H + 5){ f.y = -5; f.x = Math.random() * W; } x.beginPath(); x.arc(f.x, f.y, f.r, 0, 7); x.fill(); });
+  const N = Math.min(46, Math.round(innerWidth * innerHeight / 9000));
+  for(let i = 0; i < N; i++){
+    const near = i < 7;
+    flakes.push({ x: Math.random() * W, y: Math.random() * H, r: near ? 3.5 + Math.random() * 3 : .6 + Math.random() * 1.6,
+      s: near ? .7 + Math.random() * .5 : .2 + Math.random() * .45, w: Math.random() * 6, a: near ? .55 : .5 + Math.random() * .4, near });
+  }
+  let last = 0;
+  (function loop(ts){
     requestAnimationFrame(loop);
+    const dt = Math.min(3, ((ts || 0) - (last || ts || 0)) / 16.7); last = ts || 0;
+    if(room.classList.contains("open")) return; // une pièce couvre l'écran : inutile de dessiner
+    x.clearRect(0, 0, W, H); x.fillStyle = "#fff";
+    for(const f of flakes){
+      f.y += f.s * dt; f.w += .012 * dt; f.x += Math.sin(f.w) * .3 * dt;
+      if(f.y > H + 8){ f.y = -8; f.x = Math.random() * W; }
+      if(f.near){ x.globalAlpha = f.a; x.drawImage(soft, f.x - f.r * 1.6, f.y - f.r * 1.6, f.r * 3.2, f.r * 3.2); }
+      else { x.globalAlpha = f.a; x.beginPath(); x.arc(f.x, f.y, f.r, 0, 7); x.fill(); }
+    }
+    x.globalAlpha = 1;
   })();
 })();
 
-
-
 /* ---------- l'ange noir vole autour des cases ---------- */
 (function(){
-  const el = document.getElementById("angel"), wrap = document.querySelector(".wrap"), g = document.getElementById("grid");
+  const el = document.getElementById("angel"), wrap = document.querySelector(".wrap"), g = document.getElementById("grid"), room = document.getElementById("room");
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let W = 0, w = 0, top = 0, h = 0, mt = 0;
+  const measure = () => { W = wrap.clientWidth; w = el.offsetWidth; top = g.offsetTop; h = g.offsetHeight; };
+  addEventListener("resize", measure);
   function frame(ts){
-    const t = ts / 1000, W = wrap.clientWidth, w = el.offsetWidth, top = g.offsetTop, h = g.offsetHeight;
+    if(!still) requestAnimationFrame(frame);
+    if(!still && (document.body.classList.contains("intro-on") || room.classList.contains("open"))) return;
+    if(ts - mt > 1000 || !W){ measure(); mt = ts; }
+    const t = ts / 1000;
     const x = still ? W - w : (W - w) / 2 + (W - w) / 2 * Math.sin(t * 0.22);
     const y = still ? top - 60 : top - 34 + h / 2 + (h / 2 + 6) * Math.sin(t * 0.29 + 1.3) + 5 * Math.sin(t * 2.1);
     const dir = still ? -1 : (Math.cos(t * 0.22) >= 0 ? 1 : -1);
     const tilt = still ? 0 : -9 * Math.cos(t * 0.29 + 1.3) * dir;
-    el.style.transform = "translate(" + x + "px," + y + "px) rotate(" + tilt + "deg) scaleX(" + dir + ")";
-    if(!still) requestAnimationFrame(frame);
+    el.style.transform = "translate3d(" + x.toFixed(1) + "px," + y.toFixed(1) + "px,0) rotate(" + tilt.toFixed(2) + "deg) scaleX(" + dir + ")";
   }
   requestAnimationFrame(frame);
 })();
@@ -953,11 +1024,10 @@ function bulbsAlong(svg, path, step, offset){
   for(let d = 10; d < L - 4; d += step, i++){
     const p = path.getPointAtLength(d), q = path.getPointAtLength(Math.min(L, d + 1));
     const ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
-    const col = BULBS[i % BULBS.length], g = el("g", {transform: "translate(" + p.x.toFixed(1) + " " + p.y.toFixed(1) + ") rotate(" + (ang + (i % 2 ? 80 : 100)).toFixed(0) + ")"}, svg);
-    const dur = (1.8 + (i * 37 % 13) / 10).toFixed(2) + "s", dl = (-(i * 53 % 29) / 10).toFixed(2) + "s";
-    el("circle", {cx: 7, cy: 0, r: 9, fill: "url(#halo" + (i % BULBS.length) + ")", class: "glow", style: "--d:" + dur + ";--dl:" + dl}, g);
+    const col = BULBS[i % BULBS.length], g = el("g", {class: "b" + (i % 3), transform: "translate(" + p.x.toFixed(1) + " " + p.y.toFixed(1) + ") rotate(" + (ang + (i % 2 ? 80 : 100)).toFixed(0) + ")"}, svg);
+    el("circle", {cx: 7, cy: 0, r: 10, fill: "url(#halo" + (i % BULBS.length) + ")", class: "glow"}, g);
     el("rect", {x: -1, y: -2.2, width: 3.4, height: 4.4, rx: 1, fill: "#20302a"}, g);
-    el("ellipse", {cx: 6.2, cy: 0, rx: 4.4, ry: 2.9, fill: col, class: "bulb", style: "--d:" + dur + ";--dl:" + dl}, g);
+    el("ellipse", {cx: 6.2, cy: 0, rx: 4.4, ry: 2.9, fill: col, class: "bulb"}, g);
     el("ellipse", {cx: 5, cy: -1, rx: 1.4, ry: .8, fill: "rgba(255,255,255,.75)"}, g);
   }
 }
@@ -1062,7 +1132,7 @@ function snowmanSVG(c){
     const LC = ["#ff4d5a","#ffd166","#58e08a","#6cc6ff","#ff8fd0"];
     lights = '<path d="M7 62 Q30 74 53 60 M8 82 Q30 94 52 80" fill="none" stroke="#1b2a24" stroke-width=".8"/>';
     [[10,64],[18,68.5],[26,70.6],[34,70.4],[42,68],[50,62.6],[11,84],[19,88.4],[27,90.4],[35,90],[43,87.4],[50,82.6]].forEach(([x, y], i) => {
-      lights += '<ellipse cx="' + x + '" cy="' + (y + 1.6) + '" rx="1.5" ry="2.1" fill="' + LC[i % 5] + '" class="tli" style="animation-delay:' + (-(i * 0.37) % 1.6).toFixed(2) + 's"/>';
+      lights += '<ellipse cx="' + x + '" cy="' + (y + 1.6) + '" rx="1.5" ry="2.1" fill="' + LC[i % 5] + '" class="tli b' + (i % 3) + '"/>';
     });
   }
   const broom = has("balai") ? '<path d="M-4 54 L-12 104" stroke="#8a5a2b" stroke-width="2.6" stroke-linecap="round"/><path d="M-16 100 L-8 100 L-6 112 L-20 112 Z" fill="#d9a94e"/><path d="M-17 104 h10 M-16 108 h9" stroke="#b8862f" stroke-width=".7"/>' : "";
@@ -1098,9 +1168,10 @@ function openRoom(title, origin, build){
   roomBody.innerHTML = "";
   if(origin){ const r = origin.getBoundingClientRect(); roomEl.style.transformOrigin = (r.left + r.width / 2) + "px " + (r.top + r.height / 2) + "px"; }
   roomEl.classList.add("open");
+  clearTimeout(roomEl._t); roomEl._t = setTimeout(() => { if(roomEl.classList.contains("open")) document.body.classList.add("room-on"); }, 560);
   requestAnimationFrame(() => { roomCleanup = build(roomBody) || null; });
 }
-function closeRoom(){ roomEl.classList.remove("open"); if(roomCleanup){ roomCleanup(); roomCleanup = null; } setTimeout(() => { if(!roomEl.classList.contains("open")) roomBody.innerHTML = ""; }, 500); }
+function closeRoom(){ clearTimeout(roomEl._t); document.body.classList.remove("room-on"); roomEl.classList.remove("open"); if(roomCleanup){ roomCleanup(); roomCleanup = null; } setTimeout(() => { if(!roomEl.classList.contains("open")) roomBody.innerHTML = ""; }, 500); }
 document.getElementById("roomBack").addEventListener("click", closeRoom);
 function svgPoint(svg, e){ const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); }
 function tabsUI(tabs){ return '<div class="tabs">' + tabs.map(([k, l], i) => '<button class="tab' + (i ? "" : " on") + '" data-t="' + k + '">' + l + '</button>').join("") + '</div><div class="tabpanel"></div>'; }
@@ -1140,7 +1211,7 @@ function roomSalon(body){
   const save = () => store.set("avent-tree", st);
   function drawTreeLights(){
     const set = LIGHT_SETS[st.lights] || [];
-    lights.innerHTML = set.length ? LP.map(([x, y], i) => '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="5" fill="' + set[i % set.length] + '" opacity=".22"/><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="2.4" fill="' + set[i % set.length] + '" class="tli" style="animation-delay:' + (-(i * 0.37) % 1.6).toFixed(2) + 's"/>').join("") : "";
+    lights.innerHTML = set.length ? LP.map(([x, y], i) => '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="5" fill="' + set[i % set.length] + '" opacity=".22"/><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="2.4" fill="' + set[i % set.length] + '" class="tli b' + (i % 3) + '"/>').join("") : "";
   }
   function drawTinsel(){
     const col = TINSEL[st.tinsel];
@@ -1217,17 +1288,28 @@ function roomToit(body){
     '<div class="gpanel" id="gPanel"><h3>Attrape les cadeaux !</h3><p>Glisse ton doigt pour bouger la hotte du Père Noël.</p>' +
     '<div class="legend"><span>🎁 <b>+1</b></span><span>🍭 <b>+2</b></span><span>⭐ <b>+3</b></span><span>❤️ une vie</span><span>❄️ ralenti</span><span>⚫ charbon −1 vie</span></div>' +
     '<p class="small">Enchaîne les prises sans en rater pour un combo ×2, puis ×3 !</p><p>Record : <b>' + best0 + '</b></p><button class="btn primary" id="gStart">Jouer</button></div></div>';
-  const cv = q("canvas", body), ctx = cv.getContext("2d"), panel = q("#gPanel", body), banner = q("#gBanner", body);
+  const cv = q("canvas", body), mainCtx = cv.getContext("2d", {alpha: false}), panel = q("#gPanel", body), banner = q("#gBanner", body);
+  let ctx = mainCtx;
   let W, H, dpr, raf, running = false, items = [], parts = [], pops = [], px = 0, tx = 0, vx = 0, score = 0, lives = 3, last = 0, spawnT = 0, shake = 0, flash = 0, combo = 0, slow = 0, level = 1, angelX = -200, angelT = 5;
   const stars = Array.from({length: 70}, () => ({x: Math.random(), y: Math.random() * .55, r: Math.random() * 1.3 + .3, p: Math.random() * 6}));
   const flakes = Array.from({length: 70}, () => ({x: Math.random(), y: Math.random(), r: Math.random() * 2 + .6, s: Math.random() * .4 + .3, w: Math.random() * 6}));
   let village = [];
+  const SPR = {}; let bgBack = null, bgFront = null;
+  function layer(w, h){ const c = document.createElement("canvas"); c.width = Math.ceil(w * dpr); c.height = Math.ceil(h * dpr); return c; }
+  function mk(w, fn){ const c = layer(w, w), sx = c.getContext("2d"); sx.setTransform(dpr, 0, 0, dpr, w * dpr / 2, w * dpr / 2); const keep = ctx; ctx = sx; fn(); ctx = keep; c.w = w; return c; }
+  function bake(w, h, fn){ const c = layer(w, h), sx = c.getContext("2d"); sx.setTransform(dpr, 0, 0, dpr, 0, 0); const keep = ctx; ctx = sx; fn(); ctx = keep; return c; }
   function size(){
-    dpr = Math.min(devicePixelRatio || 1, 2); W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    dpr = Math.min(devicePixelRatio || 1, 2); W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr; mainCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if(!W || !H) return;
     if(!px) px = tx = W / 2;
     village = []; let x = -10; while(x < W + 20){ const w = 34 + Math.random() * 30, h = 26 + Math.random() * 36; village.push({x, w, h, roof: Math.random() < .5, win: Array.from({length: 4}, () => Math.random() < .6), ch: Math.random() < .4}); x += w + 2 + Math.random() * 8; }
+    const o = {x: 0, y: 0, rot: 0};
+    SPR.gift = GC.map(c => mk(76, () => drawGift(Object.assign({s: 36, c}, o))));
+    SPR.star = mk(70, () => drawStar(o)); SPR.cane = mk(56, () => drawCane(o)); SPR.heart = mk(64, () => drawHeart(o));
+    SPR.flake = mk(60, () => drawFlake(o)); SPR.coal = mk(54, () => drawCoal(o)); SPR.sack = mk(164, () => drawSackShape());
+    SPR.halo = mk(90, () => { const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 45); g.addColorStop(0, "rgba(255,236,190,.45)"); g.addColorStop(1, "rgba(255,236,190,0)"); ctx.fillStyle = g; ctx.fillRect(-45, -45, 90, 90); });
+    bgBack = bake(W, H, drawBack); bgFront = bake(W, H, drawFront);
   }
-  size(); addEventListener("resize", size);
   const move = e => { const r = cv.getBoundingClientRect(); tx = Math.max(44, Math.min(W - 44, e.clientX - r.left)); };
   cv.addEventListener("pointerdown", move); cv.addEventListener("pointermove", move);
   const GC = [["#c8202c","#f0d08a"],["#1f6b45","#e8be68"],["#2f5fb3","#fff"],["#e8be68","#c8202c"],["#e06aa0","#fff"],["#7a4bc2","#f0d08a"]];
@@ -1235,7 +1317,7 @@ function roomToit(body){
   function spawn(){
     const r = Math.random();
     const type = r < .17 ? "coal" : r < .25 ? "star" : r < .34 ? "cane" : r < .37 ? "heart" : r < .40 ? "flake" : "gift";
-    items.push({type, x: 26 + Math.random() * (W - 52), y: -30, vy: (120 + Math.random() * 60) * (1 + (level - 1) * .14), s: type === "gift" ? 26 + Math.random() * 10 : 24, rot: Math.random() * .6 - .3, vr: Math.random() * 2 - 1, c: GC[Math.floor(Math.random() * GC.length)], sw: Math.random() * 6});
+    items.push({type, x: 26 + Math.random() * (W - 52), y: -30, vy: (120 + Math.random() * 60) * (1 + (level - 1) * .14), s: type === "gift" ? 26 + Math.random() * 10 : 24, rot: Math.random() * .6 - .3, vr: Math.random() * 2 - 1, ci: Math.floor(Math.random() * GC.length), sw: Math.random() * 6}); const it = items[items.length - 1]; it.c = GC[it.ci];
   }
   function rr(x, y, w, h, r){ ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); }
   function drawGift(it){ ctx.save(); ctx.translate(it.x, it.y); ctx.rotate(it.rot); const s = it.s;
@@ -1260,8 +1342,10 @@ function roomToit(body){
     ctx.shadowColor = "rgba(255,90,40,.55)"; ctx.shadowBlur = 10; ctx.fillStyle = "#26221f"; ctx.beginPath();
     [[0,-13],[10,-8],[13,4],[5,13],[-8,11],[-14,1],[-9,-10]].forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); ctx.fill(); ctx.shadowBlur = 0;
     ctx.fillStyle = "rgba(255,255,255,.16)"; ctx.beginPath(); ctx.arc(-4, -4, 3.4, 0, 7); ctx.fill(); ctx.fillStyle = "rgba(255,110,50,.6)"; ctx.beginPath(); ctx.arc(4, 5, 1.6, 0, 7); ctx.fill(); ctx.restore(); }
-  function drawSack(){
-    const y = H - 104, w = 84; ctx.save(); ctx.translate(px, y); ctx.rotate(Math.max(-.25, Math.min(.25, vx / 900)));
+  function blit(c, x, y, rot, k){ const w = c.w * (k || 1); ctx.save(); ctx.translate(x, y); if(rot) ctx.rotate(rot); ctx.drawImage(c, -w / 2, -w / 2, w, w); ctx.restore(); }
+  function drawSack(){ blit(SPR.sack, px, H - 104, Math.max(-.25, Math.min(.25, vx / 900))); }
+  function drawSackShape(){
+    const w = 84; ctx.save();
     [[-18,-6,"#2f5fb3","#e8be68"],[14,-9,"#e8be68","#c8202c"],[-2,-14,"#1f6b45","#fff"]].forEach(([x, yy, c1, c2]) => { ctx.fillStyle = c1; rr(x - 9, yy - 9, 18, 18, 3); ctx.fill(); ctx.fillStyle = c2; ctx.fillRect(x - 2, yy - 9, 4, 18); ctx.fillRect(x - 9, yy - 2, 18, 4); });
     ctx.shadowColor = "rgba(0,0,0,.4)"; ctx.shadowBlur = 12; ctx.shadowOffsetY = 6;
     const g = ctx.createLinearGradient(-w/2, 0, w/2, 0); g.addColorStop(0, "#8f1820"); g.addColorStop(.45, "#cf3540"); g.addColorStop(1, "#7d141b");
@@ -1276,7 +1360,8 @@ function roomToit(body){
     angelT -= dt; if(angelT <= 0 && angelX < -150){ angelX = W + 80; angelT = 14 + Math.random() * 10; }
     if(angelX <= -150) return;
     angelX -= 70 * dt; const ay = H * .22 + Math.sin(t / 500) * 10;
-    ctx.save(); ctx.translate(angelX, ay); ctx.shadowColor = "rgba(255,236,190,.8)"; ctx.shadowBlur = 14;
+    blit(SPR.halo, angelX - 2, ay - 4);
+    ctx.save(); ctx.translate(angelX, ay);
     ctx.fillStyle = "#141218"; ctx.beginPath(); ctx.ellipse(0, 0, 16, 8, 0, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(-16, -4, 8, 0, 7); ctx.fill();
     ctx.beginPath(); ctx.moveTo(-22, -8); ctx.lineTo(-21, -17); ctx.lineTo(-15, -11); ctx.closePath(); ctx.moveTo(-13, -11); ctx.lineTo(-9, -18); ctx.lineTo(-9, -7); ctx.closePath(); ctx.fill();
     ctx.beginPath(); ctx.moveTo(14, -2); ctx.quadraticCurveTo(26, -6, 26, -16); ctx.lineWidth = 3; ctx.strokeStyle = "#141218"; ctx.stroke();
@@ -1284,15 +1369,12 @@ function roomToit(body){
     const fl = Math.sin(t / 90) * 7; ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.moveTo(2, -4); ctx.quadraticCurveTo(6, -26 - fl, 24, -24 - fl); ctx.quadraticCurveTo(18, -12, 6, 2); ctx.fill();
     ctx.fillStyle = "#ffd54a"; ctx.beginPath(); ctx.arc(-19, -5, 1.7, 0, 7); ctx.arc(-13.5, -5, 1.7, 0, 7); ctx.fill(); ctx.restore();
   }
-  function scene(t, dt){
+  function drawBack(){
     const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#050f1a"); g.addColorStop(.55, "#0f2c40"); g.addColorStop(1, "#1d4a52"); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    for(let k = 0; k < 2; k++){ ctx.save(); ctx.globalAlpha = .16 + .07 * Math.sin(t / 1800 + k); const ag = ctx.createLinearGradient(0, H * .04, 0, H * .42);
-      ag.addColorStop(0, "rgba(90,255,180,0)"); ag.addColorStop(.5, k ? "rgba(120,190,255,.9)" : "rgba(90,255,180,.9)"); ag.addColorStop(1, "rgba(90,255,180,0)");
-      ctx.fillStyle = ag; ctx.beginPath(); ctx.moveTo(0, H * .42); for(let x = 0; x <= W; x += 10) ctx.lineTo(x, H * (.12 + k * .07) + Math.sin(x / 70 + t / 1400 + k * 2) * 26); ctx.lineTo(W, H * .42); ctx.closePath(); ctx.fill(); ctx.restore(); }
-    stars.forEach(s => { ctx.globalAlpha = .3 + .7 * Math.abs(Math.sin(t / 900 + s.p)); ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.r, 0, 7); ctx.fill(); }); ctx.globalAlpha = 1;
     ctx.save(); ctx.shadowColor = "#fff2c0"; ctx.shadowBlur = 40; ctx.fillStyle = "#fff6dc"; ctx.beginPath(); ctx.arc(W - 64, 78, 28, 0, 7); ctx.fill(); ctx.restore();
     ctx.fillStyle = "rgba(0,0,0,.06)"; ctx.beginPath(); ctx.arc(W - 56, 70, 6, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(W - 72, 88, 8, 0, 7); ctx.fill();
-    drawAngel(t, dt);
+  }
+  function drawFront(){
     ctx.fillStyle = "#16384a"; ctx.beginPath(); ctx.moveTo(0, H); for(let x = 0; x <= W; x += 20) ctx.lineTo(x, (H - 172) + Math.sin(x / 90) * 22 + Math.cos(x / 37) * 10); ctx.lineTo(W, H); ctx.fill();
     ctx.fillStyle = "rgba(240,248,252,.55)"; ctx.beginPath(); for(let x = 0; x <= W; x += 20){ const y = (H - 172) + Math.sin(x / 90) * 22 + Math.cos(x / 37) * 10; x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } for(let x = W; x >= 0; x -= 20) ctx.lineTo(x, (H - 172) + Math.sin(x / 90) * 22 + Math.cos(x / 37) * 10 + 5); ctx.fill();
     const vy = H - 96;
@@ -1301,13 +1383,22 @@ function roomToit(body){
       if(h.ch){ ctx.fillRect(h.x + h.w * .7, vy - h.h - 22, 7, 16); }
       ctx.beginPath(); if(h.roof){ ctx.moveTo(h.x - 4, vy - h.h); ctx.lineTo(h.x + h.w / 2, vy - h.h - 18); ctx.lineTo(h.x + h.w + 4, vy - h.h); ctx.closePath(); } else ctx.rect(h.x - 3, vy - h.h - 5, h.w + 6, 6); ctx.fill();
       ctx.fillStyle = "rgba(240,248,252,.9)"; ctx.beginPath(); if(h.roof){ ctx.moveTo(h.x - 4, vy - h.h); ctx.lineTo(h.x + h.w / 2, vy - h.h - 18); ctx.lineTo(h.x + h.w + 4, vy - h.h); ctx.lineTo(h.x + h.w / 2, vy - h.h - 13); ctx.closePath(); } else ctx.rect(h.x - 3, vy - h.h - 8, h.w + 6, 3.5); ctx.fill();
-      h.win.forEach((on, i) => { if(!on) return; ctx.fillStyle = "rgba(255,206,110," + (.75 + .25 * Math.sin(t / 700 + i + h.x)) + ")"; ctx.fillRect(h.x + 6 + (i % 2) * (h.w - 18), vy - h.h + 8 + Math.floor(i / 2) * 14, 6, 7); });
+      h.win.forEach((on, i) => { if(!on) return; ctx.fillStyle = "rgba(255,206,110," + (.72 + .28 * ((i * 7 + h.x) % 1)) + ")"; ctx.fillRect(h.x + 6 + (i % 2) * (h.w - 18), vy - h.h + 8 + Math.floor(i / 2) * 14, 6, 7); });
     });
     ctx.fillStyle = "#7a2a24"; ctx.beginPath(); ctx.moveTo(-10, H - 38); ctx.lineTo(W / 2, H - 64); ctx.lineTo(W + 10, H - 38); ctx.lineTo(W + 10, H); ctx.lineTo(-10, H); ctx.fill();
     ctx.strokeStyle = "rgba(0,0,0,.25)"; ctx.lineWidth = 2; for(let i = 0; i < 4; i++){ ctx.beginPath(); ctx.moveTo(-10, H - 26 + i * 12); ctx.lineTo(W / 2, H - 52 + i * 12); ctx.lineTo(W + 10, H - 26 + i * 12); ctx.stroke(); }
     ctx.fillStyle = "#f4f8fb"; ctx.beginPath(); ctx.moveTo(-10, H - 46); ctx.lineTo(W / 2, H - 72); ctx.lineTo(W + 10, H - 46); ctx.lineTo(W + 10, H - 34); ctx.lineTo(W / 2, H - 58); ctx.lineTo(-10, H - 34); ctx.fill();
     for(let x = 6; x < W; x += 26){ const yb = H - 34 - (1 - Math.abs(x - W / 2) / (W / 2 + 10)) * 24; ctx.beginPath(); ctx.moveTo(x - 4, yb); ctx.lineTo(x, yb + 7 + (x % 3) * 2); ctx.lineTo(x + 4, yb); ctx.fill(); }
     ctx.fillStyle = "#6b3a2a"; ctx.fillRect(W * .8, H - 118, 32, 64); ctx.fillStyle = "#5a2f22"; ctx.fillRect(W * .8, H - 118, 32, 4); ctx.fillStyle = "#f4f8fb"; rr(W * .8 - 5, H - 124, 42, 10, 5); ctx.fill();
+  }
+  function scene(t, dt){
+    if(bgBack) ctx.drawImage(bgBack, 0, 0, W, H);
+    for(let k = 0; k < 2; k++){ ctx.save(); ctx.globalAlpha = .16 + .07 * Math.sin(t / 1800 + k); const ag = ctx.createLinearGradient(0, H * .04, 0, H * .42);
+      ag.addColorStop(0, "rgba(90,255,180,0)"); ag.addColorStop(.5, k ? "rgba(120,190,255,.9)" : "rgba(90,255,180,.9)"); ag.addColorStop(1, "rgba(90,255,180,0)");
+      ctx.fillStyle = ag; ctx.beginPath(); ctx.moveTo(0, H * .42); for(let x = 0; x <= W; x += 10) ctx.lineTo(x, H * (.12 + k * .07) + Math.sin(x / 70 + t / 1400 + k * 2) * 26); ctx.lineTo(W, H * .42); ctx.closePath(); ctx.fill(); ctx.restore(); }
+    stars.forEach(s => { ctx.globalAlpha = .3 + .7 * Math.abs(Math.sin(t / 900 + s.p)); ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.r, 0, 7); ctx.fill(); }); ctx.globalAlpha = 1;
+    drawAngel(t, dt);
+    if(bgFront) ctx.drawImage(bgFront, 0, 0, W, H);
     ctx.fillStyle = "rgba(255,255,255,.85)";
     flakes.forEach(f => { f.y += f.s * dt * (slow > 0 ? .4 : 1) * .12; f.w += dt; if(f.y > 1.02){ f.y = -.02; f.x = Math.random(); } ctx.beginPath(); ctx.arc(f.x * W + Math.sin(f.w) * 8, f.y * H, f.r, 0, 7); ctx.fill(); });
     if(slow > 0){ ctx.fillStyle = "rgba(160,220,255," + Math.min(.16, slow * .05) + ")"; ctx.fillRect(0, 0, W, H); }
@@ -1343,11 +1434,18 @@ function roomToit(body){
         hud(); if(lives <= 0) over(); return false;
       }
       if(it.y > H + 40){ if((it.type === "gift" || it.type === "star" || it.type === "cane") && running){ if(combo >= 2) pops.push({x: it.x, y: H - 130, txt: "raté…", c: "#cfd8e3", t: .8}); combo = 0; hud(); } return false; }
-      ({gift: drawGift, star: drawStar, cane: drawCane, heart: drawHeart, flake: drawFlake, coal: drawCoal})[it.type](it); return true;
+      const T = it.type;
+      if(T === "gift") blit(SPR.gift[it.ci], it.x, it.y, it.rot, it.s / 36);
+      else if(T === "star") blit(SPR.star, it.x, it.y, it.y / 60);
+      else if(T === "cane") blit(SPR.cane, it.x, it.y, it.rot + Math.sin(it.y / 40) * .3);
+      else if(T === "heart") blit(SPR.heart, it.x, it.y, 0, 1 + Math.sin(it.y / 18) * .08);
+      else if(T === "flake") blit(SPR.flake, it.x, it.y, it.y / 50);
+      else blit(SPR.coal, it.x, it.y, it.y / 90);
+      return true;
     });
     drawSack();
     parts = parts.filter(p => { p.t -= dt; p.vy += 260 * dt; p.x += p.vx * dt; p.y += p.vy * dt; ctx.globalAlpha = Math.max(0, p.t); ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill(); ctx.globalAlpha = 1; return p.t > 0; });
-    pops = pops.filter(p => { p.t -= dt; p.y -= 46 * dt; ctx.globalAlpha = Math.max(0, p.t); ctx.fillStyle = p.c; ctx.font = "700 24px Fraunces, Georgia, serif"; ctx.textAlign = "center"; ctx.shadowColor = "rgba(0,0,0,.5)"; ctx.shadowBlur = 6; ctx.fillText(p.txt, p.x, p.y); ctx.shadowBlur = 0; ctx.globalAlpha = 1; return p.t > 0; });
+    pops = pops.filter(p => { p.t -= dt; p.y -= 46 * dt; ctx.globalAlpha = Math.max(0, p.t); ctx.fillStyle = p.c; ctx.font = "700 24px Fraunces, Georgia, serif"; ctx.textAlign = "center"; ctx.lineWidth = 4; ctx.lineJoin = "round"; ctx.strokeStyle = "rgba(0,0,0,.45)"; ctx.strokeText(p.txt, p.x, p.y); ctx.fillText(p.txt, p.x, p.y); ctx.globalAlpha = 1; return p.t > 0; });
     ctx.restore();
     if(flash > 0){ flash -= dt; ctx.fillStyle = "rgba(255,60,60," + Math.max(0, flash) * .6 + ")"; ctx.fillRect(0, 0, W, H); }
   }
@@ -1361,6 +1459,7 @@ function roomToit(body){
     panel.classList.remove("hide"); q("#gStart", panel).onclick = start;
   }
   q("#gStart", body).onclick = start;
+  size(); addEventListener("resize", size);
   raf = requestAnimationFrame(frame);
   return () => { cancelAnimationFrame(raf); removeEventListener("resize", size); };
 }
@@ -1509,13 +1608,14 @@ function roomLettre(body){
   let alive = true;
   function fly(ts){
     if(!alive) return;
+    requestAnimationFrame(fly);
+    if(document.body.classList.contains("room-on")) return;
     const t = (ts || 0) / 1000, r = sc.getBoundingClientRect(), w = a.offsetWidth;
     const cx = r.left + r.width / 2 - w / 2, cy = r.top + r.height * .32;
     const x = cx + Math.min(r.width * .5, (innerWidth - w) / 2 - 4) * Math.sin(t * .45), y = cy + r.height * .2 * Math.sin(t * .9) + 6 * Math.sin(t * 2.3);
     const dir = Math.cos(t * .45) >= 0 ? 1 : -1;
-    a.style.transform = "translate(" + x + "px," + y + "px) rotate(" + (-8 * Math.cos(t * .9) * dir) + "deg) scaleX(" + dir + ")";
-    a.style.zIndex = Math.cos(t * .45) > 0 ? 4 : 1;
-    requestAnimationFrame(fly);
+    a.style.transform = "translate3d(" + x.toFixed(1) + "px," + y.toFixed(1) + "px,0) rotate(" + (-8 * Math.cos(t * .9) * dir).toFixed(2) + "deg) scaleX(" + dir + ")";
+    const z = Math.cos(t * .45) > 0 ? "4" : "1"; if(a.style.zIndex !== z) a.style.zIndex = z;
   }
   requestAnimationFrame(fly);
   const locked = () => !preview && today() === 0;
@@ -1544,7 +1644,7 @@ function roomLettre(body){
       intro.classList.add("opening"); sc.classList.add("zoom");
     }, 950);
     setTimeout(() => { intro.classList.add("gone"); document.body.classList.remove("intro-on"); drawLights(); }, 2700);
-    setTimeout(() => { alive = false; }, 3700);
+    clearTimeout(window._killFly); window._killFly = setTimeout(() => { alive = false; }, 3700);
   }
   door.addEventListener("click", enter);
   document.getElementById("homeBtn").addEventListener("click", () => {
@@ -1553,7 +1653,7 @@ function roomLettre(body){
     document.getElementById("hint").classList.remove("hide");
     void intro.offsetWidth; intro.classList.remove("intro-reset");
     entered = false; document.body.classList.add("intro-on"); intro.classList.remove("gone");
-    if(!alive){ alive = true; requestAnimationFrame(fly); }
+    clearTimeout(window._killFly); if(!alive){ alive = true; requestAnimationFrame(fly); }
     scrollTo(0, 0);
   });
   document.getElementById("hotWindow").addEventListener("click", e => openRoom("Le salon", e.currentTarget, roomSalon));
@@ -1568,8 +1668,10 @@ function roomLettre(body){
   });
   if(location.hash === "#apercu"){ alive = false; intro.classList.add("gone"); document.body.classList.remove("intro-on"); }
 })();
-
-/* ================= musique de Noël (airs traditionnels du domaine public, joués par la page) ================= */
+/* ================= musique de Noël (airs traditionnels du domaine public) =================
+   iPhone : un son généré en direct (Web Audio) est souvent muet (bouton silencieux, geste requis…).
+   On « enregistre » donc chaque morceau hors-ligne en vrai fichier WAV, puis on le joue
+   avec un simple lecteur <audio>, démarré directement dans le premier toucher. */
 const Music = (() => {
   const SONGS = [
     {t: "Jingle Bells", bpm: 132, bar: 4, bells: true,
@@ -1589,43 +1691,43 @@ const Music = (() => {
         "D4:1.5 E4:.5 F4:1 D4:1 E4:1.5 F4:.5 G4:1 D4:1 E4:.5 F#4:.5 G4:1 A4:.5 B4:.5 C5:1 B4:1 A4:1 G4:2 " +
         "G4:1.5 F4:.5 E4:1 D4:1 C4:1 D4:1 E4:1 C4:1 A4:.5 A4:.5 A4:.5 A4:.5 G4:1.5 F4:.5 E4:1 D4:1 C4:2"}
   ];
+  const RATE = 32000;
   const SEMI = {C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11};
   const midiOf = n => { const m = n.match(/^([A-G])(#|b)?(\d)$/); return (+m[3] + 1) * 12 + SEMI[m[1]] + (m[2] === "#" ? 1 : m[2] === "b" ? -1 : 0); };
   const hz = midi => 440 * Math.pow(2, (midi - 69) / 12);
-  let ctx = null, master, wet, noiseBuf, idx = 0, songEnd = 0, on = store.get("avent-music", true), loop = null;
-  const btn = document.getElementById("musicBtn"), label = document.getElementById("songName");
+  const chordOf = name => { const m = name.match(/^([A-G])(#|b)?(m)?/); return {r: SEMI[m[1]] + (m[2] === "#" ? 1 : m[2] === "b" ? -1 : 0), third: m[3] ? 3 : 4}; };
+  const songLen = s => ((s.pickup || 0) + s.chords.split(" ").length * s.bar) * 60 / s.bpm;
 
-  function setup(){
-    ctx = new (window.AudioContext || window.webkitAudioContext)();
-    master = ctx.createGain(); master.gain.value = .6;
+  /* ---------- rendu hors-ligne d'un morceau → AudioBuffer ---------- */
+  function render(song){
+    const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    if(!OAC) return Promise.reject("no offline audio");
+    const total = songLen(song) + 2.4;
+    const ctx = new OAC(1, Math.ceil(total * RATE), RATE);
+    const master = ctx.createGain(); master.gain.value = .6;
     const comp = ctx.createDynamicsCompressor(); master.connect(comp); comp.connect(ctx.destination);
-    const len = Math.floor(ctx.sampleRate * 2.6), ir = ctx.createBuffer(2, len, ctx.sampleRate);
-    for(let c = 0; c < 2; c++){ const d = ir.getChannelData(c); for(let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
-    const conv = ctx.createConvolver(); conv.buffer = ir; wet = ctx.createGain(); wet.gain.value = .3; wet.connect(conv); conv.connect(master);
-    noiseBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * .2), ctx.sampleRate); const nd = noiseBuf.getChannelData(0); for(let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
-  }
-  const out = node => { node.connect(master); node.connect(wet); };
-  function env(t, v, len, att){ const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + (att || .006)); g.gain.exponentialRampToValueAtTime(.0006, t + len); out(g); return g; }
-  function musicBox(f, t, v, len){ // timbre de boîte à musique / célesta
-    const g = env(t, v, len);
-    [[1, 1, "sine"], [2, .3, "sine"], [3.01, .07, "triangle"], [5.4, .025, "sine"]].forEach(([k, a, type]) => {
-      const o = ctx.createOscillator(); o.type = type; o.frequency.value = f * k; o.detune.value = (Math.random() - .5) * 6;
-      const og = ctx.createGain(); og.gain.value = a; o.connect(og); og.connect(g); o.start(t); o.stop(t + len + .05);
-    });
-  }
-  function soft(f, t, v, len, type){ const g = env(t, v, len, .03); const o = ctx.createOscillator(); o.type = type || "triangle"; o.frequency.value = f; o.connect(g); o.start(t); o.stop(t + len + .05); }
-  function jingle(t, v){ const s = ctx.createBufferSource(); s.buffer = noiseBuf; s.playbackRate.value = .9 + Math.random() * .2;
-    const hp = ctx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 7000; const g = ctx.createGain();
-    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.0004, t + .11); s.connect(hp); hp.connect(g); out(g); s.start(t); s.stop(t + .14); }
-  function chordOf(name){ const m = name.match(/^([A-G])(#|b)?(m)?/); const r = SEMI[m[1]] + (m[2] === "#" ? 1 : m[2] === "b" ? -1 : 0); return {r, third: m[3] ? 3 : 4}; }
+    const len = Math.floor(RATE * 2.4), ir = ctx.createBuffer(1, len, RATE), d = ir.getChannelData(0);
+    for(let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+    const conv = ctx.createConvolver(); conv.buffer = ir; const wet = ctx.createGain(); wet.gain.value = .3; wet.connect(conv); conv.connect(master);
+    const noise = ctx.createBuffer(1, Math.floor(RATE * .2), RATE), nd = noise.getChannelData(0); for(let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+    const out = n => { n.connect(master); n.connect(wet); };
+    const env = (t, v, l, att) => { const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + (att || .006)); g.gain.exponentialRampToValueAtTime(.0006, t + l); out(g); return g; };
+    const musicBox = (f, t, v, l) => { const g = env(t, v, l);
+      [[1, 1, "sine"], [2, .3, "sine"], [3.01, .07, "triangle"], [5.4, .025, "sine"]].forEach(([k, a, type]) => {
+        if(f * k > RATE / 2.2) return;
+        const o = ctx.createOscillator(); o.type = type; o.frequency.value = f * k; o.detune.value = (Math.random() - .5) * 6;
+        const og = ctx.createGain(); og.gain.value = a; o.connect(og); og.connect(g); o.start(t); o.stop(t + l + .05); }); };
+    const soft = (f, t, v, l, type) => { const g = env(t, v, l, .03); const o = ctx.createOscillator(); o.type = type || "triangle"; o.frequency.value = f; o.connect(g); o.start(t); o.stop(t + l + .05); };
+    const jingle = (t, v) => { const s = ctx.createBufferSource(); s.buffer = noise; s.playbackRate.value = .9 + Math.random() * .2;
+      const hp = ctx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 6500; const g = ctx.createGain();
+      g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.0004, t + .11); s.connect(hp); hp.connect(g); out(g); s.start(t); s.stop(t + .14); };
 
-  function play(song){
-    const b = 60 / song.bpm, pick = song.pickup || 0, t0 = ctx.currentTime + .2;
+    const b = 60 / song.bpm, pick = song.pickup || 0, t0 = .15;
     let t = t0, beat = -pick;
     song.m.trim().split(/\s+/).forEach(tok => {
-      const [n, d] = tok.split(":"), dur = +d;
+      const [n, dd] = tok.split(":"), dur = +dd;
       if(n !== "R"){ const accent = ((beat % song.bar) + song.bar) % song.bar === 0 ? 1.15 : 1;
-        musicBox(hz(midiOf(n)), t + (Math.random() - .5) * .012, .2 * accent * (.92 + Math.random() * .16), Math.max(1.1, dur * b * 2.4)); }
+        musicBox(hz(midiOf(n)), Math.max(0, t + (Math.random() - .5) * .012), .2 * accent * (.92 + Math.random() * .16), Math.min(Math.max(1.1, dur * b * 2.4), total - t - .1)); }
       t += dur * b; beat += dur;
     });
     const chords = song.chords.split(" ");
@@ -1633,38 +1735,112 @@ const Music = (() => {
       const c = chordOf(ch), tb = t0 + (pick + i * song.bar) * b, root = 48 + c.r;
       soft(hz(root), tb, .17, song.bar * b * .95);
       soft(hz(root - 12), tb, .08, song.bar * b * .9, "sine");
-      const dy = [60 + c.r + c.third, 60 + c.r + 7];
-      const offs = song.bar === 3 ? [1, 2] : [1, 3];
+      const dy = [60 + c.r + c.third, 60 + c.r + 7], offs = song.bar === 3 ? [1, 2] : [1, 3];
       offs.forEach(o => dy.forEach(m => soft(hz(m), tb + o * b, .035, b * .9, "sine")));
     });
-    const total = (pick + chords.length * song.bar) * b;
-    if(song.bells) for(let x = 0; x < total; x += b / 2) jingle(t0 + x, x % b === 0 ? .06 : .03);
-    songEnd = t0 + total + 1.6;
-    if(label){ label.textContent = "♪ " + song.t; label.classList.remove("show"); void label.offsetWidth; label.classList.add("show"); }
+    if(song.bells){ const tt = songLen(song); for(let x = 0; x < tt; x += b / 2) jingle(t0 + x, x % b === 0 ? .06 : .03); }
+
+    return new Promise((res, rej) => {
+      ctx.oncomplete = e => res(e.renderedBuffer);
+      const p = ctx.startRendering();
+      if(p && p.then) p.then(res, rej);
+    });
   }
-  function tick(){ if(ctx && on && ctx.state === "running" && ctx.currentTime >= songEnd){ play(SONGS[idx]); idx = (idx + 1) % SONGS.length; } }
-  function ui(){ if(!btn) return; btn.classList.toggle("off", !on); btn.textContent = on ? "🎵" : "🔇"; btn.setAttribute("aria-label", on ? "Couper la musique" : "Mettre la musique"); }
-  function start(){
+
+  /* ---------- AudioBuffer → fichier WAV (16 bits mono), volume normalisé ---------- */
+  function toWav(buf){
+    const data = buf.getChannelData(0), n = data.length;
+    let peak = 0; for(let i = 0; i < n; i++){ const a = Math.abs(data[i]); if(a > peak) peak = a; }
+    const gain = peak > 0 ? .6 / peak : 1, fade = Math.floor(RATE * .6);
+    const ab = new ArrayBuffer(44 + n * 2), v = new DataView(ab);
+    const str = (o, s) => { for(let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+    str(0, "RIFF"); v.setUint32(4, 36 + n * 2, true); str(8, "WAVE"); str(12, "fmt ");
+    v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, RATE, true);
+    v.setUint32(28, RATE * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); str(36, "data"); v.setUint32(40, n * 2, true);
+    for(let i = 0; i < n; i++){
+      let s = data[i] * gain; if(i > n - fade) s *= (n - i) / fade; if(i < 200) s *= i / 200;
+      s = s > 1 ? 1 : s < -1 ? -1 : s; v.setInt16(44 + i * 2, s * 32767, true);
+    }
+    return URL.createObjectURL(new Blob([ab], {type: "audio/wav"}));
+  }
+
+  /* un tout petit WAV silencieux, pour « débloquer » le lecteur dès le premier toucher */
+  const SILENT = (() => { const n = 800, ab = new ArrayBuffer(44 + n * 2), v = new DataView(ab);
+    const str = (o, s) => { for(let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+    str(0, "RIFF"); v.setUint32(4, 36 + n * 2, true); str(8, "WAVE"); str(12, "fmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true);
+    v.setUint16(22, 1, true); v.setUint32(24, 8000, true); v.setUint32(28, 16000, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+    str(36, "data"); v.setUint32(40, n * 2, true); return URL.createObjectURL(new Blob([ab], {type: "audio/wav"})); })();
+
+  const urls = new Array(SONGS.length).fill(null);
+  let rendering = null;
+  function prepare(i){
+    if(urls[i]) return Promise.resolve(urls[i]);
+    const job = (rendering || Promise.resolve()).then(() => urls[i] || render(SONGS[i]).then(buf => (urls[i] = toWav(buf))));
+    rendering = job.catch(() => {});
+    return job;
+  }
+
+  const audio = new Audio();
+  audio.preload = "auto"; audio.setAttribute("playsinline", ""); audio.setAttribute("webkit-playsinline", "");
+  let on = store.get("avent-music", true), idx = 0, unlocked = false, wanted = false, current = -1;
+  const btn = document.getElementById("musicBtn"), label = document.getElementById("songName");
+  const playingUI = () => { if(btn) btn.classList.toggle("playing", !audio.paused && audio.src !== SILENT && on); };
+  ["playing", "pause", "ended", "emptied"].forEach(ev => audio.addEventListener(ev, playingUI));
+
+  function showName(i){ if(!label) return; label.textContent = "♪ " + SONGS[i].t; label.classList.remove("show"); void label.offsetWidth; label.classList.add("show"); }
+  function playSong(i){
+    current = i;
+    prepare(i).then(url => {
+      if(!wanted || current !== i) return;
+      audio.src = url; audio.currentTime = 0;
+      const p = audio.play(); if(p && p.catch) p.catch(() => { unlocked = false; });
+      showName(i);
+      prepare((i + 1) % SONGS.length); // prépare le suivant pendant que celui-ci joue
+    }).catch(() => {});
+  }
+  audio.addEventListener("ended", () => { if(!wanted || audio.src === SILENT) return; idx = (idx + 1) % SONGS.length; setTimeout(() => wanted && playSong(idx), 900); });
+
+  // appelé SYNCHRONEMENT dans le geste (toucher / clic) : c'est ce qui autorise le son sur iPhone
+  function startFromGesture(){
     try{ if(navigator.audioSession) navigator.audioSession.type = "playback"; }catch(e){}
-    if(!ctx){ try{ setup(); }catch(e){ return; } }
-    if(ctx.state !== "running") ctx.resume();
-    if(!loop) loop = setInterval(tick, 300);
-    setTimeout(tick, 60);
+    wanted = true;
+    if(audio.src && audio.src !== SILENT && current >= 0 && !audio.ended){
+      const p = audio.play(); if(p && p.catch) p.catch(() => {}); unlocked = true; return;
+    }
+    if(urls[idx]){ audio.src = urls[idx]; current = idx; showName(idx); prepare((idx + 1) % SONGS.length); }
+    else { audio.src = SILENT; playSong(idx); }
+    const p = audio.play(); if(p && p.catch) p.catch(() => {});
+    unlocked = true;
   }
+  function stop(){ wanted = false; audio.pause(); }
+
+  function ui(){ if(!btn) return; playingUI(); btn.classList.toggle("off", !on); btn.textContent = on ? "🎵" : "🔇"; btn.setAttribute("aria-label", on ? "Couper la musique" : "Mettre la musique"); }
   function toggle(){
+    if(on && !unlocked){ startFromGesture(); toast("🎵 Musique de Noël"); return; } // 1er toucher sur le bouton = lancer
     on = !on; store.set("avent-music", on); ui();
-    if(on){ start(); toast("🎵 Musique de Noël"); } else if(ctx){ ctx.suspend(); toast("🔇 Musique coupée"); }
+    if(on){ startFromGesture(); toast("🎵 Musique de Noël"); } else { stop(); toast("🔇 Musique coupée"); }
   }
   ui();
-  if(btn) btn.addEventListener("click", e => { e.stopPropagation(); unlockDone = true; toggle(); });
-  let unlockDone = false;
-  const unlock = e => {
-    if(unlockDone || (btn && btn.contains(e.target))) return;
-    unlockDone = true; ["touchend", "click"].forEach(ev => document.removeEventListener(ev, unlock, true));
-    if(on){ start(); if(!store.get("avent-music-tip", false)){ store.set("avent-music-tip", true); setTimeout(() => toast("🎵 Musique de Noël · touche 🎵 pour la couper"), 600); } }
+  if(btn) btn.addEventListener("click", e => { e.stopPropagation(); toggle(); });
+
+  // n'importe quel toucher lance la musique (si elle est activée), et la relance si iOS l'a mise en pause
+  const onTap = e => {
+    if(!on || (btn && btn.contains(e.target))) return;
+    if(unlocked && !audio.paused) return;
+    if(unlocked && audio.paused && audio.src && audio.src !== SILENT && !audio.ended){ wanted = true; const p = audio.play(); if(p && p.catch) p.catch(() => {}); return; }
+    if(unlocked) return;
+    startFromGesture();
+    if(!store.get("avent-music-tip", false)){ store.set("avent-music-tip", true); setTimeout(() => toast("🎵 Musique de Noël · touche 🎵 pour la couper"), 700); }
   };
-  ["touchend", "click"].forEach(ev => document.addEventListener(ev, unlock, true));
-  document.addEventListener("visibilitychange", () => { if(!ctx) return; if(document.hidden) ctx.suspend(); else if(on) ctx.resume(); });
+  ["touchend", "click"].forEach(ev => document.addEventListener(ev, onTap, true));
+  document.addEventListener("visibilitychange", () => {
+    if(document.hidden){ if(!audio.paused) audio.pause(); }
+    else if(on && wanted && audio.src && audio.src !== SILENT){ const p = audio.play(); if(p && p.catch) p.catch(() => {}); }
+  });
+
+  // prépare le premier morceau dès que la page est calme
+  const idle = window.requestIdleCallback || (f => setTimeout(f, 700));
+  idle(() => prepare(0));
   return {toggle};
 })();
 
