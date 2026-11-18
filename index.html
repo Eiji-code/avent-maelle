@@ -14,7 +14,7 @@
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --night:#0e2621; --night2:#14332c;
@@ -318,6 +318,85 @@
   .wfly{position:fixed;z-index:96;pointer-events:none;max-width:70vw;padding:10px 14px;border-radius:16px;background:rgba(255,241,201,.95);color:#5a3a12;font-size:15px;
     box-shadow:0 0 30px 10px rgba(255,220,140,.6);animation:wfly 2.2s cubic-bezier(.5,0,.6,1) forwards}
   @keyframes wfly{0%{transform:scale(1);opacity:1}35%{transform:scale(.2);border-radius:50%;opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(.05);opacity:0}}
+
+  /* ---------- maison v2 : onglets, jeu, vœux, lettre ---------- */
+  .tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -14px 8px;padding:0 14px}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;border:1px solid rgba(232,190,104,.3);background:rgba(255,255,255,.05);color:var(--paper);font:inherit;font-size:13.5px;font-weight:700;padding:8px 12px;border-radius:999px;cursor:pointer}
+  .tab.on{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+  .tabpanel{min-height:96px;max-height:30vh;overflow-y:auto}
+  .tools .row-l:first-child{margin-top:2px}
+  .emo{width:42px;height:42px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.08);font-size:22px;cursor:pointer;display:grid;place-items:center}
+  .emo.on{border-color:var(--gold);background:rgba(232,190,104,.2);transform:scale(1.08)}
+  .tip.big{font-size:15px;color:var(--paper);padding:18px 0}
+  .acts{align-items:center;flex-wrap:wrap}
+  .acts .count{font-size:12.5px;color:var(--muted);margin-left:4px}
+  .sw.small{width:24px;height:24px;border-width:2px;vertical-align:middle;margin-left:4px}
+  .namein{width:100%;font:inherit;font-size:16px;padding:10px 12px;border-radius:12px;border:1px solid rgba(232,190,104,.4);background:rgba(255,255,255,.08);color:var(--paper);-webkit-user-select:text;user-select:text}
+  .namein::placeholder{color:rgba(255,255,255,.4)}
+  #winSnow.storm circle{animation-duration:1.6s !important}
+  .embers circle{animation:ember 1.8s ease-out infinite}.embers circle:nth-child(2){animation-delay:-.6s}.embers circle:nth-child(3){animation-delay:-1.2s}
+  @keyframes ember{0%{transform:translateY(20px);opacity:0}30%{opacity:1}100%{transform:translateY(-30px);opacity:0}}
+  .aur{animation:aur 7s ease-in-out infinite alternate}.aur.a2{animation-duration:9s}
+  @keyframes aur{from{transform:translateX(-12px) skewX(-4deg);opacity:.8}to{transform:translateX(12px) skewX(4deg);opacity:1}}
+  .stocking{cursor:pointer}
+
+  /* jeu */
+  .ghud{align-items:center}
+  .gsc b{font-size:24px}
+  .gcombo{font-family:"DM Sans",sans-serif;font-size:13px;font-weight:700;color:var(--paper);background:rgba(0,0,0,.35);padding:4px 10px;border-radius:999px;opacity:0;transition:opacity .2s}
+  .gcombo:not(:empty){opacity:1}
+  .gcombo.hot{background:linear-gradient(90deg,#ff7a2a,#e8be68);color:#2b1d16;animation:pulseC .6s ease-in-out infinite alternate}
+  @keyframes pulseC{to{transform:scale(1.08)}}
+  .gbanner{position:absolute;left:0;right:0;top:34%;text-align:center;font-family:Fraunces,Georgia,serif;font-weight:700;font-size:30px;color:#fff1c9;text-shadow:0 3px 14px rgba(0,0,0,.6);opacity:0;pointer-events:none}
+  .gbanner.show{animation:banner 1.5s ease-out}
+  @keyframes banner{0%{opacity:0;transform:scale(.6)}15%{opacity:1;transform:scale(1.08)}70%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translateY(-20px)}}
+  .legend{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:6px 0 10px}
+  .legend span{background:#f3ead9;border-radius:10px;padding:6px 4px;font-size:13px;color:#4a3626}
+  .gpanel .small{font-size:13px;color:#8a7a68}
+  .medal{font-size:54px;line-height:1;margin-bottom:4px;animation:ornPop .5s cubic-bezier(.3,1.6,.5,1)}
+
+  /* vœux */
+  .wsky{position:absolute;inset:0;z-index:1}
+  .wlines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .wstar{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border:0;padding:0;background:none;cursor:pointer;animation:wtw 2.6s ease-in-out infinite}
+  .wstar::before{content:"";position:absolute;inset:0;background:var(--c);clip-path:polygon(50% 0,61% 38%,100% 50%,61% 62%,50% 100%,39% 62%,0 50%,39% 38%);filter:drop-shadow(0 0 6px var(--c))}
+  .wstar::after{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--c);box-shadow:0 0 14px 6px var(--c);opacity:.6}
+  @keyframes wtw{0%,100%{transform:scale(.85) rotate(0)}50%{transform:scale(1.1) rotate(12deg)}}
+  .wbubble{position:absolute;z-index:4;width:230px;background:rgba(255,250,241,.97);color:var(--ink);border-radius:14px;padding:10px 12px;font-size:14.5px;line-height:1.4;box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;transform:translateY(-6px);pointer-events:none;transition:all .25s}
+  .wbubble.show{opacity:1;transform:none}
+  .wbubble small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#a07a3a;margin-bottom:3px;font-weight:700}
+  .wcols{display:flex;align-items:center;gap:2px;font-size:13px;color:#6a5646;margin:10px 0 2px}
+  .wish .shoot{top:20%}
+  .wcard{margin-top:18vh}
+
+  /* lettre */
+  .letterwrap{flex:1;overflow-y:auto;padding:18px 16px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;
+    background:radial-gradient(80% 50% at 50% 0%,#23493f,transparent 70%),#0e2621}
+  .letter{position:relative;width:min(92vw,380px);background:#fdf6e6;color:#3a2a1e;border-radius:6px;padding:22px 20px 18px;font-family:Caveat,"Segoe Print",cursive;font-size:22px;line-height:1.25;
+    box-shadow:0 14px 34px rgba(0,0,0,.45);background-image:repeating-linear-gradient(transparent 0 33px,rgba(120,150,200,.25) 33px 34px);background-position:0 54px}
+  .letter::before{content:"";position:absolute;left:34px;top:0;bottom:0;width:1.5px;background:rgba(220,90,90,.35)}
+  .letter.fly{animation:letterFly 1.6s cubic-bezier(.5,0,.6,1)}
+  @keyframes letterFly{0%{transform:none}25%{transform:scale(.9) rotate(-3deg)}100%{transform:translate(60vw,-80vh) scale(.1) rotate(25deg);opacity:0}}
+  .stamp{position:absolute;right:14px;top:12px;width:58px;height:66px;border:2px dashed #c8202c;border-radius:4px;display:grid;place-items:center;font-size:26px;background:#fff;transform:rotate(6deg);font-family:"DM Sans",sans-serif;line-height:1}
+  .stamp small{font-size:7.5px;letter-spacing:.1em;color:#c8202c;font-weight:700}
+  .lt-h{font-size:30px;font-weight:700;color:#9b1f26;margin:4px 70px 6px 18px}
+  .lt-p{margin:0 0 8px 18px;padding-right:56px}
+  .lt-list{list-style:none;margin:0 0 6px 18px;padding:0}
+  .lt-list li{display:flex;align-items:center;gap:8px;min-height:34px}
+  .lt-list li span{flex:1}
+  .lt-list li.ok span{text-decoration:line-through;text-decoration-color:#c8202c;opacity:.6}
+  .lt-list li.empty{opacity:.55}
+  .ck{width:22px;height:22px;border-radius:6px;border:2px solid #9b1f26;background:#fff;color:#1f6b45;font-weight:700;font-size:15px;line-height:1;cursor:pointer;flex:0 0 auto;padding:0}
+  .del{border:0;background:none;color:#b9a48a;font-size:22px;cursor:pointer;padding:0 4px}
+  .lt-add{display:flex;gap:8px;margin:4px 0 10px 18px}
+  .lt-add input{flex:1;min-width:0;font-family:Caveat,cursive;font-size:22px;border:0;border-bottom:2px dashed #c9b28e;background:transparent;color:#3a2a1e;padding:2px 2px;-webkit-user-select:text;user-select:text;outline:none}
+  .lt-add button{width:36px;height:36px;border-radius:50%;border:0;background:#c8202c;color:#fff;font-size:20px;cursor:pointer}
+  .lt-sign{text-align:right;font-size:24px;color:#9b1f26}
+  .letterwrap .btn{width:min(92vw,380px)}
+  .letterwrap .tip{color:var(--muted)}
+  #hotMail::after{animation-delay:-.9s}
+
   @media (prefers-reduced-motion:reduce){.tile.today{animation:none;box-shadow:0 0 0 3px var(--gold)}#snow{display:none}}
 </style>
 </head>
@@ -485,6 +564,15 @@
     <circle cx="18" cy="28" r="2.8" fill="#6cc6ff" class="tl d3"/><circle cx="32" cy="44" r="2.8" fill="#ff4d5a" class="tl"/><circle cx="12" cy="56" r="2.8" fill="#ffd166" class="tl d4"/>
     <circle cx="36" cy="74" r="2.8" fill="#ff8fd0" class="tl d2"/><circle cx="6" cy="86" r="2.8" fill="#58e08a" class="tl"/><circle cx="44" cy="88" r="2.8" fill="#fff1c4" class="tl d3"/>
   </g>
+  <!-- boîte aux lettres -->
+  <g class="mailbox">
+    <rect x="74" y="288" width="28" height="20" rx="3" fill="#c8202c" stroke="#8f1820" stroke-width="1.5"/>
+    <path d="M74 292 Q88 278 102 292 Z" fill="#b51f29" stroke="#8f1820" stroke-width="1.5"/>
+    <path d="M73 291 Q88 276 103 291 Q100 287 96 288 Q92 285 88 286 Q84 285 80 288 Q76 287 73 291 Z" fill="#f4f8fb"/>
+    <rect x="80" y="297" width="16" height="2.4" rx="1.2" fill="#5e0f14"/>
+    <g class="letterpeek"><rect x="81" y="290" width="14" height="9" rx="1" fill="#fdf6e6" transform="rotate(-8 88 294)"/><path d="M86 293.4 c-1.6 -1 -1.2 -2.4 -.2 -2.2 c.3 0 .4 .2 .4 .4 c0 -.2 .2 -.4 .4 -.4 c1 -.2 1.4 1.2 -.2 2.2 z" fill="#d42a35" transform="rotate(-8 88 294)"/></g>
+    <circle cx="99" cy="302" r="1.4" fill="#e8be68"/>
+  </g>
   <!-- neige au sol -->
   <path d="M-70 480 C-50 400 30 378 90 380 S180 384 270 378 S410 396 430 480 Z" fill="url(#groundG)"/>
   <path d="M-40 490 C-20 420 60 398 120 404 S240 400 300 404 S400 430 400 490 Z" fill="url(#groundG2)"/>
@@ -539,6 +627,7 @@
   </g>
 </svg></button>
     <button class="hot" id="hotWindow" style="left:50%;top:23.6%;width:13%" aria-label="Le salon"></button>
+    <button class="hot d2" id="hotMail" style="left:24.4%;top:67%;width:11%" aria-label="La boîte aux lettres"></button>
     <button class="hot d1" id="hotChimney" style="left:68.3%;top:11.5%;width:14%" aria-label="Le toit"></button>
     <button class="hot tall d2" id="hotSnow" style="left:13.5%;top:83%;width:21%" aria-label="Le bonhomme de neige"></button>
     <div class="knock" id="knock">Toc toc…</div>
@@ -903,41 +992,83 @@ function drawLights(){
 }
 
 
-const SALON_SVG = "  <defs>\n    <linearGradient id=\"sWall\" x1=\"0\" x2=\"0\" y1=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#6a2f27\"/><stop offset=\"1\" stop-color=\"#4f211b\"/></linearGradient>\n    <radialGradient id=\"sFire\" cx=\"50%\" cy=\"85%\" r=\"70%\"><stop offset=\"0\" stop-color=\"#ffcf6b\" stop-opacity=\".9\"/><stop offset=\"1\" stop-color=\"#ff7a2a\" stop-opacity=\"0\"/></radialGradient>\n    <radialGradient id=\"sRoomGlow\" cx=\"25%\" cy=\"80%\" r=\"60%\"><stop offset=\"0\" stop-color=\"#ffb35c\" stop-opacity=\".28\"/><stop offset=\"1\" stop-color=\"#ffb35c\" stop-opacity=\"0\"/></radialGradient>\n    <linearGradient id=\"sSky\" x1=\"0\" x2=\"0\" y1=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#0d2236\"/><stop offset=\"1\" stop-color=\"#1e4a5c\"/></linearGradient>\n  </defs>\n  <rect width=\"360\" height=\"440\" fill=\"url(#sWall)\"/>\n  <g fill=\"rgba(255,255,255,.035)\"><rect x=\"0\" width=\"12\" height=\"440\"/><rect x=\"36\" width=\"12\" height=\"440\"/><rect x=\"72\" width=\"12\" height=\"440\"/><rect x=\"108\" width=\"12\" height=\"440\"/><rect x=\"144\" width=\"12\" height=\"440\"/><rect x=\"180\" width=\"12\" height=\"440\"/><rect x=\"216\" width=\"12\" height=\"440\"/><rect x=\"252\" width=\"12\" height=\"440\"/><rect x=\"288\" width=\"12\" height=\"440\"/><rect x=\"324\" width=\"12\" height=\"440\"/></g>\n  <!-- fenêtre -->\n  <rect x=\"24\" y=\"44\" width=\"110\" height=\"120\" rx=\"6\" fill=\"#f3ead9\"/>\n  <rect x=\"31\" y=\"51\" width=\"96\" height=\"106\" rx=\"3\" fill=\"url(#sSky)\"/>\n  <circle cx=\"104\" cy=\"74\" r=\"10\" fill=\"#fff5d6\"/>\n  <g fill=\"#fff\" class=\"sflakes\"><circle cx=\"44\" cy=\"70\" r=\"1.6\"/><circle cx=\"60\" cy=\"96\" r=\"1.3\"/><circle cx=\"90\" cy=\"110\" r=\"1.7\"/><circle cx=\"52\" cy=\"130\" r=\"1.4\"/><circle cx=\"112\" cy=\"128\" r=\"1.5\"/><circle cx=\"76\" cy=\"62\" r=\"1.2\"/></g>\n  <path d=\"M31 150 Q60 140 80 146 T127 144 V157 H31 Z\" fill=\"#eef5f8\"/>\n  <path d=\"M79 51 V157 M31 104 H127\" stroke=\"#f3ead9\" stroke-width=\"5\"/>\n  <path d=\"M20 40 Q79 60 138 40\" fill=\"none\" stroke=\"#2f7d4f\" stroke-width=\"6\" stroke-linecap=\"round\"/>\n  <g fill=\"#e0353f\"><circle cx=\"40\" cy=\"47\" r=\"2.6\"/><circle cx=\"62\" cy=\"52\" r=\"2.6\"/><circle cx=\"96\" cy=\"52\" r=\"2.6\"/><circle cx=\"118\" cy=\"47\" r=\"2.6\"/></g>\n  <!-- cadre : l'ange -->\n  <rect x=\"38\" y=\"196\" width=\"84\" height=\"74\" rx=\"4\" fill=\"#c99a45\"/>\n  <rect x=\"44\" y=\"202\" width=\"72\" height=\"62\" rx=\"2\" fill=\"#16283a\"/>\n  <g fill=\"#fff\" opacity=\".7\"><circle cx=\"54\" cy=\"212\" r=\"1\"/><circle cx=\"104\" cy=\"214\" r=\"1.2\"/><circle cx=\"96\" cy=\"254\" r=\"1\"/><circle cx=\"60\" cy=\"250\" r=\"1.1\"/></g>\n  <svg x=\"46\" y=\"208\" width=\"68\" height=\"50\" viewBox=\"0 0 130 96\">\n  <g class=\"wing wing-b\"><path d=\"M64 48 C60 30 52 16 36 8 C30 6 26 10 30 14 C24 14 21 20 27 23 C21 25 20 31 27 33 C23 37 25 42 32 41 C40 44 52 48 62 55 Z\" fill=\"#d9d3ee\" stroke=\"#b9b0dc\" stroke-width=\"1.1\"/></g>\n  <path d=\"M34 60 C16 64 6 52 12 40\" fill=\"none\" stroke=\"#141218\" stroke-width=\"7\" stroke-linecap=\"round\"/>\n  <ellipse cx=\"34\" cy=\"66\" rx=\"10\" ry=\"4.5\" fill=\"#141218\" transform=\"rotate(14 34 66)\"/>\n  <ellipse cx=\"58\" cy=\"58\" rx=\"27\" ry=\"14.5\" fill=\"#141218\"/>\n  <ellipse cx=\"86\" cy=\"68\" rx=\"10\" ry=\"4.2\" fill=\"#141218\" transform=\"rotate(-8 86 68)\"/>\n  <path d=\"M79 38 L80 20 L91 32 Z\" fill=\"#141218\"/><path d=\"M82 34 L82 25 L88 32 Z\" fill=\"#e7a3b4\"/>\n  <path d=\"M97 32 L106 17 L107 36 Z\" fill=\"#141218\"/><path d=\"M99 32 L104 23 L105 33 Z\" fill=\"#e7a3b4\"/>\n  <circle cx=\"93\" cy=\"46\" r=\"16\" fill=\"#141218\"/>\n  <ellipse cx=\"89\" cy=\"45\" rx=\"3.4\" ry=\"4\" fill=\"#ffd54a\"/><ellipse cx=\"89.4\" cy=\"45\" rx=\"1.1\" ry=\"3.2\" fill=\"#141218\"/>\n  <ellipse cx=\"100\" cy=\"45\" rx=\"3.4\" ry=\"4\" fill=\"#ffd54a\"/><ellipse cx=\"100.4\" cy=\"45\" rx=\"1.1\" ry=\"3.2\" fill=\"#141218\"/>\n  <path d=\"M103 51 l-3 2.2 l-3 -2.2 z\" fill=\"#e7a3b4\"/>\n  <path d=\"M100 53.5 q-2 2.5 -4.5 1 M100 53.5 q2 2.5 4.5 1\" fill=\"none\" stroke=\"#5a5560\" stroke-width=\"1\"/>\n  <path d=\"M105 52 l14 -3 M105 54 l14 1 M105 56 l12 4\" stroke=\"#8d8798\" stroke-width=\".9\"/>\n  <g transform=\"rotate(-10 94 30)\">\n    <path d=\"M84 30 C83 18 79 10 68 8 C77 5 92 9 102 28 Z\" fill=\"#c8202c\"/>\n    <circle cx=\"68\" cy=\"8.5\" r=\"4.2\" fill=\"#fff\"/>\n    <rect x=\"82\" y=\"26.5\" width=\"23\" height=\"6\" rx=\"3\" fill=\"#fff\"/>\n  </g>\n  <g class=\"wing wing-f\"><path d=\"M60 50 C56 30 48 14 30 6 C24 4 20 8 24 12 C18 12 15 18 21 21 C15 23 14 29 21 31 C17 35 19 40 26 39 C34 42 46 46 58 56 Z\" fill=\"#ffffff\" stroke=\"#c9c2e6\" stroke-width=\"1.1\"/>\n    <path d=\"M30 13 C40 21 48 32 54 46 M24 25 C36 30 45 38 52 50\" fill=\"none\" stroke=\"#ddd8f0\" stroke-width=\"1\"/></g>\n</svg>\n  <!-- cheminée -->\n  <rect x=\"18\" y=\"300\" width=\"134\" height=\"140\" fill=\"#c9b79a\"/>\n  <g stroke=\"#a8977c\" stroke-width=\"2\" fill=\"none\"><path d=\"M18 330 H152 M18 360 H40 M130 360 H152 M18 390 H40 M130 390 H152 M18 420 H40 M130 420 H152 M60 300 V330 M110 300 V330 M30 330 V360 M140 330 V360 M30 390 V420 M140 390 V420\"/></g>\n  <path d=\"M40 440 V372 A45 34 0 0 1 130 372 V440 Z\" fill=\"#1d120d\"/>\n  <ellipse cx=\"85\" cy=\"420\" rx=\"46\" ry=\"40\" fill=\"url(#sFire)\" class=\"fireglow\"/>\n  <g class=\"flames\">\n    <path class=\"fl f1\" d=\"M85 432 C66 432 62 412 72 398 C74 410 80 410 80 404 C80 392 88 384 86 370 C98 382 104 396 100 410 C104 406 106 402 106 398 C114 412 106 432 85 432 Z\" fill=\"#ff7a2a\"/>\n    <path class=\"fl f2\" d=\"M85 432 C72 432 70 418 77 408 C79 416 83 416 83 410 C83 402 88 396 88 388 C96 398 99 408 96 418 C99 416 100 412 101 410 C104 420 98 432 85 432 Z\" fill=\"#ffb347\"/>\n    <path class=\"fl f3\" d=\"M85 432 C78 432 77 424 81 418 C82 422 85 422 85 418 C85 414 88 410 89 404 C93 412 94 420 92 426 C91 430 89 432 85 432 Z\" fill=\"#fff0b3\"/>\n  </g>\n  <rect x=\"58\" y=\"428\" width=\"56\" height=\"8\" rx=\"4\" fill=\"#5b3426\" transform=\"rotate(-6 86 432)\"/>\n  <rect x=\"60\" y=\"430\" width=\"52\" height=\"8\" rx=\"4\" fill=\"#6e4130\" transform=\"rotate(7 86 434)\"/>\n  <rect x=\"8\" y=\"288\" width=\"154\" height=\"14\" rx=\"3\" fill=\"#5a3424\"/>\n  <path d=\"M10 292 Q48 306 85 294 T160 292\" fill=\"none\" stroke=\"#2f7d4f\" stroke-width=\"7\" stroke-linecap=\"round\"/>\n  <g fill=\"#ffd166\"><circle cx=\"30\" cy=\"298\" r=\"2.2\"/><circle cx=\"60\" cy=\"300\" r=\"2.2\"/><circle cx=\"110\" cy=\"298\" r=\"2.2\"/><circle cx=\"140\" cy=\"297\" r=\"2.2\"/></g>\n  <!-- bougies sur le manteau -->\n  <rect x=\"134\" y=\"268\" width=\"7\" height=\"20\" rx=\"1.5\" fill=\"#f3ead9\"/><path class=\"candle\" d=\"M137.5 268 c-3 -4 0 -9 0 -11 c1 3 4 6 0 11 z\" fill=\"#ffc35c\"/>\n  <rect x=\"146\" y=\"274\" width=\"7\" height=\"14\" rx=\"1.5\" fill=\"#f3ead9\"/><path class=\"candle c2\" d=\"M149.5 274 c-3 -4 0 -9 0 -11 c1 3 4 6 0 11 z\" fill=\"#ffc35c\"/>\n  <!-- chaussettes -->\n  <g transform=\"translate(24 302)\"><path d=\"M0 0 h24 v34 q0 8 9 10 l9 3 q7 4 3 12 q-4 6 -14 4 l-19 -5 q-12 -4 -12 -15 z\" fill=\"#c8202c\"/><rect x=\"-2\" y=\"-2\" width=\"28\" height=\"11\" rx=\"3\" fill=\"#fff\"/><text x=\"12\" y=\"6\" text-anchor=\"middle\" font-family=\"Fraunces,Georgia,serif\" font-size=\"6.5\" font-weight=\"700\" fill=\"#9b1f26\">Maëlle</text></g>\n  <g transform=\"translate(70 302)\"><path d=\"M0 0 h24 v34 q0 8 9 10 l9 3 q7 4 3 12 q-4 6 -14 4 l-19 -5 q-12 -4 -12 -15 z\" fill=\"#1f6b45\"/><rect x=\"-2\" y=\"-2\" width=\"28\" height=\"11\" rx=\"3\" fill=\"#fff\"/><text x=\"12\" y=\"6\" text-anchor=\"middle\" font-family=\"Fraunces,Georgia,serif\" font-size=\"6.5\" font-weight=\"700\" fill=\"#1f6b45\">Eiji</text></g>\n  <g transform=\"translate(116 302)\"><path d=\"M0 0 h20 v28 q0 7 8 9 l7 2 q6 3 3 10 q-3 5 -12 3 l-16 -4 q-10 -3 -10 -13 z\" fill=\"#2f5fb3\"/><rect x=\"-2\" y=\"-2\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#fff\"/><text x=\"10\" y=\"5.5\" text-anchor=\"middle\" font-family=\"Fraunces,Georgia,serif\" font-size=\"6\" font-weight=\"700\" fill=\"#2f5fb3\">Uko</text></g>\n  <!-- sol -->\n  <rect y=\"440\" width=\"360\" height=\"80\" fill=\"#4a2a1c\"/>\n  <g stroke=\"#3a2015\" stroke-width=\"2\"><path d=\"M0 466 H360 M0 494 H360 M70 440 V466 M190 440 V466 M300 440 V466 M130 466 V494 M250 466 V494 M40 494 V520 M170 494 V520 M320 494 V520\"/></g>\n  <rect width=\"360\" height=\"520\" fill=\"url(#sRoomGlow)\"/>\n  <ellipse cx=\"110\" cy=\"486\" rx=\"78\" ry=\"20\" fill=\"#9b2a2f\"/><ellipse cx=\"110\" cy=\"486\" rx=\"66\" ry=\"14\" fill=\"none\" stroke=\"#e8be68\" stroke-width=\"2\" stroke-dasharray=\"5 4\"/>\n  <!-- sapin -->\n  <g id=\"treeG\">\n    <rect x=\"252\" y=\"408\" width=\"20\" height=\"30\" fill=\"#5b3426\"/>\n    <path d=\"M236 436 h52 l-6 30 h-40 z\" fill=\"#9b2a2f\"/><rect x=\"232\" y=\"432\" width=\"60\" height=\"8\" rx=\"2\" fill=\"#b8323a\"/>\n    <polygon class=\"tshape\" points=\"262,262 350,410 174,410\" fill=\"#1f5a44\"/>\n    <polygon class=\"tshape\" points=\"262,196 332,320 192,320\" fill=\"#226349\"/>\n    <polygon class=\"tshape\" points=\"262,146 314,240 210,240\" fill=\"#256b4f\"/>\n    <path d=\"M262 262 L350 410 H262 Z M262 196 L332 320 H262 Z M262 146 L314 240 H262 Z\" fill=\"rgba(0,0,0,.12)\" pointer-events=\"none\"/>\n    <g id=\"tLights\"></g>\n    <g id=\"orn\"></g>\n    <g id=\"tStar\" transform=\"translate(262 140)\"><circle r=\"16\" fill=\"#ffd166\" opacity=\".25\" class=\"sglow\"/><path d=\"M0 -14 l4 8.6 9.4 1 -7 6.4 2 9.2 -8.4 -4.8 -8.4 4.8 2 -9.2 -7 -6.4 9.4 -1 z\" fill=\"#ffd166\" stroke=\"#e8a92e\" stroke-width=\"1\"/></g>\n  </g>\n  <!-- cadeaux sous le sapin -->\n  <g><rect x=\"186\" y=\"446\" width=\"34\" height=\"26\" rx=\"2\" fill=\"#2f5fb3\"/><rect x=\"200\" y=\"446\" width=\"6\" height=\"26\" fill=\"#e8be68\"/><rect x=\"186\" y=\"456\" width=\"34\" height=\"6\" fill=\"#e8be68\"/></g>\n  <g><rect x=\"296\" y=\"440\" width=\"40\" height=\"32\" rx=\"2\" fill=\"#c8202c\"/><rect x=\"313\" y=\"440\" width=\"6\" height=\"32\" fill=\"#fff\"/><rect x=\"296\" y=\"453\" width=\"40\" height=\"6\" fill=\"#fff\"/></g>\n  <g><rect x=\"324\" y=\"458\" width=\"26\" height=\"18\" rx=\"2\" fill=\"#e8be68\"/><rect x=\"335\" y=\"458\" width=\"5\" height=\"18\" fill=\"#1f6b45\"/></g>\n  <!-- Uko devant le feu -->\n  <svg x=\"122\" y=\"430\" width=\"52\" height=\"56\" viewBox=\"0 0 96 104\">\n  <g class=\"tail\"><path d=\"M62 94 C88 96 92 74 80 64\" fill=\"none\" stroke=\"#7f8590\" stroke-width=\"8\" stroke-linecap=\"round\"/></g>\n  <ellipse cx=\"46\" cy=\"78\" rx=\"23\" ry=\"22\" fill=\"#9399a4\"/>\n  <ellipse cx=\"46\" cy=\"81\" rx=\"11\" ry=\"14\" fill=\"#c7cbd2\"/>\n  <ellipse cx=\"37\" cy=\"99\" rx=\"7.5\" ry=\"4\" fill=\"#c7cbd2\"/><ellipse cx=\"55\" cy=\"99\" rx=\"7.5\" ry=\"4\" fill=\"#c7cbd2\"/>\n  <path d=\"M25 42 L26 19 L41 32 Z\" fill=\"#9399a4\"/><path d=\"M29 38 L29.5 25 L38 33 Z\" fill=\"#e7a3b4\"/>\n  <path d=\"M67 42 L66 19 L51 32 Z\" fill=\"#9399a4\"/><path d=\"M63 38 L62.5 25 L54 33 Z\" fill=\"#e7a3b4\"/>\n  <circle cx=\"46\" cy=\"48\" r=\"20\" fill=\"#9399a4\"/>\n  <path d=\"M41 33 l1.5 6 M46 32 v7 M51 33 l-1.5 6\" stroke=\"#7a808b\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <g class=\"eyes\">\n    <ellipse cx=\"38\" cy=\"49\" rx=\"4.3\" ry=\"4.8\" fill=\"#9ad16d\"/><ellipse cx=\"38.3\" cy=\"49\" rx=\"1.3\" ry=\"3.8\" fill=\"#1d2b17\"/>\n    <ellipse cx=\"54\" cy=\"49\" rx=\"4.3\" ry=\"4.8\" fill=\"#9ad16d\"/><ellipse cx=\"54.3\" cy=\"49\" rx=\"1.3\" ry=\"3.8\" fill=\"#1d2b17\"/>\n    <g class=\"lids\"><rect x=\"33\" y=\"43.5\" width=\"10.5\" height=\"11\" rx=\"4\" fill=\"#9399a4\"/><rect x=\"48.7\" y=\"43.5\" width=\"10.5\" height=\"11\" rx=\"4\" fill=\"#9399a4\"/></g>\n  </g>\n  <path d=\"M49 56 l-3 2.4 l-3 -2.4 z\" fill=\"#e7a3b4\"/>\n  <path d=\"M46 58.4 q-2 2.6 -4.6 1 M46 58.4 q2 2.6 4.6 1\" fill=\"none\" stroke=\"#4a4f57\" stroke-width=\"1\"/>\n  <path d=\"M31 57 l-14 -2 M31 59 l-14 2 M61 57 l14 -2 M61 59 l14 2\" stroke=\"#e9ecf0\" stroke-width=\".9\"/>\n  <g transform=\"rotate(12 46 26)\">\n    <path d=\"M36 28 C37 16 44 9 54 9 C62 9 67 14 70 22 C65 18 60 18 57 20 L57 28 Z\" fill=\"#c8202c\"/>\n    <circle cx=\"70.5\" cy=\"23.5\" r=\"4.2\" fill=\"#fff\"/>\n    <rect x=\"34\" y=\"25.5\" width=\"26\" height=\"6.5\" rx=\"3.2\" fill=\"#fff\"/>\n  </g>\n</svg>\n";
-/* ---------- la maison (page d'accueil) ---------- */
-const SCARVES = ["#c8202c","#1f6b45","#2f5fb3","#e06aa0","#e8b931","#7a4bc2"];
-let snowCfg = Object.assign({hat: "haut", scarf: "#c8202c", acc: "aucun"}, store.get("avent-snowman", {}));
+const SALON_SVG = "  <defs>\n    <linearGradient id=\"sWall\" x1=\"0\" x2=\"0\" y1=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#6a2f27\"/><stop offset=\"1\" stop-color=\"#4f211b\"/></linearGradient>\n    <radialGradient id=\"sFire\" cx=\"50%\" cy=\"85%\" r=\"70%\"><stop offset=\"0\" stop-color=\"#ffcf6b\" stop-opacity=\".9\"/><stop offset=\"1\" stop-color=\"#ff7a2a\" stop-opacity=\"0\"/></radialGradient>\n    <radialGradient id=\"sRoomGlow\" cx=\"25%\" cy=\"80%\" r=\"60%\"><stop offset=\"0\" stop-color=\"#ffb35c\" stop-opacity=\".3\"/><stop offset=\"1\" stop-color=\"#ffb35c\" stop-opacity=\"0\"/></radialGradient>\n    <linearGradient id=\"sSky\" x1=\"0\" x2=\"0\" y1=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#0d2236\"/><stop offset=\"1\" stop-color=\"#1e4a5c\"/></linearGradient>\n    <linearGradient id=\"tinOr\" x1=\"0\" x2=\"1\"><stop offset=\"0\" stop-color=\"#f6dca0\"/><stop offset=\".5\" stop-color=\"#e8b84a\"/><stop offset=\"1\" stop-color=\"#fff1c4\"/></linearGradient>\n    <clipPath id=\"winClip\"><rect x=\"31\" y=\"51\" width=\"96\" height=\"106\" rx=\"3\"/></clipPath>\n  </defs>\n  <rect width=\"360\" height=\"520\" fill=\"url(#sWall)\"/>\n  <g fill=\"rgba(255,255,255,.035)\"><rect x=\"0\" width=\"12\" height=\"440\"/><rect x=\"36\" width=\"12\" height=\"440\"/><rect x=\"72\" width=\"12\" height=\"440\"/><rect x=\"108\" width=\"12\" height=\"440\"/><rect x=\"144\" width=\"12\" height=\"440\"/><rect x=\"180\" width=\"12\" height=\"440\"/><rect x=\"216\" width=\"12\" height=\"440\"/><rect x=\"252\" width=\"12\" height=\"440\"/><rect x=\"288\" width=\"12\" height=\"440\"/><rect x=\"324\" width=\"12\" height=\"440\"/></g>\n  <g fill=\"rgba(232,190,104,.08)\"><path d=\"M18 18 l3 6 6 1 -4.5 4 1 6 -5.5 -3 -5.5 3 1 -6 -4.5 -4 6 -1 z\"/><path d=\"M198 70 l3 6 6 1 -4.5 4 1 6 -5.5 -3 -5.5 3 1 -6 -4.5 -4 6 -1 z\"/><path d=\"M330 30 l3 6 6 1 -4.5 4 1 6 -5.5 -3 -5.5 3 1 -6 -4.5 -4 6 -1 z\"/><path d=\"M160 160 l3 6 6 1 -4.5 4 1 6 -5.5 -3 -5.5 3 1 -6 -4.5 -4 6 -1 z\"/></g>\n  <!-- fenêtre -->\n  <g id=\"sWindow\">\n    <rect x=\"24\" y=\"44\" width=\"110\" height=\"120\" rx=\"6\" fill=\"#f3ead9\"/>\n    <rect x=\"31\" y=\"51\" width=\"96\" height=\"106\" rx=\"3\" fill=\"url(#sSky)\"/>\n    <g clip-path=\"url(#winClip)\">\n      <circle cx=\"104\" cy=\"74\" r=\"10\" fill=\"#fff5d6\"/>\n      <path d=\"M31 126 l14 -10 10 6 14 -14 16 12 12 -8 30 18 V157 H31 Z\" fill=\"#183a48\"/>\n      <g fill=\"#ffd27a\"><rect x=\"48\" y=\"128\" width=\"3\" height=\"3\"/><rect x=\"72\" y=\"122\" width=\"3\" height=\"3\"/><rect x=\"96\" y=\"130\" width=\"3\" height=\"3\"/></g>\n      <g fill=\"#fff\" class=\"sflakes\" id=\"winSnow\"><circle cx=\"44\" cy=\"70\" r=\"1.6\"/><circle cx=\"60\" cy=\"96\" r=\"1.3\"/><circle cx=\"90\" cy=\"110\" r=\"1.7\"/><circle cx=\"52\" cy=\"130\" r=\"1.4\"/><circle cx=\"112\" cy=\"128\" r=\"1.5\"/><circle cx=\"76\" cy=\"62\" r=\"1.2\"/><circle cx=\"118\" cy=\"92\" r=\"1.3\"/><circle cx=\"38\" cy=\"104\" r=\"1.2\"/></g>\n      <path d=\"M31 150 Q60 140 80 146 T127 144 V157 H31 Z\" fill=\"#eef5f8\"/>\n    </g>\n    <path d=\"M79 51 V157 M31 104 H127\" stroke=\"#f3ead9\" stroke-width=\"5\"/>\n    <path d=\"M20 40 Q79 60 138 40\" fill=\"none\" stroke=\"#2f7d4f\" stroke-width=\"6\" stroke-linecap=\"round\"/>\n    <g fill=\"#e0353f\"><circle cx=\"40\" cy=\"47\" r=\"2.6\"/><circle cx=\"62\" cy=\"52\" r=\"2.6\"/><circle cx=\"96\" cy=\"52\" r=\"2.6\"/><circle cx=\"118\" cy=\"47\" r=\"2.6\"/></g>\n  </g>\n  <!-- étagère + petites choses -->\n  <rect x=\"164\" y=\"96\" width=\"70\" height=\"6\" rx=\"2\" fill=\"#5a3424\"/>\n  <g transform=\"translate(172 78)\"><rect width=\"12\" height=\"18\" rx=\"2\" fill=\"#f3ead9\"/><path d=\"M6 0 c-3 -4 0 -8 0 -10 c1 3 4 6 0 10 z\" fill=\"#ffc35c\" class=\"candle\"/></g>\n  <g transform=\"translate(192 74)\"><circle cx=\"10\" cy=\"12\" r=\"10\" fill=\"rgba(200,230,255,.35)\" stroke=\"#d9e8f2\"/><rect x=\"2\" y=\"20\" width=\"16\" height=\"4\" rx=\"1\" fill=\"#8a5a2b\"/><path d=\"M5 18 l5 -9 l5 9 z\" fill=\"#1f6b45\"/><g fill=\"#fff\"><circle cx=\"6\" cy=\"8\" r=\".8\"/><circle cx=\"13\" cy=\"6\" r=\".8\"/><circle cx=\"9\" cy=\"14\" r=\".7\"/></g></g>\n  <g transform=\"translate(216 82)\"><rect width=\"12\" height=\"14\" rx=\"1\" fill=\"#c8202c\"/><rect x=\"5\" width=\"2\" height=\"14\" fill=\"#e8be68\"/></g>\n  <!-- cadre : l'ange -->\n  <g id=\"sFrame\" style=\"cursor:pointer\">\n    <rect x=\"38\" y=\"196\" width=\"84\" height=\"74\" rx=\"4\" fill=\"#c99a45\"/>\n    <rect x=\"44\" y=\"202\" width=\"72\" height=\"62\" rx=\"2\" fill=\"#16283a\"/>\n    <g fill=\"#fff\" opacity=\".7\"><circle cx=\"54\" cy=\"212\" r=\"1\"/><circle cx=\"104\" cy=\"214\" r=\"1.2\"/><circle cx=\"96\" cy=\"254\" r=\"1\"/><circle cx=\"60\" cy=\"250\" r=\"1.1\"/></g>\n    <svg x=\"46\" y=\"208\" width=\"68\" height=\"50\" viewBox=\"0 0 130 96\">\n  <g class=\"wing wing-b\"><path d=\"M64 48 C60 30 52 16 36 8 C30 6 26 10 30 14 C24 14 21 20 27 23 C21 25 20 31 27 33 C23 37 25 42 32 41 C40 44 52 48 62 55 Z\" fill=\"#d9d3ee\" stroke=\"#b9b0dc\" stroke-width=\"1.1\"/></g>\n  <path d=\"M34 60 C16 64 6 52 12 40\" fill=\"none\" stroke=\"#141218\" stroke-width=\"7\" stroke-linecap=\"round\"/>\n  <ellipse cx=\"34\" cy=\"66\" rx=\"10\" ry=\"4.5\" fill=\"#141218\" transform=\"rotate(14 34 66)\"/>\n  <ellipse cx=\"58\" cy=\"58\" rx=\"27\" ry=\"14.5\" fill=\"#141218\"/>\n  <ellipse cx=\"86\" cy=\"68\" rx=\"10\" ry=\"4.2\" fill=\"#141218\" transform=\"rotate(-8 86 68)\"/>\n  <path d=\"M79 38 L80 20 L91 32 Z\" fill=\"#141218\"/><path d=\"M82 34 L82 25 L88 32 Z\" fill=\"#e7a3b4\"/>\n  <path d=\"M97 32 L106 17 L107 36 Z\" fill=\"#141218\"/><path d=\"M99 32 L104 23 L105 33 Z\" fill=\"#e7a3b4\"/>\n  <circle cx=\"93\" cy=\"46\" r=\"16\" fill=\"#141218\"/>\n  <ellipse cx=\"89\" cy=\"45\" rx=\"3.4\" ry=\"4\" fill=\"#ffd54a\"/><ellipse cx=\"89.4\" cy=\"45\" rx=\"1.1\" ry=\"3.2\" fill=\"#141218\"/>\n  <ellipse cx=\"100\" cy=\"45\" rx=\"3.4\" ry=\"4\" fill=\"#ffd54a\"/><ellipse cx=\"100.4\" cy=\"45\" rx=\"1.1\" ry=\"3.2\" fill=\"#141218\"/>\n  <path d=\"M103 51 l-3 2.2 l-3 -2.2 z\" fill=\"#e7a3b4\"/>\n  <path d=\"M100 53.5 q-2 2.5 -4.5 1 M100 53.5 q2 2.5 4.5 1\" fill=\"none\" stroke=\"#5a5560\" stroke-width=\"1\"/>\n  <path d=\"M105 52 l14 -3 M105 54 l14 1 M105 56 l12 4\" stroke=\"#8d8798\" stroke-width=\".9\"/>\n  <g transform=\"rotate(-10 94 30)\">\n    <path d=\"M84 30 C83 18 79 10 68 8 C77 5 92 9 102 28 Z\" fill=\"#c8202c\"/>\n    <circle cx=\"68\" cy=\"8.5\" r=\"4.2\" fill=\"#fff\"/>\n    <rect x=\"82\" y=\"26.5\" width=\"23\" height=\"6\" rx=\"3\" fill=\"#fff\"/>\n  </g>\n  <g class=\"wing wing-f\"><path d=\"M60 50 C56 30 48 14 30 6 C24 4 20 8 24 12 C18 12 15 18 21 21 C15 23 14 29 21 31 C17 35 19 40 26 39 C34 42 46 46 58 56 Z\" fill=\"#ffffff\" stroke=\"#c9c2e6\" stroke-width=\"1.1\"/>\n    <path d=\"M30 13 C40 21 48 32 54 46 M24 25 C36 30 45 38 52 50\" fill=\"none\" stroke=\"#ddd8f0\" stroke-width=\"1\"/></g>\n</svg>\n  </g>\n  <!-- cheminée -->\n  <g id=\"sFireplace\" style=\"cursor:pointer\">\n    <rect x=\"18\" y=\"300\" width=\"134\" height=\"140\" fill=\"#c9b79a\"/>\n    <g stroke=\"#a8977c\" stroke-width=\"2\" fill=\"none\"><path d=\"M18 330 H152 M18 360 H40 M130 360 H152 M18 390 H40 M130 390 H152 M18 420 H40 M130 420 H152 M60 300 V330 M110 300 V330 M30 330 V360 M140 330 V360 M30 390 V420 M140 390 V420\"/></g>\n    <path d=\"M40 440 V372 A45 34 0 0 1 130 372 V440 Z\" fill=\"#1d120d\"/>\n    <g id=\"sFlames\">\n      <ellipse cx=\"85\" cy=\"420\" rx=\"46\" ry=\"40\" fill=\"url(#sFire)\" class=\"fireglow\"/>\n      <path class=\"fl f1\" d=\"M85 432 C66 432 62 412 72 398 C74 410 80 410 80 404 C80 392 88 384 86 370 C98 382 104 396 100 410 C104 406 106 402 106 398 C114 412 106 432 85 432 Z\" fill=\"#ff7a2a\"/>\n      <path class=\"fl f2\" d=\"M85 432 C72 432 70 418 77 408 C79 416 83 416 83 410 C83 402 88 396 88 388 C96 398 99 408 96 418 C99 416 100 412 101 410 C104 420 98 432 85 432 Z\" fill=\"#ffb347\"/>\n      <path class=\"fl f3\" d=\"M85 432 C78 432 77 424 81 418 C82 422 85 422 85 418 C85 414 88 410 89 404 C93 412 94 420 92 426 C91 430 89 432 85 432 Z\" fill=\"#fff0b3\"/>\n      <g fill=\"#ffcf6b\" class=\"embers\"><circle cx=\"78\" cy=\"390\" r=\"1.2\"/><circle cx=\"92\" cy=\"384\" r=\"1\"/><circle cx=\"86\" cy=\"376\" r=\"1.1\"/></g>\n    </g>\n    <rect x=\"58\" y=\"428\" width=\"56\" height=\"8\" rx=\"4\" fill=\"#5b3426\" transform=\"rotate(-6 86 432)\"/>\n    <rect x=\"60\" y=\"430\" width=\"52\" height=\"8\" rx=\"4\" fill=\"#6e4130\" transform=\"rotate(7 86 434)\"/>\n  </g>\n  <rect x=\"8\" y=\"288\" width=\"154\" height=\"14\" rx=\"3\" fill=\"#5a3424\"/>\n  <path d=\"M10 292 Q48 306 85 294 T160 292\" fill=\"none\" stroke=\"#2f7d4f\" stroke-width=\"7\" stroke-linecap=\"round\"/>\n  <g fill=\"#ffd166\" class=\"mantel-lights\"><circle cx=\"30\" cy=\"298\" r=\"2.2\"/><circle cx=\"60\" cy=\"300\" r=\"2.2\"/><circle cx=\"110\" cy=\"298\" r=\"2.2\"/><circle cx=\"140\" cy=\"297\" r=\"2.2\"/></g>\n  <rect x=\"134\" y=\"268\" width=\"7\" height=\"20\" rx=\"1.5\" fill=\"#f3ead9\"/><path class=\"candle\" d=\"M137.5 268 c-3 -4 0 -9 0 -11 c1 3 4 6 0 11 z\" fill=\"#ffc35c\"/>\n  <rect x=\"146\" y=\"274\" width=\"7\" height=\"14\" rx=\"1.5\" fill=\"#f3ead9\"/><path class=\"candle c2\" d=\"M149.5 274 c-3 -4 0 -9 0 -11 c1 3 4 6 0 11 z\" fill=\"#ffc35c\"/>\n  <!-- chaussettes -->\n  <g id=\"st1\" class=\"stocking\" transform=\"translate(24 302)\"><path d=\"M0 0 h24 v34 q0 8 9 10 l9 3 q7 4 3 12 q-4 6 -14 4 l-19 -5 q-12 -4 -12 -15 z\" fill=\"#c8202c\"/><path d=\"M2 18 h20 M2 26 h20\" stroke=\"rgba(255,255,255,.35)\" stroke-width=\"2\"/><rect x=\"-2\" y=\"-2\" width=\"28\" height=\"11\" rx=\"3\" fill=\"#fff\"/><text x=\"12\" y=\"6\" text-anchor=\"middle\" font-family=\"Fraunces,Georgia,serif\" font-size=\"6.5\" font-weight=\"700\" fill=\"#9b1f26\">Maëlle</text></g>\n  <g id=\"st2\" class=\"stocking\" transform=\"translate(70 302)\"><path d=\"M0 0 h24 v34 q0 8 9 10 l9 3 q7 4 3 12 q-4 6 -14 4 l-19 -5 q-12 -4 -12 -15 z\" fill=\"#1f6b45\"/><g fill=\"rgba(255,255,255,.35)\"><circle cx=\"7\" cy=\"20\" r=\"1.6\"/><circle cx=\"16\" cy=\"28\" r=\"1.6\"/><circle cx=\"8\" cy=\"36\" r=\"1.6\"/></g><rect x=\"-2\" y=\"-2\" width=\"28\" height=\"11\" rx=\"3\" fill=\"#fff\"/><text x=\"12\" y=\"6\" text-anchor=\"middle\" font-family=\"Fraunces,Georgia,serif\" font-size=\"6.5\" font-weight=\"700\" fill=\"#1f6b45\">Eiji</text></g>\n  <g id=\"st3\" class=\"stocking\" transform=\"translate(116 302)\"><path d=\"M0 0 h20 v28 q0 7 8 9 l7 2 q6 3 3 10 q-3 5 -12 3 l-16 -4 q-10 -3 -10 -13 z\" fill=\"#2f5fb3\"/><path d=\"M6 20 l2 2 2 -2 M12 26 l2 2 2 -2\" stroke=\"rgba(255,255,255,.45)\" stroke-width=\"1.2\" fill=\"none\"/><rect x=\"-2\" y=\"-2\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#fff\"/><text x=\"10\" y=\"5.5\" text-anchor=\"middle\" font-family=\"Fraunces,Georgia,serif\" font-size=\"6\" font-weight=\"700\" fill=\"#2f5fb3\">Uko</text></g>\n  <!-- sol -->\n  <rect y=\"440\" width=\"360\" height=\"80\" fill=\"#4a2a1c\"/>\n  <g stroke=\"#3a2015\" stroke-width=\"2\"><path d=\"M0 466 H360 M0 494 H360 M70 440 V466 M190 440 V466 M300 440 V466 M130 466 V494 M250 466 V494 M40 494 V520 M170 494 V520 M320 494 V520\"/></g>\n  <rect width=\"360\" height=\"520\" fill=\"url(#sRoomGlow)\" id=\"sRoomGlowR\" pointer-events=\"none\"/>\n  <ellipse cx=\"110\" cy=\"486\" rx=\"78\" ry=\"20\" fill=\"#9b2a2f\"/><ellipse cx=\"110\" cy=\"486\" rx=\"66\" ry=\"14\" fill=\"none\" stroke=\"#e8be68\" stroke-width=\"2\" stroke-dasharray=\"5 4\"/>\n  <!-- sapin -->\n  <g id=\"treeG\">\n    <rect x=\"252\" y=\"408\" width=\"20\" height=\"30\" fill=\"#5b3426\"/>\n    <path d=\"M236 436 h52 l-6 30 h-40 z\" fill=\"#9b2a2f\"/><rect x=\"232\" y=\"432\" width=\"60\" height=\"8\" rx=\"2\" fill=\"#b8323a\"/>\n    <polygon class=\"tshape\" points=\"262,262 350,410 174,410\" fill=\"#1f5a44\"/>\n    <polygon class=\"tshape\" points=\"262,196 332,320 192,320\" fill=\"#226349\"/>\n    <polygon class=\"tshape\" points=\"262,146 314,240 210,240\" fill=\"#256b4f\"/>\n    <path d=\"M262 262 L350 410 H262 Z M262 196 L332 320 H262 Z M262 146 L314 240 H262 Z\" fill=\"rgba(0,0,0,.12)\" pointer-events=\"none\"/>\n    <g fill=\"none\" stroke=\"rgba(255,255,255,.08)\" stroke-width=\"2\" pointer-events=\"none\"><path d=\"M262 262 L178 406 M262 196 L196 316 M262 146 L214 236\"/></g>\n    <g id=\"tinsel\" pointer-events=\"none\"></g>\n    <g id=\"tLights\" pointer-events=\"none\"></g>\n    <g id=\"orn\"></g>\n    <g id=\"tStar\" transform=\"translate(262 140)\" pointer-events=\"none\"></g>\n  </g>\n  <!-- cadeaux sous le sapin -->\n  <g><rect x=\"186\" y=\"446\" width=\"34\" height=\"26\" rx=\"2\" fill=\"#2f5fb3\"/><rect x=\"200\" y=\"446\" width=\"6\" height=\"26\" fill=\"#e8be68\"/><rect x=\"186\" y=\"456\" width=\"34\" height=\"6\" fill=\"#e8be68\"/></g>\n  <g><rect x=\"296\" y=\"440\" width=\"40\" height=\"32\" rx=\"2\" fill=\"#c8202c\"/><rect x=\"313\" y=\"440\" width=\"6\" height=\"32\" fill=\"#fff\"/><rect x=\"296\" y=\"453\" width=\"40\" height=\"6\" fill=\"#fff\"/></g>\n  <g><rect x=\"324\" y=\"458\" width=\"26\" height=\"18\" rx=\"2\" fill=\"#e8be68\"/><rect x=\"335\" y=\"458\" width=\"5\" height=\"18\" fill=\"#1f6b45\"/></g>\n  <!-- Uko devant le feu -->\n  <svg id=\"sUko\" x=\"122\" y=\"430\" width=\"52\" height=\"56\" viewBox=\"0 0 96 104\" style=\"cursor:pointer;overflow:visible\">\n  <g class=\"tail\"><path d=\"M62 94 C88 96 92 74 80 64\" fill=\"none\" stroke=\"#7f8590\" stroke-width=\"8\" stroke-linecap=\"round\"/></g>\n  <ellipse cx=\"46\" cy=\"78\" rx=\"23\" ry=\"22\" fill=\"#9399a4\"/>\n  <ellipse cx=\"46\" cy=\"81\" rx=\"11\" ry=\"14\" fill=\"#c7cbd2\"/>\n  <ellipse cx=\"37\" cy=\"99\" rx=\"7.5\" ry=\"4\" fill=\"#c7cbd2\"/><ellipse cx=\"55\" cy=\"99\" rx=\"7.5\" ry=\"4\" fill=\"#c7cbd2\"/>\n  <path d=\"M25 42 L26 19 L41 32 Z\" fill=\"#9399a4\"/><path d=\"M29 38 L29.5 25 L38 33 Z\" fill=\"#e7a3b4\"/>\n  <path d=\"M67 42 L66 19 L51 32 Z\" fill=\"#9399a4\"/><path d=\"M63 38 L62.5 25 L54 33 Z\" fill=\"#e7a3b4\"/>\n  <circle cx=\"46\" cy=\"48\" r=\"20\" fill=\"#9399a4\"/>\n  <path d=\"M41 33 l1.5 6 M46 32 v7 M51 33 l-1.5 6\" stroke=\"#7a808b\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <g class=\"eyes\">\n    <ellipse cx=\"38\" cy=\"49\" rx=\"4.3\" ry=\"4.8\" fill=\"#9ad16d\"/><ellipse cx=\"38.3\" cy=\"49\" rx=\"1.3\" ry=\"3.8\" fill=\"#1d2b17\"/>\n    <ellipse cx=\"54\" cy=\"49\" rx=\"4.3\" ry=\"4.8\" fill=\"#9ad16d\"/><ellipse cx=\"54.3\" cy=\"49\" rx=\"1.3\" ry=\"3.8\" fill=\"#1d2b17\"/>\n    <g class=\"lids\"><rect x=\"33\" y=\"43.5\" width=\"10.5\" height=\"11\" rx=\"4\" fill=\"#9399a4\"/><rect x=\"48.7\" y=\"43.5\" width=\"10.5\" height=\"11\" rx=\"4\" fill=\"#9399a4\"/></g>\n  </g>\n  <path d=\"M49 56 l-3 2.4 l-3 -2.4 z\" fill=\"#e7a3b4\"/>\n  <path d=\"M46 58.4 q-2 2.6 -4.6 1 M46 58.4 q2 2.6 4.6 1\" fill=\"none\" stroke=\"#4a4f57\" stroke-width=\"1\"/>\n  <path d=\"M31 57 l-14 -2 M31 59 l-14 2 M61 57 l14 -2 M61 59 l14 2\" stroke=\"#e9ecf0\" stroke-width=\".9\"/>\n  <g transform=\"rotate(12 46 26)\">\n    <path d=\"M36 28 C37 16 44 9 54 9 C62 9 67 14 70 22 C65 18 60 18 57 20 L57 28 Z\" fill=\"#c8202c\"/>\n    <circle cx=\"70.5\" cy=\"23.5\" r=\"4.2\" fill=\"#fff\"/>\n    <rect x=\"34\" y=\"25.5\" width=\"26\" height=\"6.5\" rx=\"3.2\" fill=\"#fff\"/>\n  </g>\n</svg>\n";
+const ANGEL_INNER = "\n  <g class=\"wing wing-b\"><path d=\"M64 48 C60 30 52 16 36 8 C30 6 26 10 30 14 C24 14 21 20 27 23 C21 25 20 31 27 33 C23 37 25 42 32 41 C40 44 52 48 62 55 Z\" fill=\"#d9d3ee\" stroke=\"#b9b0dc\" stroke-width=\"1.1\"/></g>\n  <path d=\"M34 60 C16 64 6 52 12 40\" fill=\"none\" stroke=\"#141218\" stroke-width=\"7\" stroke-linecap=\"round\"/>\n  <ellipse cx=\"34\" cy=\"66\" rx=\"10\" ry=\"4.5\" fill=\"#141218\" transform=\"rotate(14 34 66)\"/>\n  <ellipse cx=\"58\" cy=\"58\" rx=\"27\" ry=\"14.5\" fill=\"#141218\"/>\n  <ellipse cx=\"86\" cy=\"68\" rx=\"10\" ry=\"4.2\" fill=\"#141218\" transform=\"rotate(-8 86 68)\"/>\n  <path d=\"M79 38 L80 20 L91 32 Z\" fill=\"#141218\"/><path d=\"M82 34 L82 25 L88 32 Z\" fill=\"#e7a3b4\"/>\n  <path d=\"M97 32 L106 17 L107 36 Z\" fill=\"#141218\"/><path d=\"M99 32 L104 23 L105 33 Z\" fill=\"#e7a3b4\"/>\n  <circle cx=\"93\" cy=\"46\" r=\"16\" fill=\"#141218\"/>\n  <ellipse cx=\"89\" cy=\"45\" rx=\"3.4\" ry=\"4\" fill=\"#ffd54a\"/><ellipse cx=\"89.4\" cy=\"45\" rx=\"1.1\" ry=\"3.2\" fill=\"#141218\"/>\n  <ellipse cx=\"100\" cy=\"45\" rx=\"3.4\" ry=\"4\" fill=\"#ffd54a\"/><ellipse cx=\"100.4\" cy=\"45\" rx=\"1.1\" ry=\"3.2\" fill=\"#141218\"/>\n  <path d=\"M103 51 l-3 2.2 l-3 -2.2 z\" fill=\"#e7a3b4\"/>\n  <path d=\"M100 53.5 q-2 2.5 -4.5 1 M100 53.5 q2 2.5 4.5 1\" fill=\"none\" stroke=\"#5a5560\" stroke-width=\"1\"/>\n  <path d=\"M105 52 l14 -3 M105 54 l14 1 M105 56 l12 4\" stroke=\"#8d8798\" stroke-width=\".9\"/>\n  <g transform=\"rotate(-10 94 30)\">\n    <path d=\"M84 30 C83 18 79 10 68 8 C77 5 92 9 102 28 Z\" fill=\"#c8202c\"/>\n    <circle cx=\"68\" cy=\"8.5\" r=\"4.2\" fill=\"#fff\"/>\n    <rect x=\"82\" y=\"26.5\" width=\"23\" height=\"6\" rx=\"3\" fill=\"#fff\"/>\n  </g>\n  <g class=\"wing wing-f\"><path d=\"M60 50 C56 30 48 14 30 6 C24 4 20 8 24 12 C18 12 15 18 21 21 C15 23 14 29 21 31 C17 35 19 40 26 39 C34 42 46 46 58 56 Z\" fill=\"#ffffff\" stroke=\"#c9c2e6\" stroke-width=\"1.1\"/>\n    <path d=\"M30 13 C40 21 48 32 54 46 M24 25 C36 30 45 38 52 50\" fill=\"none\" stroke=\"#ddd8f0\" stroke-width=\"1\"/></g>\n";
+/* ================= la maison (page d'accueil) ================= */
+const PALETTE = ["#c8202c","#1f6b45","#2f5fb3","#e06aa0","#e8b931","#7a4bc2","#f2f2f2","#1d1d1f"];
+const SNOW_DEF = {hat: "haut", eyes: "rond", nose: "carotte", mouth: "sourire", blush: true, scarf: "#c8202c", motif: "uni",
+  buttons: "charbon", arms: "branches", acc: [], bg: "nuit", name: ""};
+let snowCfg = Object.assign({}, SNOW_DEF, store.get("avent-snowman", {}));
+if(!Array.isArray(snowCfg.acc)) snowCfg.acc = snowCfg.acc && snowCfg.acc !== "aucun" ? [snowCfg.acc] : [];
+const q = (s, r) => (r || document).querySelector(s);
+
 function snowmanSVG(c){
+  const S = c.scarf, has = k => c.acc.includes(k);
+  const eyes = {
+    rond: '<circle cx="24" cy="30" r="2" fill="#2b2b2b"/><circle cx="36" cy="30" r="2" fill="#2b2b2b"/><circle cx="24.6" cy="29.4" r=".6" fill="#fff"/><circle cx="36.6" cy="29.4" r=".6" fill="#fff"/>',
+    clin: '<circle cx="24" cy="30" r="2" fill="#2b2b2b"/><circle cx="24.6" cy="29.4" r=".6" fill="#fff"/><path d="M33 30.5 q3 -3 6 0" fill="none" stroke="#2b2b2b" stroke-width="1.6" stroke-linecap="round"/>',
+    joie: '<path d="M21 31 q3 -4 6 0 M33 31 q3 -4 6 0" fill="none" stroke="#2b2b2b" stroke-width="1.6" stroke-linecap="round"/>',
+    coeur: '<path d="M24 32.5 c-4 -2.6 -3 -5.6 -1 -5.4 c.6 .1 1 .6 1 1 c0 -.4 .4 -.9 1 -1 c2 -.2 3 2.8 -1 5.4 z M36 32.5 c-4 -2.6 -3 -5.6 -1 -5.4 c.6 .1 1 .6 1 1 c0 -.4 .4 -.9 1 -1 c2 -.2 3 2.8 -1 5.4 z" fill="#e0355a"/>',
+    etoile: '<path d="M24 26.6 l1 2.1 2.3 .3 -1.7 1.6 .4 2.3 -2 -1.1 -2 1.1 .4 -2.3 -1.7 -1.6 2.3 -.3 z M36 26.6 l1 2.1 2.3 .3 -1.7 1.6 .4 2.3 -2 -1.1 -2 1.1 .4 -2.3 -1.7 -1.6 2.3 -.3 z" fill="#e8b931"/>'
+  };
+  const noses = {
+    carotte: '<path d="M30 35 l13 3 -13 2 z" fill="#f08a24"/><path d="M33 36 l2 .6 M37 37 l1.5 .5" stroke="#c96a12" stroke-width=".6"/>',
+    rouge: '<circle cx="31" cy="36" r="3.4" fill="#e0262f"/><circle cx="30" cy="35" r="1" fill="rgba(255,255,255,.7)"/>',
+    bouton: '<circle cx="31" cy="36" r="2.4" fill="#2b2b2b"/>'
+  };
+  const mouths = {
+    sourire: '<path d="M23 41 q7 5 14 0" fill="none" stroke="#2b2b2b" stroke-width="1.6" stroke-linecap="round"/>',
+    rire: '<path d="M23 40 q7 9 14 0 z" fill="#2b2b2b"/><path d="M27 44 q3 2 6 0 q-3 -2 -6 0 z" fill="#e06a7a"/>',
+    bisou: '<path d="M31 43.6 c-3 -2 -2.4 -4.4 -.7 -4.2 c.4 0 .7 .4 .7 .7 c0 -.3 .3 -.7 .7 -.7 c1.7 -.2 2.3 2.2 -.7 4.2 z" fill="#e0355a"/>',
+    surpris: '<ellipse cx="30" cy="42" rx="2" ry="2.6" fill="#2b2b2b"/>'
+  };
+  const btnCol = {charbon: "#2b2b2b", rouge: "#d42a35", or: "#e8be68", vert: "#2f8a5a"}[c.buttons] || "#2b2b2b";
+  const buttons = c.buttons === "flocons"
+    ? [66, 77, 88].map(y => '<g transform="translate(30 ' + y + ') scale(.32)" stroke="#7fb6d9" stroke-width="2.4" stroke-linecap="round"><path d="M0 -8 V8 M-7 -4 L7 4 M-7 4 L7 -4"/></g>').join("")
+    : [66, 77, 88].map(y => '<circle cx="30" cy="' + y + '" r="2.4" fill="' + btnCol + '"/>').join("");
+  let scarf = '<path d="M13 48 q17 8 34 0 l-2 6 q-15 6 -30 0 z" fill="' + S + '"/><path d="M38 52 l6 16 l-7 -2 l-3 -12 z" fill="' + S + '"/>';
+  const lightC = S === "#f2f2f2" ? "#d42a35" : "#fff";
+  if(c.motif === "rayures") scarf += '<path d="M15 51.5 q15 7 30 0" fill="none" stroke="' + lightC + '" stroke-width="5" stroke-dasharray="2.4 3.4" opacity=".85"/><path d="M39.5 57 l2 1 M40.5 61 l2.4 1 M41.5 65 l2.4 1" stroke="' + lightC + '" stroke-width="2" opacity=".85"/>';
+  if(c.motif === "pois") scarf += '<g fill="' + lightC + '" opacity=".85"><circle cx="18" cy="51" r="1"/><circle cx="24" cy="53.5" r="1"/><circle cx="30" cy="54.4" r="1"/><circle cx="36" cy="53.5" r="1"/><circle cx="42" cy="51" r="1"/><circle cx="40" cy="58" r="1"/><circle cx="42" cy="64" r="1"/></g>';
+  if(c.motif === "flocons") scarf += '<g stroke="' + lightC + '" stroke-width=".7" opacity=".9"><path d="M20 50 v4 M18 52 h4 M30 52.4 v4 M28 54.4 h4 M40 50 v4 M38 52 h4 M41 59 v4 M39 61 h4"/></g>';
+  const mitten = (x, y, r) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')"><ellipse rx="4.6" ry="5.4" fill="' + S + '"/><ellipse cx="-4" cy="-1" rx="2" ry="2.6" fill="' + S + '"/><rect x="-4.6" y="3" width="9.2" height="3" rx="1.4" fill="#fff"/></g>';
+  const leftArm = '<path d="M7 64 L-8 52 M-3 56 l-4 -6" stroke="#5b3426" stroke-width="2.4" stroke-linecap="round"/>' + (c.arms === "moufles" ? mitten(-9, 50, -50) : "");
+  const rightArm = '<g class="wave"><path d="M53 64 L68 50 M63 54 l1 -7" stroke="#5b3426" stroke-width="2.4" stroke-linecap="round"/>' + (c.arms === "moufles" ? mitten(69, 48, 40) : "") + '</g>';
   const hats = {
-    haut: '<rect x="17" y="12" width="26" height="4" rx="2" fill="#1f1a17"/><rect x="21" y="-4" width="18" height="17" rx="2" fill="#1f1a17"/><rect x="21" y="7" width="18" height="3" fill="' + c.scarf + '"/>',
+    haut: '<rect x="17" y="12" width="26" height="4" rx="2" fill="#1f1a17"/><rect x="21" y="-4" width="18" height="17" rx="2" fill="#1f1a17"/><rect x="21" y="7" width="18" height="3" fill="' + S + '"/><path d="M36 6 l3 -4 1 5 z" fill="#2f8a5a"/><circle cx="37" cy="7" r="1.4" fill="#d42a35"/>',
     noel: '<path d="M14 22 C16 6 30 -2 44 6 C50 10 52 16 52 24 C48 18 44 16 40 18 L42 22 Z" fill="#c8202c"/><circle cx="52" cy="25" r="4" fill="#fff"/><rect x="12" y="17" width="34" height="7" rx="3.5" fill="#fff"/>',
-    pompon: '<path d="M13 23 C13 4 47 4 47 23 Z" fill="' + c.scarf + '"/><path d="M16 13 h28 M14 18 h32" stroke="rgba(255,255,255,.45)" stroke-width="2"/><circle cx="30" cy="4" r="5.5" fill="#fff"/><rect x="12" y="19" width="36" height="6" rx="3" fill="rgba(0,0,0,.2)"/>',
+    pompon: '<path d="M13 23 C13 4 47 4 47 23 Z" fill="' + S + '"/><path d="M16 13 h28 M14 18 h32" stroke="rgba(255,255,255,.45)" stroke-width="2"/><circle cx="30" cy="4" r="5.5" fill="#fff"/><rect x="12" y="19" width="36" height="6" rx="3" fill="rgba(0,0,0,.2)"/>',
+    couronne: '<path d="M16 21 L14 7 L21 13 L25 3 L30 12 L35 3 L39 13 L46 7 L44 21 Z" fill="#e8be68" stroke="#b8862f" stroke-width="1"/><circle cx="30" cy="16" r="2" fill="#d42a35"/><circle cx="22" cy="17" r="1.4" fill="#3d7bd9"/><circle cx="38" cy="17" r="1.4" fill="#2f8a5a"/>',
+    renne: '<path d="M18 20 C16 10 10 8 8 2 M14 12 l-6 -2 M12 6 l-2 -5 M42 20 C44 10 50 8 52 2 M46 12 l6 -2 M48 6 l2 -5" fill="none" stroke="#8a5a2b" stroke-width="2.6" stroke-linecap="round"/><path d="M13 22 A17 17 0 0 1 47 22" fill="none" stroke="' + S + '" stroke-width="3.4"/>',
+    elfe: '<path d="M13 22 C18 8 30 2 44 -6 C40 4 46 14 47 22 Z" fill="#2f8a5a"/><circle cx="44" cy="-6" r="3" fill="#e8b931"/><path d="M12 22 l4 -4 4 4 4 -4 4 4 4 -4 4 4 4 -4 4 4 4 -4 2 4" fill="#d42a35"/>',
     aucun: ""
   };
-  const accs = {
-    aucun: "",
-    cache: '<path d="M12 33 A18 18 0 0 1 48 33" fill="none" stroke="' + c.scarf + '" stroke-width="3"/><circle cx="12" cy="35" r="6" fill="' + c.scarf + '" stroke="#fff" stroke-width="2"/><circle cx="48" cy="35" r="6" fill="' + c.scarf + '" stroke="#fff" stroke-width="2"/>',
-    lunettes: '<circle cx="24" cy="30" r="5" fill="rgba(190,225,255,.35)" stroke="#2b2b2b" stroke-width="1.6"/><circle cx="36" cy="30" r="5" fill="rgba(190,225,255,.35)" stroke="#2b2b2b" stroke-width="1.6"/><path d="M29 30 h2" stroke="#2b2b2b" stroke-width="1.6"/>',
-    noeud: '<path d="M30 60 l-10 -6 v12 z M30 60 l10 -6 v12 z" fill="#e8be68"/><circle cx="30" cy="60" r="3" fill="#c99a45"/>'
-  };
-  return '<ellipse cx="30" cy="96" rx="26" ry="6" fill="rgba(0,0,0,.08)"/>' +
-    '<circle cx="30" cy="72" r="24" fill="#f7fbfd" stroke="#cfdde5" stroke-width="1.5"/>' +
+  let lights = "";
+  if(has("lumieres")){
+    const LC = ["#ff4d5a","#ffd166","#58e08a","#6cc6ff","#ff8fd0"];
+    lights = '<path d="M7 62 Q30 74 53 60 M8 82 Q30 94 52 80" fill="none" stroke="#1b2a24" stroke-width=".8"/>';
+    [[10,64],[18,68.5],[26,70.6],[34,70.4],[42,68],[50,62.6],[11,84],[19,88.4],[27,90.4],[35,90],[43,87.4],[50,82.6]].forEach(([x, y], i) => {
+      lights += '<ellipse cx="' + x + '" cy="' + (y + 1.6) + '" rx="1.5" ry="2.1" fill="' + LC[i % 5] + '" class="tli" style="animation-delay:' + (-(i * 0.37) % 1.6).toFixed(2) + 's"/>';
+    });
+  }
+  const broom = has("balai") ? '<path d="M-4 54 L-12 104" stroke="#8a5a2b" stroke-width="2.6" stroke-linecap="round"/><path d="M-16 100 L-8 100 L-6 112 L-20 112 Z" fill="#d9a94e"/><path d="M-17 104 h10 M-16 108 h9" stroke="#b8862f" stroke-width=".7"/>' : "";
+  return broom + '<ellipse cx="30" cy="96" rx="26" ry="6" fill="rgba(0,0,0,.08)"/>' +
+    '<circle cx="30" cy="72" r="24" fill="#f7fbfd" stroke="#cfdde5" stroke-width="1.5"/><path d="M14 80 q16 14 34 0" fill="none" stroke="#e3edf3" stroke-width="3"/>' +
     '<circle cx="30" cy="34" r="17" fill="#f7fbfd" stroke="#cfdde5" stroke-width="1.5"/>' +
-    '<circle cx="30" cy="68" r="2.2" fill="#2b2b2b"/><circle cx="30" cy="78" r="2.2" fill="#2b2b2b"/><circle cx="30" cy="88" r="2.2" fill="#2b2b2b"/>' +
-    '<circle cx="24" cy="30" r="2" fill="#2b2b2b"/><circle cx="36" cy="30" r="2" fill="#2b2b2b"/>' +
-    '<path d="M30 35 l13 3 -13 2 z" fill="#f08a24"/>' +
-    '<path d="M23 41 q7 5 14 0" fill="none" stroke="#2b2b2b" stroke-width="1.6" stroke-linecap="round"/>' +
-    '<path d="M13 48 q17 8 34 0 l-2 6 q-15 6 -30 0 z" fill="' + c.scarf + '"/><path d="M38 52 l6 16 l-7 -2 l-3 -12 z" fill="' + c.scarf + '"/>' +
-    '<path d="M7 64 L-8 52 M-3 56 l-4 -6" stroke="#5b3426" stroke-width="2.4" stroke-linecap="round"/>' +
-    '<g class="wave"><path d="M53 64 L68 50 M63 54 l1 -7" stroke="#5b3426" stroke-width="2.4" stroke-linecap="round"/></g>' +
-    (c.acc === "noeud" ? accs.noeud : "") + (hats[c.hat] || "") + (c.acc !== "noeud" ? accs[c.acc] || "" : "");
+    buttons + lights + leftArm + rightArm +
+    (c.blush ? '<circle cx="20.5" cy="37" r="3" fill="#ff9aa8" opacity=".5"/><circle cx="39.5" cy="37" r="3" fill="#ff9aa8" opacity=".5"/>' : "") +
+    (eyes[c.eyes] || eyes.rond) + (noses[c.nose] || noses.carotte) + (mouths[c.mouth] || mouths.sourire) + scarf +
+    (has("noeud") ? '<path d="M30 60 l-8 -5 v10 z M30 60 l8 -5 v10 z" fill="#e8be68"/><circle cx="30" cy="60" r="2.6" fill="#c99a45"/>' : "") +
+    (has("lunettes") ? '<circle cx="24" cy="30" r="5" fill="rgba(190,225,255,.3)" stroke="#2b2b2b" stroke-width="1.5"/><circle cx="36" cy="30" r="5" fill="rgba(190,225,255,.3)" stroke="#2b2b2b" stroke-width="1.5"/><path d="M29 30 h2 M19 29 l-3 -1 M41 29 l3 -1" stroke="#2b2b2b" stroke-width="1.5"/>' : "") +
+    (hats[c.hat] || "") +
+    (has("cache") ? '<path d="M12 33 A18 18 0 0 1 48 33" fill="none" stroke="' + S + '" stroke-width="3"/><circle cx="12" cy="35" r="6" fill="' + S + '" stroke="#fff" stroke-width="2"/><circle cx="48" cy="35" r="6" fill="' + S + '" stroke="#fff" stroke-width="2"/>' : "");
 }
 function paintMainSnowman(){ const g = document.getElementById("mainSnowman"); if(g) g.innerHTML = snowmanSVG(snowCfg); }
 
 function hearts(el, items){
-  const r = el.getBoundingClientRect();
+  const it = items || ["💕","❤️","💗"], r = el.getBoundingClientRect();
   for(let i = 0; i < 7; i++){
-    const h = document.createElement("span"); h.className = "heart"; h.textContent = (items || ["💕","❤️","💗"])[i % 3];
+    const h = document.createElement("span"); h.className = "heart"; h.textContent = it[i % it.length];
     h.style.left = (r.left + r.width / 2 - 9 + (Math.random() * 30 - 15)) + "px"; h.style.top = (r.top + 10) + "px";
     h.style.setProperty("--dx", (Math.random() * 60 - 30) + "px"); h.style.animationDelay = (i * .08) + "s";
     document.body.appendChild(h); setTimeout(() => h.remove(), 1600);
@@ -957,186 +1088,395 @@ function openRoom(title, origin, build){
 }
 function closeRoom(){ roomEl.classList.remove("open"); if(roomCleanup){ roomCleanup(); roomCleanup = null; } setTimeout(() => { if(!roomEl.classList.contains("open")) roomBody.innerHTML = ""; }, 500); }
 document.getElementById("roomBack").addEventListener("click", closeRoom);
-
 function svgPoint(svg, e){ const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); }
+function tabsUI(tabs){ return '<div class="tabs">' + tabs.map(([k, l], i) => '<button class="tab' + (i ? "" : " on") + '" data-t="' + k + '">' + l + '</button>').join("") + '</div><div class="tabpanel"></div>'; }
 
-/* 1. le salon : décorer le sapin */
+/* ===== 1. le salon : décorer le sapin ===== */
+const ORN_COLS = ["#d42a35","#e8be68","#2f8a5a","#3d7bd9","#d9dee6","#e06aa0","#8a4fd1","#1f2a44"];
+const ORN = {
+  boule: c => '<line y1="-10" y2="-7" stroke="#c99a45" stroke-width="1"/><rect x="-2.2" y="-8.6" width="4.4" height="3" rx=".8" fill="#c99a45"/><circle r="6.4" fill="' + c + '"/><path d="M-6 0 q6 3 12 0" stroke="rgba(255,255,255,.35)" stroke-width="1.2" fill="none"/><circle cx="-2" cy="-2.2" r="1.8" fill="rgba(255,255,255,.6)"/>',
+  canne: () => '<path d="M2 9 V-3 a4 4 0 0 0 -8 0" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><path d="M2 9 V-3 a4 4 0 0 0 -8 0" fill="none" stroke="#d42a35" stroke-width="3.2" stroke-dasharray="2.4 2.6"/>',
+  etoile: () => '<path d="M0 -8 l2.3 4.9 5.3 .6 -4 3.6 1.1 5.3 -4.7 -2.7 -4.7 2.7 1.1 -5.3 -4 -3.6 5.3 -.6 z" fill="#ffd166" stroke="#d9a12e" stroke-width=".8"/>',
+  flocon: () => '<g stroke="#eaf6ff" stroke-width="1.5" stroke-linecap="round"><path d="M0 -8 V8 M-7 -4 L7 4 M-7 4 L7 -4"/><path d="M0 -8 l-2 2 M0 -8 l2 2 M0 8 l-2 -2 M0 8 l2 -2 M-7 -4 l2.6 .4 M7 4 l-2.6 -.4 M-7 4 l2.6 -.4 M7 -4 l-2.6 .4"/></g><circle r="1.6" fill="#bfe6ff"/>',
+  cloche: () => '<path d="M-6 5 C-6 -1 -5 -6 0 -6 C5 -6 6 -1 6 5 C7 6 7 7 6 7 H-6 C-7 7 -7 6 -6 5 Z" fill="#e8be68" stroke="#b8862f" stroke-width=".8"/><circle cy="7.6" r="1.8" fill="#b8862f"/><path d="M0 -6 c-3 -3 -6 -1 -3 1 z M0 -6 c3 -3 6 -1 3 1 z" fill="#d42a35"/>',
+  noeud: () => '<path d="M0 0 C-4 -6 -9 -5 -8 -1 C-7 2 -3 2 0 0 Z M0 0 C4 -6 9 -5 8 -1 C7 2 3 2 0 0 Z" fill="#d42a35"/><path d="M-1 1 L-4 8 L-2 7 L0 2 Z M1 1 L4 8 L2 7 L0 2 Z" fill="#b51f29"/><circle r="2" fill="#e0353f"/>',
+  pain: () => '<circle cy="-5" r="3.6" fill="#b5713b"/><path d="M-2 -2 H2 L6 1 L5 3 L2 2 L3 8 L1 8 L0 5 L-1 8 L-3 8 L-2 2 L-5 3 L-6 1 Z" fill="#b5713b"/><circle cx="-1.2" cy="-5.5" r=".6" fill="#fff"/><circle cx="1.2" cy="-5.5" r=".6" fill="#fff"/><path d="M-1.2 -3.8 q1.2 1 2.4 0" stroke="#fff" stroke-width=".6" fill="none"/><circle cy="1" r=".7" fill="#fff"/><circle cy="3.4" r=".7" fill="#fff"/>',
+  coeur: () => '<path d="M0 6 C-8 0 -7 -7 -2.5 -6 C-1 -5.6 0 -4.4 0 -3.6 C0 -4.4 1 -5.6 2.5 -6 C7 -7 8 0 0 6 Z" fill="#e0355a"/><circle cx="-3" cy="-3" r="1.2" fill="rgba(255,255,255,.6)"/>',
+  pomme: () => '<ellipse rx="4.6" ry="7" fill="#7a4a26"/><path d="M-4 -3 h8 M-4.4 0 h8.8 M-4 3 h8 M0 -7 V7" stroke="#5a3418" stroke-width=".8"/><path d="M-2 -8 l2 -2 l2 2" fill="#2f7d4f"/>',
+  cadeau: () => '<rect x="-5" y="-4" width="10" height="9" rx="1" fill="#3d7bd9"/><rect x="-1" y="-4" width="2" height="9" fill="#e8be68"/><rect x="-5" y="-.5" width="10" height="2" fill="#e8be68"/><path d="M0 -4 c-3 -3 -5 -1 -2 0 z M0 -4 c3 -3 5 -1 2 0 z" fill="#e8be68"/>',
+  chat: () => '<path d="M-6 6 C-7 -2 -5 -5 -5 -5 L-6 -10 L-2 -6.5 C-1 -7 1 -7 2 -6.5 L6 -10 L5 -5 C5 -5 7 -2 6 6 Z" fill="#9399a4"/><circle cx="-2.2" cy="-2" r="1" fill="#9ad16d"/><circle cx="2.2" cy="-2" r="1" fill="#9ad16d"/><path d="M0 0 l-1 .8 h2 z" fill="#e7a3b4"/>',
+  ange: () => '<path d="M-1 0 C-4 -6 -9 -7 -10 -4 C-8 -3 -9 -1 -11 0 C-8 1 -6 2 -1 3 Z" fill="#fff"/><ellipse cy="3" rx="6" ry="3.6" fill="#141218"/><circle cx="5" cy="-.5" r="3.6" fill="#141218"/><path d="M3 -3 l.6 -3 1.6 2.4 M6 -3.4 l1.6 -2.4 .4 3" fill="#141218"/><circle cx="4.4" cy="-.8" r=".7" fill="#ffd54a"/><circle cx="6.6" cy="-.8" r=".7" fill="#ffd54a"/><ellipse cx="5" cy="-6.6" rx="3" ry=".9" fill="none" stroke="#ffd166" stroke-width=".8"/>'
+};
+const ORN_FORMS = [["canne","🍭"],["etoile","⭐"],["flocon","❄️"],["cloche","🔔"],["noeud","🎀"],["pain","🍪"],["coeur","❤️"],["pomme","🌰"],["cadeau","🎁"],["chat","🐱"],["ange","😇"]];
+const LIGHT_SETS = {multi: ["#ff4d5a","#ffd166","#58e08a","#6cc6ff","#ff8fd0"], chaud: ["#ffe6a8","#ffd27a","#fff4d6"], glace: ["#bfe6ff","#8fd3ff","#ffffff"], rougeor: ["#ff4d5a","#ffd166"], off: []};
+const TINSEL = {or: "url(#tinOr)", argent: "#dfe6ee", rouge: "#d42a35", vert: "#58c48a", aucune: ""};
 function roomSalon(body){
-  const COLS = ["#d42a35","#e8be68","#2f8a5a","#3d7bd9","#d9dee6","#e06aa0"];
-  const st = Object.assign({orn: [], star: false, lights: true}, store.get("avent-tree", {}));
-  let sel = 0, armed = 0;
+  const saved = store.get("avent-tree", {});
+  const st = Object.assign({orn: [], top: "or", lights: "multi", tinsel: "aucune", fire: true}, saved);
+  if(saved.star === false && !saved.top) st.top = "aucune";
+  if(saved.lights === true) st.lights = "multi"; if(saved.lights === false) st.lights = "off";
+  st.orn = (st.orn || []).map(o => o.k ? o : {x: o.x, y: o.y, k: "boule", c: o.c || 0});
+  let tool = {k: "boule", c: 0}, armed = 0;
   body.innerHTML = '<svg class="stage" viewBox="0 0 360 520" preserveAspectRatio="xMidYMid meet">' + SALON_SVG + '</svg>' +
-    '<div class="tools"><div class="pal">' + COLS.map((c, i) => '<button class="sw' + (i ? "" : " on") + '" data-i="' + i + '" style="--c:' + c + '" aria-label="Boule"></button>').join("") + '</div>' +
-    '<div class="acts"><button data-a="star">⭐ Étoile</button><button data-a="lights">💡 Lumières</button><button data-a="undo">↩︎</button><button data-a="reset">🗑️</button></div>' +
-    '<p class="tip">Choisis une boule, puis touche le sapin 🎄</p></div>';
-  const svg = body.querySelector("svg"), orn = svg.querySelector("#orn"), lights = svg.querySelector("#tLights"), star = svg.querySelector("#tStar");
-  const shapes = [...svg.querySelectorAll(".tshape")];
-  // guirlande du sapin
-  const LC = ["#ff4d5a","#ffd166","#58e08a","#6cc6ff","#fff1c4"];
-  [[224,230,294,216],[208,310,310,292],[190,400,322,376]].forEach(([x1, y1, x2, y2], k) => {
-    for(let i = 0; i <= 8; i++){ const t = i / 8, x = x1 + (x2 - x1) * t, y = y1 + (y2 - y1) * t + Math.sin(t * Math.PI) * 10;
-      const c = document.createElementNS(NS, "circle"); c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", 2.4);
-      c.setAttribute("fill", LC[(i + k) % LC.length]); c.setAttribute("class", "tli"); c.style.animationDelay = (-(i * 37 + k * 11) % 16 / 10) + "s"; lights.appendChild(c); }
-  });
-  function ball(o, pop){
-    const g = document.createElementNS(NS, "g"); if(pop) g.setAttribute("class", "orn-pop");
-    g.innerHTML = '<line x1="' + o.x + '" y1="' + (o.y - 10) + '" x2="' + o.x + '" y2="' + (o.y - 7) + '" stroke="#c99a45" stroke-width="1"/>' +
-      '<rect x="' + (o.x - 2.2) + '" y="' + (o.y - 8.6) + '" width="4.4" height="3" rx=".8" fill="#c99a45"/>' +
-      '<circle cx="' + o.x + '" cy="' + o.y + '" r="6.4" fill="' + COLS[o.c] + '"/>' +
-      '<circle cx="' + (o.x - 2) + '" cy="' + (o.y - 2.2) + '" r="1.8" fill="rgba(255,255,255,.6)"/>';
-    orn.appendChild(g);
-  }
-  function paint(){ orn.innerHTML = ""; st.orn.forEach(o => ball(o)); star.style.display = st.star ? "" : "none"; lights.classList.toggle("off", !st.lights);
-    body.querySelector('[data-a="star"]').classList.toggle("on", st.star); body.querySelector('[data-a="lights"]').classList.toggle("on", st.lights); }
+    '<div class="tools">' + tabsUI([["boules","🔴 Boules"],["formes","🍭 Décos"],["guir","✨ Guirlandes"],["cime","⭐ Cime"],["gomme","🧽 Gomme"]]) +
+    '<div class="acts"><button data-a="undo">↩︎ Annuler</button><button data-a="reset">🗑️ Tout enlever</button><span class="count" id="ornCount"></span></div></div>';
+  const svg = q("svg.stage", body), orn = q("#orn", svg), lights = q("#tLights", svg), top = q("#tStar", svg), tin = q("#tinsel", svg);
+  const shapes = [...svg.querySelectorAll(".tshape")], panel = q(".tabpanel", body);
+  const LP = []; [[224,230,294,216],[208,310,310,292],[190,400,322,376]].forEach(([x1, y1, x2, y2]) => { for(let i = 0; i <= 8; i++){ const t = i / 8; LP.push([x1 + (x2 - x1) * t, y1 + (y2 - y1) * t + Math.sin(t * Math.PI) * 10]); } });
   const save = () => store.set("avent-tree", st);
-  paint();
+  function drawTreeLights(){
+    const set = LIGHT_SETS[st.lights] || [];
+    lights.innerHTML = set.length ? LP.map(([x, y], i) => '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="5" fill="' + set[i % set.length] + '" opacity=".22"/><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="2.4" fill="' + set[i % set.length] + '" class="tli" style="animation-delay:' + (-(i * 0.37) % 1.6).toFixed(2) + 's"/>').join("") : "";
+  }
+  function drawTinsel(){
+    const col = TINSEL[st.tinsel];
+    tin.innerHTML = col ? ["M228 218 Q262 240 298 214","M214 284 Q262 310 310 280","M210 356 Q262 388 318 352"].map(d =>
+      '<path d="' + d + '" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="5" stroke-linecap="round" transform="translate(0 1.5)"/><path d="' + d + '" fill="none" stroke="' + col + '" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="1.2 2.2"/>').join("") : "";
+  }
+  function drawTop(){
+    const t = st.top;
+    top.innerHTML = t === "or" ? '<circle r="18" fill="#ffd166" opacity=".25" class="sglow"/><path d="M0 -14 l4 8.6 9.4 1 -7 6.4 2 9.2 -8.4 -4.8 -8.4 4.8 2 -9.2 -7 -6.4 9.4 -1 z" fill="#ffd166" stroke="#e8a92e" stroke-width="1"/>'
+      : t === "argent" ? '<circle r="18" fill="#dfe9f5" opacity=".3" class="sglow"/><path d="M0 -14 l4 8.6 9.4 1 -7 6.4 2 9.2 -8.4 -4.8 -8.4 4.8 2 -9.2 -7 -6.4 9.4 -1 z" fill="#eef3f8" stroke="#aebccc" stroke-width="1"/>'
+      : t === "noeud" ? '<g transform="translate(0 4) scale(1.8)">' + ORN.noeud() + '</g>'
+      : t === "ange" ? '<circle r="22" fill="#fff4d6" opacity=".22" class="sglow"/><svg x="-24" y="-26" width="48" height="36" viewBox="0 0 130 96" style="overflow:visible">' + ANGEL_INNER + '</svg>'
+      : t === "coeur" ? '<g transform="translate(0 2) scale(2)">' + ORN.coeur() + '</g>' : "";
+  }
+  const count = () => q("#ornCount", body).textContent = st.orn.length + " déco" + (st.orn.length > 1 ? "s" : "");
+  function put(o, pop){
+    const g = document.createElementNS(NS, "g"); g.setAttribute("transform", "translate(" + o.x + " " + o.y + ")");
+    g.innerHTML = '<g' + (pop ? ' class="orn-pop"' : "") + '>' + (ORN[o.k] || ORN.boule)(ORN_COLS[o.c] || ORN_COLS[0]) + '</g>'; orn.appendChild(g);
+  }
+  function drawOrn(){ orn.innerHTML = ""; st.orn.forEach(o => put(o)); count(); }
+  function fire(){ q("#sFlames", svg).style.display = st.fire ? "" : "none"; q("#sRoomGlowR", svg).style.opacity = st.fire ? 1 : .2; }
+  function paintAll(){ drawTreeLights(); drawTinsel(); drawTop(); drawOrn(); fire(); }
+  paintAll();
+  const opt = (g, list) => '<div class="opts" data-g="' + g + '">' + list.map(([k, l]) => '<button class="opt' + (st[g] === k ? " on" : "") + '" data-v="' + k + '">' + l + '</button>').join("") + '</div>';
+  function showTab(t){
+    body.querySelectorAll(".tab").forEach(b => b.classList.toggle("on", b.dataset.t === t));
+    if(t === "boules"){ tool = {k: "boule", c: tool.k === "boule" ? tool.c : 0};
+      panel.innerHTML = '<div class="pal">' + ORN_COLS.map((c, i) => '<button class="sw' + (i === tool.c ? " on" : "") + '" data-c="' + i + '" style="--c:' + c + '" aria-label="Boule"></button>').join("") + '</div><p class="tip">Choisis une couleur, puis touche le sapin 🎄</p>'; }
+    if(t === "formes"){ if(tool.k === "boule" || tool.k === "gomme") tool = {k: "canne", c: 0};
+      panel.innerHTML = '<div class="pal">' + ORN_FORMS.map(([k, e]) => '<button class="emo' + (tool.k === k ? " on" : "") + '" data-k="' + k + '">' + e + '</button>').join("") + '</div><p class="tip">Choisis une déco, puis touche le sapin</p>'; }
+    if(t === "guir"){ panel.innerHTML = '<div class="row-l">Lumières</div>' + opt("lights", [["multi","🌈 Multicolore"],["chaud","🕯️ Blanc chaud"],["glace","🧊 Bleu glacé"],["rougeor","❤️ Rouge & or"],["off","⚫ Éteintes"]]) +
+      '<div class="row-l">Guirlande</div>' + opt("tinsel", [["or","✨ Dorée"],["argent","🤍 Argentée"],["rouge","❤️ Rouge"],["vert","💚 Verte"],["aucune","✖️ Aucune"]]); }
+    if(t === "cime"){ panel.innerHTML = opt("top", [["or","⭐ Étoile dorée"],["argent","🤍 Étoile argent"],["noeud","🎀 Gros nœud"],["coeur","❤️ Cœur"],["ange","😇 Petit ange"],["aucune","✖️ Rien"]]) + '<p class="tip">Le petit ange, c\'est le chat noir 🖤</p>'; }
+    if(t === "gomme"){ tool = {k: "gomme"}; panel.innerHTML = '<p class="tip big">🧽 Touche une déco sur le sapin pour l\'enlever</p>'; }
+  }
+  showTab("boules");
+  q(".tabs", body).addEventListener("click", e => { const b = e.target.closest(".tab"); if(b) showTab(b.dataset.t); });
+  panel.addEventListener("click", e => {
+    const sw = e.target.closest(".sw[data-c]"), em = e.target.closest(".emo"), op = e.target.closest(".opt");
+    if(sw){ tool = {k: "boule", c: +sw.dataset.c}; panel.querySelectorAll(".sw").forEach(x => x.classList.toggle("on", x === sw)); }
+    if(em){ tool = {k: em.dataset.k, c: 0}; panel.querySelectorAll(".emo").forEach(x => x.classList.toggle("on", x === em)); }
+    if(op){ const g = op.closest(".opts").dataset.g; st[g] = op.dataset.v; op.parentNode.querySelectorAll(".opt").forEach(x => x.classList.toggle("on", x === op)); save(); paintAll();
+      if(g === "top" && st.top === "ange") toast("Il veille sur le sapin ✨"); }
+  });
   svg.addEventListener("pointerdown", e => {
     const p = svgPoint(svg, e);
-    if(!shapes.some(s => s.isPointInFill ? s.isPointInFill(new DOMPoint(p.x, p.y)) : false)) return;
-    if(st.orn.length >= 80) return toast("Le sapin est plein ! 🎄");
-    const o = {x: Math.round(p.x), y: Math.round(p.y), c: sel}; st.orn.push(o); ball(o, true); save();
+    if(tool.k === "gomme"){
+      let best = -1, bd = 14; st.orn.forEach((o, i) => { const d = Math.hypot(o.x - p.x, o.y - p.y); if(d < bd){ bd = d; best = i; } });
+      if(best >= 0){ st.orn.splice(best, 1); save(); drawOrn(); } return;
+    }
+    if(!shapes.some(s => s.isPointInFill && s.isPointInFill(new DOMPoint(p.x, p.y)))) return;
+    if(st.orn.length >= 120) return toast("Le sapin est plein ! 🎄");
+    const o = {x: Math.round(p.x), y: Math.round(p.y), k: tool.k, c: tool.c || 0}; st.orn.push(o); put(o, true); save(); count();
   });
-  body.querySelector(".pal").addEventListener("click", e => {
-    const b = e.target.closest(".sw"); if(!b) return; sel = +b.dataset.i;
-    body.querySelectorAll(".sw").forEach(x => x.classList.toggle("on", x === b));
-  });
-  body.querySelector(".acts").addEventListener("click", e => {
+  q(".acts", body).addEventListener("click", e => {
     const a = e.target.closest("button"); if(!a) return;
-    if(a.dataset.a === "star"){ st.star = !st.star; if(st.star) toast("✨ Le sapin a son étoile !"); }
-    if(a.dataset.a === "lights") st.lights = !st.lights;
-    if(a.dataset.a === "undo") st.orn.pop();
-    if(a.dataset.a === "reset"){ if(Date.now() - armed > 2500){ armed = Date.now(); return toast("Touche encore 🗑️ pour tout enlever"); } st.orn = []; st.star = false; toast("Sapin remis à zéro"); }
-    save(); paint();
+    if(a.dataset.a === "undo"){ st.orn.pop(); }
+    if(a.dataset.a === "reset"){ if(Date.now() - armed > 2500){ armed = Date.now(); return toast("Touche encore 🗑️ pour tout enlever"); } st.orn = []; toast("Sapin remis à zéro"); }
+    save(); drawOrn();
   });
+  q("#sFireplace", svg).addEventListener("click", () => { st.fire = !st.fire; save(); fire(); toast(st.fire ? "🔥 Le feu crépite" : "Le feu est éteint… brr 🥶"); });
+  q("#st1", svg).addEventListener("click", () => toast("Celle-là, c'est la tienne ❤️"));
+  q("#st2", svg).addEventListener("click", () => toast("Celle d'Eiji 😏"));
+  q("#st3", svg).addEventListener("click", () => toast("Celle d'Uko, évidemment 🐾"));
+  q("#sFrame", svg).addEventListener("click", e => { hearts(e.currentTarget, ["✨","🖤","⭐"]); toast("Il veille sur vous ✨"); });
+  q("#sUko", svg).addEventListener("click", e => { hearts(e.currentTarget); toast("Uko ronronne devant le feu 💤"); });
+  q("#sWindow", svg).addEventListener("click", () => { const w = q("#winSnow", svg); w.classList.toggle("storm"); toast(w.classList.contains("storm") ? "❄️ Il neige à gros flocons" : "La neige se calme"); });
 }
 
-/* 2. le toit : attrape les cadeaux */
+/* ===== 2. le toit : attrape les cadeaux ===== */
 function roomToit(body){
-  body.innerHTML = '<div class="game"><canvas></canvas><div class="ghud"><span id="gScore">0</span><span id="gLives">❤️❤️❤️</span></div>' +
-    '<div class="gpanel" id="gPanel"><h3>Attrape les cadeaux !</h3><p>Glisse ton doigt pour bouger la hotte. Attrape les 🎁 (+1) et les ⭐ (+3), mais évite le charbon !</p>' +
-    '<p>Record : <b id="gBest">' + store.get("avent-best", 0) + '</b></p><button class="btn primary" id="gStart">Jouer</button></div></div>';
-  const cv = body.querySelector("canvas"), ctx = cv.getContext("2d"), panel = body.querySelector("#gPanel");
-  let W, H, dpr, raf, running = false, items = [], pops = [], px = 0, tx = 0, score = 0, lives = 3, last = 0, spawnT = 0, elapsed = 0, shake = 0;
-  const stars = Array.from({length: 50}, () => ({x: Math.random(), y: Math.random() * .7, r: Math.random() * 1.3 + .4, p: Math.random() * 6}));
-  function size(){ dpr = Math.min(devicePixelRatio || 1, 2); W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); if(!px) px = tx = W / 2; }
+  const best0 = store.get("avent-best", 0);
+  body.innerHTML = '<div class="game"><canvas></canvas><div class="ghud"><span class="gsc">⭐ <b id="gScore">0</b></span><span id="gCombo" class="gcombo"></span><span id="gLives">❤️❤️❤️</span></div><div class="gbanner" id="gBanner"></div>' +
+    '<div class="gpanel" id="gPanel"><h3>Attrape les cadeaux !</h3><p>Glisse ton doigt pour bouger la hotte du Père Noël.</p>' +
+    '<div class="legend"><span>🎁 <b>+1</b></span><span>🍭 <b>+2</b></span><span>⭐ <b>+3</b></span><span>❤️ une vie</span><span>❄️ ralenti</span><span>⚫ charbon −1 vie</span></div>' +
+    '<p class="small">Enchaîne les prises sans en rater pour un combo ×2, puis ×3 !</p><p>Record : <b>' + best0 + '</b></p><button class="btn primary" id="gStart">Jouer</button></div></div>';
+  const cv = q("canvas", body), ctx = cv.getContext("2d"), panel = q("#gPanel", body), banner = q("#gBanner", body);
+  let W, H, dpr, raf, running = false, items = [], parts = [], pops = [], px = 0, tx = 0, vx = 0, score = 0, lives = 3, last = 0, spawnT = 0, shake = 0, flash = 0, combo = 0, slow = 0, level = 1, angelX = -200, angelT = 5;
+  const stars = Array.from({length: 70}, () => ({x: Math.random(), y: Math.random() * .55, r: Math.random() * 1.3 + .3, p: Math.random() * 6}));
+  const flakes = Array.from({length: 70}, () => ({x: Math.random(), y: Math.random(), r: Math.random() * 2 + .6, s: Math.random() * .4 + .3, w: Math.random() * 6}));
+  let village = [];
+  function size(){
+    dpr = Math.min(devicePixelRatio || 1, 2); W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if(!px) px = tx = W / 2;
+    village = []; let x = -10; while(x < W + 20){ const w = 34 + Math.random() * 30, h = 26 + Math.random() * 36; village.push({x, w, h, roof: Math.random() < .5, win: Array.from({length: 4}, () => Math.random() < .6), ch: Math.random() < .4}); x += w + 2 + Math.random() * 8; }
+  }
   size(); addEventListener("resize", size);
-  const move = e => { const r = cv.getBoundingClientRect(); tx = Math.max(36, Math.min(W - 36, e.clientX - r.left)); };
+  const move = e => { const r = cv.getBoundingClientRect(); tx = Math.max(44, Math.min(W - 44, e.clientX - r.left)); };
   cv.addEventListener("pointerdown", move); cv.addEventListener("pointermove", move);
-  const GC = [["#c8202c","#f0d08a"],["#1f6b45","#e8be68"],["#2f5fb3","#fff"],["#e8be68","#c8202c"],["#e06aa0","#fff"]];
+  const GC = [["#c8202c","#f0d08a"],["#1f6b45","#e8be68"],["#2f5fb3","#fff"],["#e8be68","#c8202c"],["#e06aa0","#fff"],["#7a4bc2","#f0d08a"]];
+  function shade(hex, a){ const n = parseInt(hex.slice(1), 16); const f = v => Math.max(0, Math.min(255, v + a)); return "rgb(" + f(n >> 16) + "," + f(n >> 8 & 255) + "," + f(n & 255) + ")"; }
   function spawn(){
-    const r = Math.random(), type = r < .16 ? "coal" : r < .26 ? "star" : "gift";
-    items.push({type, x: 24 + Math.random() * (W - 48), y: -30, vy: (110 + Math.random() * 60) * (1 + elapsed / 45), s: type === "gift" ? 26 + Math.random() * 8 : 24, rot: Math.random() * .6 - .3, c: GC[Math.floor(Math.random() * GC.length)]});
+    const r = Math.random();
+    const type = r < .17 ? "coal" : r < .25 ? "star" : r < .34 ? "cane" : r < .37 ? "heart" : r < .40 ? "flake" : "gift";
+    items.push({type, x: 26 + Math.random() * (W - 52), y: -30, vy: (120 + Math.random() * 60) * (1 + (level - 1) * .14), s: type === "gift" ? 26 + Math.random() * 10 : 24, rot: Math.random() * .6 - .3, vr: Math.random() * 2 - 1, c: GC[Math.floor(Math.random() * GC.length)], sw: Math.random() * 6});
   }
+  function rr(x, y, w, h, r){ ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); }
   function drawGift(it){ ctx.save(); ctx.translate(it.x, it.y); ctx.rotate(it.rot); const s = it.s;
-    ctx.fillStyle = it.c[0]; ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(-s/2, -s/2, s, s, 4); else ctx.rect(-s/2, -s/2, s, s); ctx.fill();
-    ctx.fillStyle = it.c[1]; ctx.fillRect(-3, -s/2, 6, s); ctx.fillRect(-s/2, -3, s, 6);
-    ctx.beginPath(); ctx.ellipse(-6, -s/2 - 3, 6, 4, -.5, 0, 7); ctx.ellipse(6, -s/2 - 3, 6, 4, .5, 0, 7); ctx.fill(); ctx.restore(); }
-  function drawStar(it){ ctx.save(); ctx.translate(it.x, it.y); ctx.rotate(it.y / 60); ctx.shadowColor = "#ffd166"; ctx.shadowBlur = 16; ctx.fillStyle = "#ffd166"; ctx.beginPath();
-    for(let i = 0; i < 10; i++){ const a = i * Math.PI / 5 - Math.PI / 2, r = i % 2 ? 6 : 14; ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r); } ctx.closePath(); ctx.fill(); ctx.restore(); }
-  function drawCoal(it){ ctx.save(); ctx.translate(it.x, it.y); ctx.rotate(it.y / 90); ctx.fillStyle = "#26221f"; ctx.beginPath();
-    [[0,-12],[10,-7],[12,4],[4,12],[-8,10],[-13,0],[-8,-9]].forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = "rgba(255,255,255,.18)"; ctx.beginPath(); ctx.arc(-3, -4, 3, 0, 7); ctx.fill(); ctx.restore(); }
-  function drawBasket(){ const y = H - 92, w = 74;
-    ctx.save(); ctx.translate(px, y);
-    ctx.strokeStyle = "#8a5a2b"; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(0, 4, w / 2 - 6, Math.PI, 0); ctx.stroke();
-    ctx.fillStyle = "#b9803f"; ctx.beginPath(); ctx.moveTo(-w/2, 4); ctx.lineTo(w/2, 4); ctx.lineTo(w/2 - 8, 40); ctx.lineTo(-w/2 + 8, 40); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = "rgba(90,52,20,.55)"; ctx.lineWidth = 2; for(let i = -2; i <= 2; i++){ ctx.beginPath(); ctx.moveTo(i * 12, 6); ctx.lineTo(i * 10, 38); ctx.stroke(); }
-    ctx.beginPath(); ctx.moveTo(-w/2 + 3, 18); ctx.lineTo(w/2 - 3, 18); ctx.stroke();
-    ctx.fillStyle = "#c8202c"; ctx.fillRect(-w/2 - 2, 0, w + 4, 7); ctx.fillStyle = "#fff"; ctx.fillRect(-w/2 - 2, 0, w + 4, 2.5);
+    ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 8; ctx.shadowOffsetY = 4;
+    const g = ctx.createLinearGradient(-s/2, -s/2, s/2, s/2); g.addColorStop(0, it.c[0]); g.addColorStop(1, shade(it.c[0], -40));
+    ctx.fillStyle = g; rr(-s/2, -s/2, s, s, 5); ctx.fill(); ctx.shadowColor = "transparent";
+    ctx.fillStyle = it.c[1]; ctx.fillRect(-3.5, -s/2, 7, s); ctx.fillRect(-s/2, -3.5, s, 7);
+    ctx.beginPath(); ctx.ellipse(-7, -s/2 - 3, 7, 4.5, -.5, 0, 7); ctx.ellipse(7, -s/2 - 3, 7, 4.5, .5, 0, 7); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,.25)"; ctx.beginPath(); ctx.moveTo(-s/2 + 4, -s/2 + 4); ctx.lineTo(-s/2 + 12, -s/2 + 4); ctx.lineTo(-s/2 + 4, -s/2 + 12); ctx.fill();
     ctx.restore(); }
-  function scene(t){
-    const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#071522"); g.addColorStop(.7, "#123447"); g.addColorStop(1, "#1d4a52"); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    stars.forEach(s => { ctx.globalAlpha = .4 + .6 * Math.abs(Math.sin(t / 900 + s.p)); ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.r, 0, 7); ctx.fill(); }); ctx.globalAlpha = 1;
-    ctx.fillStyle = "#fff5d6"; ctx.shadowColor = "#fff2c0"; ctx.shadowBlur = 30; ctx.beginPath(); ctx.arc(W - 60, 70, 26, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
-    ctx.fillStyle = "#2e4a40"; ctx.beginPath(); ctx.moveTo(-10, H - 40); ctx.lineTo(W / 2, H - 70); ctx.lineTo(W + 10, H - 40); ctx.lineTo(W + 10, H); ctx.lineTo(-10, H); ctx.fill();
-    ctx.fillStyle = "#f4f8fb"; ctx.beginPath(); ctx.moveTo(-10, H - 44); ctx.lineTo(W / 2, H - 74); ctx.lineTo(W + 10, H - 44); ctx.lineTo(W + 10, H - 30); ctx.quadraticCurveTo(W * .75, H - 50, W / 2, H - 56); ctx.quadraticCurveTo(W * .25, H - 50, -10, H - 30); ctx.fill();
-    ctx.fillStyle = "#6b3a2a"; ctx.fillRect(W * .78, H - 112, 30, 60); ctx.fillStyle = "#f4f8fb"; ctx.fillRect(W * .78 - 4, H - 118, 38, 9);
+  function starPath(r1, r2){ ctx.beginPath(); for(let i = 0; i < 10; i++){ const a = i * Math.PI / 5 - Math.PI / 2, r = i % 2 ? r2 : r1; ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r); } ctx.closePath(); }
+  function drawStar(it){ ctx.save(); ctx.translate(it.x, it.y); ctx.rotate(it.y / 60); ctx.shadowColor = "#ffd166"; ctx.shadowBlur = 22;
+    const g = ctx.createRadialGradient(-3, -3, 1, 0, 0, 16); g.addColorStop(0, "#fff6c9"); g.addColorStop(1, "#f2b632"); ctx.fillStyle = g; starPath(16, 7); ctx.fill(); ctx.restore(); }
+  function drawCane(it){ ctx.save(); ctx.translate(it.x, it.y); ctx.rotate(it.rot + Math.sin(it.y / 40) * .3); ctx.lineCap = "round"; ctx.lineWidth = 6;
+    const path = () => { ctx.beginPath(); ctx.moveTo(4, 16); ctx.lineTo(4, -4); ctx.arc(-3, -4, 7, 0, Math.PI, true); };
+    ctx.shadowColor = "rgba(0,0,0,.3)"; ctx.shadowBlur = 6; ctx.strokeStyle = "#fff"; path(); ctx.stroke(); ctx.shadowBlur = 0; ctx.strokeStyle = "#e0262f"; ctx.setLineDash([4, 4]); path(); ctx.stroke(); ctx.setLineDash([]); ctx.restore(); }
+  function drawHeart(it){ ctx.save(); ctx.translate(it.x, it.y); const k = 1 + Math.sin(it.y / 18) * .08; ctx.scale(k, k); ctx.shadowColor = "#ff6b8a"; ctx.shadowBlur = 18; ctx.fillStyle = "#ff3f6b";
+    ctx.beginPath(); ctx.moveTo(0, 12); ctx.bezierCurveTo(-18, 0, -12, -16, 0, -6); ctx.bezierCurveTo(12, -16, 18, 0, 0, 12); ctx.fill(); ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.beginPath(); ctx.arc(-6, -5, 2.4, 0, 7); ctx.fill(); ctx.restore(); }
+  function drawFlake(it){ ctx.save(); ctx.translate(it.x, it.y); ctx.rotate(it.y / 50); ctx.shadowColor = "#9fdcff"; ctx.shadowBlur = 14; ctx.strokeStyle = "#e6f6ff"; ctx.lineWidth = 2.6; ctx.lineCap = "round";
+    for(let i = 0; i < 6; i++){ ctx.rotate(Math.PI / 3); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -14); ctx.moveTo(0, -8); ctx.lineTo(-4, -12); ctx.moveTo(0, -8); ctx.lineTo(4, -12); ctx.stroke(); } ctx.restore(); }
+  function drawCoal(it){ ctx.save(); ctx.translate(it.x, it.y); ctx.rotate(it.y / 90);
+    ctx.shadowColor = "rgba(255,90,40,.55)"; ctx.shadowBlur = 10; ctx.fillStyle = "#26221f"; ctx.beginPath();
+    [[0,-13],[10,-8],[13,4],[5,13],[-8,11],[-14,1],[-9,-10]].forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); ctx.fill(); ctx.shadowBlur = 0;
+    ctx.fillStyle = "rgba(255,255,255,.16)"; ctx.beginPath(); ctx.arc(-4, -4, 3.4, 0, 7); ctx.fill(); ctx.fillStyle = "rgba(255,110,50,.6)"; ctx.beginPath(); ctx.arc(4, 5, 1.6, 0, 7); ctx.fill(); ctx.restore(); }
+  function drawSack(){
+    const y = H - 104, w = 84; ctx.save(); ctx.translate(px, y); ctx.rotate(Math.max(-.25, Math.min(.25, vx / 900)));
+    [[-18,-6,"#2f5fb3","#e8be68"],[14,-9,"#e8be68","#c8202c"],[-2,-14,"#1f6b45","#fff"]].forEach(([x, yy, c1, c2]) => { ctx.fillStyle = c1; rr(x - 9, yy - 9, 18, 18, 3); ctx.fill(); ctx.fillStyle = c2; ctx.fillRect(x - 2, yy - 9, 4, 18); ctx.fillRect(x - 9, yy - 2, 18, 4); });
+    ctx.shadowColor = "rgba(0,0,0,.4)"; ctx.shadowBlur = 12; ctx.shadowOffsetY = 6;
+    const g = ctx.createLinearGradient(-w/2, 0, w/2, 0); g.addColorStop(0, "#8f1820"); g.addColorStop(.45, "#cf3540"); g.addColorStop(1, "#7d141b");
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(-w/2 + 4, 0); ctx.bezierCurveTo(-w/2 - 10, 30, -w/2 + 2, 58, 0, 58); ctx.bezierCurveTo(w/2 - 2, 58, w/2 + 10, 30, w/2 - 4, 0); ctx.closePath(); ctx.fill();
+    ctx.shadowColor = "transparent";
+    ctx.strokeStyle = "rgba(0,0,0,.2)"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-14, 10); ctx.quadraticCurveTo(-18, 34, -8, 52); ctx.moveTo(16, 8); ctx.quadraticCurveTo(20, 30, 12, 50); ctx.stroke();
+    ctx.fillStyle = "#fff"; rr(-w/2 - 2, -6, w + 4, 12, 6); ctx.fill(); ctx.fillStyle = "#e9eef3"; for(let i = -w/2; i < w/2; i += 9){ ctx.beginPath(); ctx.arc(i + 3, 0, 3, 0, 7); ctx.fill(); }
+    ctx.strokeStyle = "#e8be68"; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(-6, 8); ctx.quadraticCurveTo(0, 18, 6, 8); ctx.stroke(); ctx.fillStyle = "#e8be68"; ctx.beginPath(); ctx.arc(0, 18, 3, 0, 7); ctx.fill();
+    ctx.restore();
   }
-  function hud(){ body.querySelector("#gScore").textContent = score; body.querySelector("#gLives").textContent = "❤️".repeat(lives) + "🖤".repeat(3 - lives); }
+  function drawAngel(t, dt){
+    angelT -= dt; if(angelT <= 0 && angelX < -150){ angelX = W + 80; angelT = 14 + Math.random() * 10; }
+    if(angelX <= -150) return;
+    angelX -= 70 * dt; const ay = H * .22 + Math.sin(t / 500) * 10;
+    ctx.save(); ctx.translate(angelX, ay); ctx.shadowColor = "rgba(255,236,190,.8)"; ctx.shadowBlur = 14;
+    ctx.fillStyle = "#141218"; ctx.beginPath(); ctx.ellipse(0, 0, 16, 8, 0, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(-16, -4, 8, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-22, -8); ctx.lineTo(-21, -17); ctx.lineTo(-15, -11); ctx.closePath(); ctx.moveTo(-13, -11); ctx.lineTo(-9, -18); ctx.lineTo(-9, -7); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(14, -2); ctx.quadraticCurveTo(26, -6, 26, -16); ctx.lineWidth = 3; ctx.strokeStyle = "#141218"; ctx.stroke();
+    ctx.shadowBlur = 0; ctx.fillStyle = "#c8202c"; ctx.beginPath(); ctx.moveTo(-24, -10); ctx.quadraticCurveTo(-14, -28, -2, -20); ctx.lineTo(-8, -10); ctx.fill(); ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(-2, -20, 2.6, 0, 7); ctx.fill(); ctx.fillRect(-25, -12, 18, 3.4);
+    const fl = Math.sin(t / 90) * 7; ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.moveTo(2, -4); ctx.quadraticCurveTo(6, -26 - fl, 24, -24 - fl); ctx.quadraticCurveTo(18, -12, 6, 2); ctx.fill();
+    ctx.fillStyle = "#ffd54a"; ctx.beginPath(); ctx.arc(-19, -5, 1.7, 0, 7); ctx.arc(-13.5, -5, 1.7, 0, 7); ctx.fill(); ctx.restore();
+  }
+  function scene(t, dt){
+    const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#050f1a"); g.addColorStop(.55, "#0f2c40"); g.addColorStop(1, "#1d4a52"); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    for(let k = 0; k < 2; k++){ ctx.save(); ctx.globalAlpha = .16 + .07 * Math.sin(t / 1800 + k); const ag = ctx.createLinearGradient(0, H * .04, 0, H * .42);
+      ag.addColorStop(0, "rgba(90,255,180,0)"); ag.addColorStop(.5, k ? "rgba(120,190,255,.9)" : "rgba(90,255,180,.9)"); ag.addColorStop(1, "rgba(90,255,180,0)");
+      ctx.fillStyle = ag; ctx.beginPath(); ctx.moveTo(0, H * .42); for(let x = 0; x <= W; x += 10) ctx.lineTo(x, H * (.12 + k * .07) + Math.sin(x / 70 + t / 1400 + k * 2) * 26); ctx.lineTo(W, H * .42); ctx.closePath(); ctx.fill(); ctx.restore(); }
+    stars.forEach(s => { ctx.globalAlpha = .3 + .7 * Math.abs(Math.sin(t / 900 + s.p)); ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.r, 0, 7); ctx.fill(); }); ctx.globalAlpha = 1;
+    ctx.save(); ctx.shadowColor = "#fff2c0"; ctx.shadowBlur = 40; ctx.fillStyle = "#fff6dc"; ctx.beginPath(); ctx.arc(W - 64, 78, 28, 0, 7); ctx.fill(); ctx.restore();
+    ctx.fillStyle = "rgba(0,0,0,.06)"; ctx.beginPath(); ctx.arc(W - 56, 70, 6, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(W - 72, 88, 8, 0, 7); ctx.fill();
+    drawAngel(t, dt);
+    ctx.fillStyle = "#16384a"; ctx.beginPath(); ctx.moveTo(0, H); for(let x = 0; x <= W; x += 20) ctx.lineTo(x, (H - 172) + Math.sin(x / 90) * 22 + Math.cos(x / 37) * 10); ctx.lineTo(W, H); ctx.fill();
+    ctx.fillStyle = "rgba(240,248,252,.55)"; ctx.beginPath(); for(let x = 0; x <= W; x += 20){ const y = (H - 172) + Math.sin(x / 90) * 22 + Math.cos(x / 37) * 10; x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } for(let x = W; x >= 0; x -= 20) ctx.lineTo(x, (H - 172) + Math.sin(x / 90) * 22 + Math.cos(x / 37) * 10 + 5); ctx.fill();
+    const vy = H - 96;
+    village.forEach(h => {
+      ctx.fillStyle = "#0b2231"; ctx.fillRect(h.x, vy - h.h, h.w, h.h + 40);
+      if(h.ch){ ctx.fillRect(h.x + h.w * .7, vy - h.h - 22, 7, 16); }
+      ctx.beginPath(); if(h.roof){ ctx.moveTo(h.x - 4, vy - h.h); ctx.lineTo(h.x + h.w / 2, vy - h.h - 18); ctx.lineTo(h.x + h.w + 4, vy - h.h); ctx.closePath(); } else ctx.rect(h.x - 3, vy - h.h - 5, h.w + 6, 6); ctx.fill();
+      ctx.fillStyle = "rgba(240,248,252,.9)"; ctx.beginPath(); if(h.roof){ ctx.moveTo(h.x - 4, vy - h.h); ctx.lineTo(h.x + h.w / 2, vy - h.h - 18); ctx.lineTo(h.x + h.w + 4, vy - h.h); ctx.lineTo(h.x + h.w / 2, vy - h.h - 13); ctx.closePath(); } else ctx.rect(h.x - 3, vy - h.h - 8, h.w + 6, 3.5); ctx.fill();
+      h.win.forEach((on, i) => { if(!on) return; ctx.fillStyle = "rgba(255,206,110," + (.75 + .25 * Math.sin(t / 700 + i + h.x)) + ")"; ctx.fillRect(h.x + 6 + (i % 2) * (h.w - 18), vy - h.h + 8 + Math.floor(i / 2) * 14, 6, 7); });
+    });
+    ctx.fillStyle = "#7a2a24"; ctx.beginPath(); ctx.moveTo(-10, H - 38); ctx.lineTo(W / 2, H - 64); ctx.lineTo(W + 10, H - 38); ctx.lineTo(W + 10, H); ctx.lineTo(-10, H); ctx.fill();
+    ctx.strokeStyle = "rgba(0,0,0,.25)"; ctx.lineWidth = 2; for(let i = 0; i < 4; i++){ ctx.beginPath(); ctx.moveTo(-10, H - 26 + i * 12); ctx.lineTo(W / 2, H - 52 + i * 12); ctx.lineTo(W + 10, H - 26 + i * 12); ctx.stroke(); }
+    ctx.fillStyle = "#f4f8fb"; ctx.beginPath(); ctx.moveTo(-10, H - 46); ctx.lineTo(W / 2, H - 72); ctx.lineTo(W + 10, H - 46); ctx.lineTo(W + 10, H - 34); ctx.lineTo(W / 2, H - 58); ctx.lineTo(-10, H - 34); ctx.fill();
+    for(let x = 6; x < W; x += 26){ const yb = H - 34 - (1 - Math.abs(x - W / 2) / (W / 2 + 10)) * 24; ctx.beginPath(); ctx.moveTo(x - 4, yb); ctx.lineTo(x, yb + 7 + (x % 3) * 2); ctx.lineTo(x + 4, yb); ctx.fill(); }
+    ctx.fillStyle = "#6b3a2a"; ctx.fillRect(W * .8, H - 118, 32, 64); ctx.fillStyle = "#5a2f22"; ctx.fillRect(W * .8, H - 118, 32, 4); ctx.fillStyle = "#f4f8fb"; rr(W * .8 - 5, H - 124, 42, 10, 5); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,.85)";
+    flakes.forEach(f => { f.y += f.s * dt * (slow > 0 ? .4 : 1) * .12; f.w += dt; if(f.y > 1.02){ f.y = -.02; f.x = Math.random(); } ctx.beginPath(); ctx.arc(f.x * W + Math.sin(f.w) * 8, f.y * H, f.r, 0, 7); ctx.fill(); });
+    if(slow > 0){ ctx.fillStyle = "rgba(160,220,255," + Math.min(.16, slow * .05) + ")"; ctx.fillRect(0, 0, W, H); }
+  }
+  const comboMult = () => combo >= 10 ? 3 : combo >= 5 ? 2 : 1;
+  function hud(){
+    q("#gScore", body).textContent = score; q("#gLives", body).textContent = "❤️".repeat(lives) + "🤍".repeat(Math.max(0, 3 - lives));
+    const m = comboMult(), c = q("#gCombo", body); c.textContent = m > 1 ? "COMBO ×" + m : combo >= 2 ? combo + " d'affilée" : ""; c.classList.toggle("hot", m > 1);
+  }
+  function burst(x, y, cols, n){ for(let i = 0; i < n; i++){ const a = Math.random() * 7, s = 60 + Math.random() * 160; parts.push({x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 60, t: .8 + Math.random() * .4, c: cols[i % cols.length], r: 1.5 + Math.random() * 2.5}); } }
+  function showBanner(txt){ banner.textContent = txt; banner.classList.remove("show"); void banner.offsetWidth; banner.classList.add("show"); }
   function frame(t){
     raf = requestAnimationFrame(frame);
     const dt = Math.min(.05, (t - (last || t)) / 1000); last = t;
-    if(running){ elapsed += dt; spawnT -= dt; if(spawnT <= 0){ spawn(); spawnT = Math.max(.32, .9 - elapsed / 60); } }
-    px += (tx - px) * Math.min(1, dt * 14);
-    ctx.save(); if(shake > 0){ shake -= dt; ctx.translate((Math.random() - .5) * 8, (Math.random() - .5) * 8); }
-    scene(t);
-    const by = H - 92;
+    const nx = px + (tx - px) * Math.min(1, dt * 14); vx = (nx - px) / Math.max(dt, .001); px = nx;
+    if(slow > 0) slow -= dt;
+    const gdt = dt * (slow > 0 ? .45 : 1);
+    if(running){ spawnT -= gdt; if(spawnT <= 0){ spawn(); spawnT = Math.max(.28, .85 - level * .07); } }
+    ctx.save(); if(shake > 0){ shake -= dt; ctx.translate((Math.random() - .5) * 10, (Math.random() - .5) * 10); }
+    scene(t, dt);
+    const by = H - 104;
     items = items.filter(it => {
-      it.y += it.vy * dt;
-      if(it.y > by - 4 && it.y < by + 26 && Math.abs(it.x - px) < 40){
-        if(it.type === "coal"){ lives--; shake = .35; pops.push({x: it.x, y: by - 10, txt: "Oups !", c: "#ff8a8a", t: 1}); if(navigator.vibrate) try{ navigator.vibrate(80); }catch(e){} }
-        else { const v = it.type === "star" ? 3 : 1; score += v; pops.push({x: it.x, y: by - 10, txt: "+" + v, c: "#ffe39a", t: 1}); }
+      it.y += it.vy * gdt; it.x += Math.sin(it.y / 40 + it.sw) * .3; it.rot += it.vr * gdt * .5;
+      if(it.y > by - 8 && it.y < by + 30 && Math.abs(it.x - px) < 46){
+        if(it.type === "coal"){ lives--; combo = 0; shake = .4; flash = .3; burst(it.x, by, ["#555","#777","#333"], 14); pops.push({x: it.x, y: by - 14, txt: "Charbon !", c: "#ff9a9a", t: 1}); try{ if(navigator.vibrate) navigator.vibrate(80); }catch(e){} }
+        else if(it.type === "heart"){ if(lives < 3){ lives++; pops.push({x: it.x, y: by - 14, txt: "+1 vie", c: "#ff8fb0", t: 1}); } else { score += 2; pops.push({x: it.x, y: by - 14, txt: "+2", c: "#ff8fb0", t: 1}); } burst(it.x, by, ["#ff3f6b","#ffb3c6"], 16); }
+        else if(it.type === "flake"){ slow = 4.5; showBanner("❄️ Ralenti !"); burst(it.x, by, ["#e6f6ff","#9fdcff"], 18); }
+        else { combo++; const base = it.type === "star" ? 3 : it.type === "cane" ? 2 : 1, v = base * comboMult(); score += v;
+          pops.push({x: it.x, y: by - 14, txt: "+" + v, c: "#ffe39a", t: 1});
+          burst(it.x, by, it.type === "star" ? ["#ffd166","#fff6c9"] : it.type === "cane" ? ["#fff","#e0262f"] : [it.c[0], it.c[1], "#fff"], 12);
+          if(combo === 5) showBanner("Combo ×2 ! 🔥"); if(combo === 10) showBanner("Combo ×3 !! 🔥🔥");
+          const nl = 1 + Math.floor(score / 25); if(nl > level){ level = nl; showBanner("Niveau " + level + " ✨"); } }
         hud(); if(lives <= 0) over(); return false;
       }
-      if(it.y > H + 40) return false;
-      it.type === "gift" ? drawGift(it) : it.type === "star" ? drawStar(it) : drawCoal(it); return true;
+      if(it.y > H + 40){ if((it.type === "gift" || it.type === "star" || it.type === "cane") && running){ if(combo >= 2) pops.push({x: it.x, y: H - 130, txt: "raté…", c: "#cfd8e3", t: .8}); combo = 0; hud(); } return false; }
+      ({gift: drawGift, star: drawStar, cane: drawCane, heart: drawHeart, flake: drawFlake, coal: drawCoal})[it.type](it); return true;
     });
-    drawBasket();
-    pops = pops.filter(p => { p.t -= dt; p.y -= 40 * dt; ctx.globalAlpha = Math.max(0, p.t); ctx.fillStyle = p.c; ctx.font = "700 22px Fraunces, Georgia, serif"; ctx.textAlign = "center"; ctx.fillText(p.txt, p.x, p.y); ctx.globalAlpha = 1; return p.t > 0; });
+    drawSack();
+    parts = parts.filter(p => { p.t -= dt; p.vy += 260 * dt; p.x += p.vx * dt; p.y += p.vy * dt; ctx.globalAlpha = Math.max(0, p.t); ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill(); ctx.globalAlpha = 1; return p.t > 0; });
+    pops = pops.filter(p => { p.t -= dt; p.y -= 46 * dt; ctx.globalAlpha = Math.max(0, p.t); ctx.fillStyle = p.c; ctx.font = "700 24px Fraunces, Georgia, serif"; ctx.textAlign = "center"; ctx.shadowColor = "rgba(0,0,0,.5)"; ctx.shadowBlur = 6; ctx.fillText(p.txt, p.x, p.y); ctx.shadowBlur = 0; ctx.globalAlpha = 1; return p.t > 0; });
     ctx.restore();
+    if(flash > 0){ flash -= dt; ctx.fillStyle = "rgba(255,60,60," + Math.max(0, flash) * .6 + ")"; ctx.fillRect(0, 0, W, H); }
   }
-  function start(){ items = []; pops = []; score = 0; lives = 3; elapsed = 0; spawnT = .4; hud(); panel.classList.add("hide"); running = true; }
+  function start(){ items = []; parts = []; pops = []; score = 0; lives = 3; combo = 0; slow = 0; level = 1; spawnT = .5; hud(); panel.classList.add("hide"); running = true; showBanner("C'est parti ! 🎄"); }
   function over(){
     running = false; items = [];
     const best = store.get("avent-best", 0), rec = score > best; if(rec) store.set("avent-best", score);
-    panel.innerHTML = "<h3>" + (rec ? "Nouveau record ! 🏆" : "Fini ! 🎄") + "</h3><p>Tu as attrapé <b>" + score + "</b> point" + (score > 1 ? "s" : "") + ".</p><p>Record : <b>" + Math.max(best, score) + "</b></p><button class=\"btn primary\" id=\"gStart\">Rejouer</button>";
-    panel.classList.remove("hide"); panel.querySelector("#gStart").onclick = start;
+    const medal = score >= 120 ? "🏆" : score >= 70 ? "🥇" : score >= 35 ? "🥈" : score >= 12 ? "🥉" : "🎄";
+    panel.innerHTML = '<div class="medal">' + medal + '</div><h3>' + (rec ? "Nouveau record !" : "Fini !") + '</h3><p>Tu as fait <b>' + score + '</b> point' + (score > 1 ? "s" : "") + ' (niveau ' + level + ').</p>' +
+      '<p class="small">🥉 12 · 🥈 35 · 🥇 70 · 🏆 120</p><p>Record : <b>' + Math.max(best, score) + '</b></p><button class="btn primary" id="gStart">Rejouer</button>';
+    panel.classList.remove("hide"); q("#gStart", panel).onclick = start;
   }
-  body.querySelector("#gStart").onclick = start;
+  q("#gStart", body).onclick = start;
   raf = requestAnimationFrame(frame);
   return () => { cancelAnimationFrame(raf); removeEventListener("resize", size); };
 }
 
-/* 3. habiller le bonhomme de neige */
+/* ===== 3. habiller le bonhomme de neige ===== */
 function roomSnowman(body){
-  const HATS = [["haut","🎩 Chapeau"],["noel","🎅 Bonnet de Noël"],["pompon","🧶 Bonnet"],["aucun","✖️ Rien"]];
-  const ACCS = [["aucun","✖️ Rien"],["cache","🎧 Cache-oreilles"],["lunettes","👓 Lunettes"],["noeud","🎀 Nœud"]];
-  body.innerHTML = '<svg class="stage" viewBox="0 0 360 400" preserveAspectRatio="xMidYMid meet">' +
-    '<defs><linearGradient id="smSky" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#0d2236"/><stop offset="1" stop-color="#2a5d6e"/></linearGradient></defs>' +
-    '<rect width="360" height="400" fill="url(#smSky)"/>' +
-    '<g fill="#fff" opacity=".8"><circle cx="40" cy="40" r="1.4"/><circle cx="120" cy="80" r="1"/><circle cx="300" cy="50" r="1.5"/><circle cx="250" cy="110" r="1"/><circle cx="70" cy="140" r="1.2"/><circle cx="330" cy="160" r="1"/></g>' +
+  const T = {
+    chapeau: [["hat", [["haut","🎩 Haut-de-forme"],["noel","🎅 Bonnet de Noël"],["pompon","🧶 Bonnet"],["couronne","👑 Couronne"],["renne","🦌 Bois de renne"],["elfe","🧝 Elfe"],["aucun","✖️ Rien"]]]],
+    visage: [["eyes", [["rond","👀 Normal"],["clin","😉 Clin d'œil"],["joie","😊 Content"],["coeur","😍 Amoureux"],["etoile","🤩 Étoiles"]]],
+             ["nose", [["carotte","🥕 Carotte"],["rouge","🔴 Nez rouge"],["bouton","⚫ Bouton"]]],
+             ["mouth", [["sourire","🙂 Sourire"],["rire","😄 Rire"],["bisou","😘 Bisou"],["surpris","😮 Surpris"]]],
+             ["blush", [[true,"🌸 Joues roses"],[false,"✖️ Sans"]]]],
+    echarpe: [["scarf", "colors"], ["motif", [["uni","Uni"],["rayures","Rayures"],["pois","Pois"],["flocons","Flocons"]]]],
+    tenue: [["buttons", [["charbon","⚫ Charbon"],["rouge","🔴 Rouges"],["or","🟡 Dorés"],["vert","🟢 Verts"],["flocons","❄️ Flocons"]]], ["arms", [["branches","🌿 Branches"],["moufles","🧤 Moufles"]]],
+             ["acc", [["lunettes","👓 Lunettes"],["cache","🎧 Cache-oreilles"],["noeud","🎀 Nœud pap'"],["lumieres","💡 Guirlande"],["balai","🧹 Balai"]], true]],
+    decor: [["bg", [["nuit","🌙 Nuit étoilée"],["aurore","🌌 Aurore boréale"],["jour","☀️ Journée"],["coucher","🌅 Coucher de soleil"]]]]
+  };
+  const LBL = {hat: "Chapeau", eyes: "Yeux", nose: "Nez", mouth: "Bouche", blush: "Joues", scarf: "Couleur", motif: "Motif", buttons: "Boutons", arms: "Bras", acc: "Accessoires (plusieurs possibles)", bg: "Décor"};
+  const tree = (x, y, s) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><path d="M24 0 L46 34 H36 L52 62 H40 L58 96 H-10 L8 62 H-4 L12 34 H2 Z" fill="#1f5a44"/><path d="M24 0 L46 34 H36 L52 62 H40 L58 96 H24 Z" fill="#174a37"/><rect x="19" y="96" width="10" height="14" fill="#5b3426"/><path d="M10 34 q14 6 28 0 M4 62 q20 8 40 0" stroke="#f4f8fb" stroke-width="3" fill="none" opacity=".7"/></g>';
+  body.innerHTML = '<svg class="stage" viewBox="0 0 360 400" preserveAspectRatio="xMidYMid meet"><g id="smBg"></g>' + tree(272, 222, .9) + tree(18, 236, .7) +
     '<path d="M-10 330 Q90 300 180 312 T370 322 V400 H-10 Z" fill="#eef5f8"/><path d="M-10 360 Q100 344 200 356 T370 352 V400 H-10 Z" fill="#dde9ef"/>' +
-    '<g transform="translate(270 220) scale(.9)"><path d="M24 0 L46 34 H36 L52 62 H40 L58 96 H-10 L8 62 H-4 L12 34 H2 Z" fill="#1f5a44"/><rect x="19" y="96" width="10" height="14" fill="#5b3426"/></g>' +
-    '<g transform="translate(18 236) scale(.7)"><path d="M24 0 L46 34 H36 L52 62 H40 L58 96 H-10 L8 62 H-4 L12 34 H2 Z" fill="#1f5a44"/><rect x="19" y="96" width="10" height="14" fill="#5b3426"/></g>' +
-    '<g id="bigSnow" class="snowman" transform="translate(96 40) scale(2.8)"></g></svg>' +
-    '<div class="tools"><div class="row-l">Chapeau</div><div class="opts" data-k="hat">' + HATS.map(([k, l]) => '<button class="opt" data-v="' + k + '">' + l + '</button>').join("") + '</div>' +
-    '<div class="row-l">Couleur de l\'écharpe</div><div class="opts" data-k="scarf">' + SCARVES.map(c => '<button class="sw" data-v="' + c + '" style="--c:' + c + '" aria-label="Couleur"></button>').join("") + '</div>' +
-    '<div class="row-l">Accessoire</div><div class="opts" data-k="acc">' + ACCS.map(([k, l]) => '<button class="opt" data-v="' + k + '">' + l + '</button>').join("") + '</div></div>';
+    '<g id="smSign"></g><g id="bigSnow" class="snowman" transform="translate(96 40) scale(2.8)"></g></svg>' +
+    '<div class="tools">' + tabsUI([["chapeau","🎩 Chapeau"],["visage","😊 Visage"],["echarpe","🧣 Écharpe"],["tenue","🧤 Tenue"],["decor","🌌 Décor"]]) +
+    '<div class="acts"><button data-a="rand">🎲 Surprise</button><button data-a="reset">↺ Par défaut</button></div></div>';
+  const panel = q(".tabpanel", body); let cur = "chapeau";
+  const BGS = {
+    nuit: '<defs><linearGradient id="bgA" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#0b1d2e"/><stop offset="1" stop-color="#2a5d6e"/></linearGradient></defs><rect width="360" height="400" fill="url(#bgA)"/><circle cx="300" cy="60" r="22" fill="#fff6dc"/><g fill="#fff">' + Array.from({length: 26}, (_, i) => '<circle cx="' + (i * 53 % 360) + '" cy="' + (i * 37 % 200) + '" r="' + (i % 3 ? .9 : 1.5) + '" class="tli" style="animation-delay:-' + ((i % 7) / 3).toFixed(2) + 's"/>').join("") + '</g>',
+    aurore: '<defs><linearGradient id="bgA" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#06121f"/><stop offset="1" stop-color="#173f4f"/></linearGradient><linearGradient id="au" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5affb4" stop-opacity="0"/><stop offset=".5" stop-color="#5affb4" stop-opacity=".55"/><stop offset="1" stop-color="#5affb4" stop-opacity="0"/></linearGradient><linearGradient id="au2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#9a7bff" stop-opacity="0"/><stop offset=".5" stop-color="#78c8ff" stop-opacity=".5"/><stop offset="1" stop-color="#9a7bff" stop-opacity="0"/></linearGradient></defs><rect width="360" height="400" fill="url(#bgA)"/><path class="aur" d="M-20 40 Q60 0 140 50 T300 30 T400 60 V170 Q300 130 200 160 T-20 150 Z" fill="url(#au)"/><path class="aur a2" d="M-20 90 Q80 50 170 100 T380 80 V200 Q260 170 160 200 T-20 190 Z" fill="url(#au2)"/><g fill="#fff">' + Array.from({length: 20}, (_, i) => '<circle cx="' + (i * 61 % 360) + '" cy="' + (i * 29 % 220) + '" r="1"/>').join("") + '</g>',
+    jour: '<defs><linearGradient id="bgA" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#7cc4ef"/><stop offset="1" stop-color="#d8f0fb"/></linearGradient></defs><rect width="360" height="400" fill="url(#bgA)"/><circle cx="300" cy="64" r="38" fill="#fff3b0" opacity=".3"/><circle cx="300" cy="64" r="26" fill="#fff3b0"/><g fill="#fff" opacity=".9"><ellipse cx="80" cy="70" rx="34" ry="12"/><ellipse cx="104" cy="62" rx="22" ry="12"/><ellipse cx="210" cy="110" rx="28" ry="9"/></g>',
+    coucher: '<defs><linearGradient id="bgA" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3a2a6b"/><stop offset=".55" stop-color="#e46a6a"/><stop offset="1" stop-color="#ffc483"/></linearGradient></defs><rect width="360" height="400" fill="url(#bgA)"/><circle cx="180" cy="300" r="46" fill="#ffd27a" opacity=".9"/><g fill="#fff" opacity=".6"><circle cx="60" cy="40" r="1"/><circle cx="140" cy="24" r="1.2"/><circle cx="290" cy="50" r="1"/></g>'
+  };
   function paint(){
-    body.querySelector("#bigSnow").innerHTML = snowmanSVG(snowCfg); paintMainSnowman();
-    body.querySelectorAll(".opts").forEach(o => o.querySelectorAll("button").forEach(b => b.classList.toggle("on", snowCfg[o.dataset.k] === b.dataset.v)));
+    q("#smBg", body).innerHTML = BGS[snowCfg.bg] || BGS.nuit;
+    q("#bigSnow", body).innerHTML = snowmanSVG(snowCfg); paintMainSnowman();
+    q("#smSign", body).innerHTML = snowCfg.name ? '<g transform="translate(286 262)"><rect x="-2" y="24" width="5" height="44" fill="#6b4226"/><rect x="-48" y="0" width="100" height="30" rx="4" fill="#8a5a2b" stroke="#5b3426" stroke-width="2"/><text x="2" y="20" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-size="13" font-weight="700" fill="#fff4dc">' + esc(snowCfg.name) + '</text><path d="M-48 2 q50 -8 100 0" fill="none" stroke="#f4f8fb" stroke-width="4" stroke-linecap="round"/></g>' : "";
   }
-  body.querySelector(".tools").addEventListener("click", e => {
+  function showTab(t){
+    cur = t; body.querySelectorAll(".tab").forEach(b => b.classList.toggle("on", b.dataset.t === t));
+    panel.innerHTML = T[t].map(([k, opts, multi]) => '<div class="row-l">' + LBL[k] + '</div><div class="opts" data-k="' + k + '"' + (multi ? ' data-multi="1"' : "") + '>' +
+      (opts === "colors" ? PALETTE.map(c => '<button class="sw' + (snowCfg.scarf === c ? " on" : "") + '" data-v="' + c + '" style="--c:' + c + '" aria-label="Couleur"></button>').join("")
+        : opts.map(([v, l]) => '<button class="opt' + ((multi ? snowCfg[k].includes(v) : snowCfg[k] === v) ? " on" : "") + '" data-v="' + v + '">' + l + '</button>').join("")) + '</div>').join("") +
+      (t === "decor" ? '<div class="row-l">Son prénom (sur un panneau)</div><input class="namein" id="smName" maxlength="14" placeholder="Donne-lui un prénom…" value="' + esc(snowCfg.name) + '">' : "");
+    const ni = q("#smName", panel); if(ni) ni.addEventListener("input", () => { snowCfg.name = ni.value.trim(); store.set("avent-snowman", snowCfg); paint(); });
+  }
+  q(".tabs", body).addEventListener("click", e => { const b = e.target.closest(".tab"); if(b) showTab(b.dataset.t); });
+  panel.addEventListener("click", e => {
     const b = e.target.closest("button[data-v]"); if(!b) return;
-    snowCfg[b.closest(".opts").dataset.k] = b.dataset.v; store.set("avent-snowman", snowCfg); paint();
+    const box = b.closest(".opts"), k = box.dataset.k; let v = b.dataset.v; if(v === "true") v = true; if(v === "false") v = false;
+    if(box.dataset.multi){ const s = new Set(snowCfg[k]); s.has(v) ? s.delete(v) : s.add(v); snowCfg[k] = [...s]; } else snowCfg[k] = v;
+    store.set("avent-snowman", snowCfg); paint(); showTab(cur);
   });
-  paint();
+  q(".acts", body).addEventListener("click", e => {
+    const a = e.target.closest("button"); if(!a) return;
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+    if(a.dataset.a === "rand"){
+      snowCfg = Object.assign({}, snowCfg, {hat: pick(T.chapeau[0][1])[0], eyes: pick(T.visage[0][1])[0], nose: pick(T.visage[1][1])[0], mouth: pick(T.visage[2][1])[0], blush: Math.random() < .6,
+        scarf: pick(PALETTE), motif: pick(T.echarpe[1][1])[0], buttons: pick(T.tenue[0][1])[0], arms: pick(T.tenue[1][1])[0], acc: T.tenue[2][1].map(x => x[0]).filter(() => Math.random() < .3)}); hearts(a, ["✨","⛄","❄️"]); }
+    if(a.dataset.a === "reset"){ snowCfg = Object.assign({}, SNOW_DEF, {acc: [], name: snowCfg.name, bg: snowCfg.bg}); }
+    store.set("avent-snowman", snowCfg); paint(); showTab(cur);
+  });
+  paint(); showTab("chapeau");
 }
 
-/* 4. la lune : faire un vœu */
+/* ===== 4. la lune : le ciel des vœux ===== */
 function roomVoeu(body){
-  let n = store.get("avent-wishes", 0);
-  body.innerHTML = '<div class="wish"><div class="stars" id="wstars"></div><div class="wmoon"></div>' +
-    '<div class="wcard"><h3>Fais un vœu ✨</h3><p>Écris ton vœu, une étoile filante va l\'emporter. Il reste secret.</p>' +
+  let wishes = store.get("avent-wishlist", []); const STARC = {or: "#ffd166", rose: "#ff9ec4", bleu: "#9fd8ff", blanc: "#ffffff"};
+  let col = "or";
+  body.innerHTML = '<div class="wish"><div class="stars" id="wstars"></div><div class="shoot"></div><div class="wmoon"></div><div class="wsky" id="wsky"></div>' +
+    '<div class="wcard"><h3>Fais un vœu ✨</h3><p>Ton vœu deviendra une étoile dans ton ciel. Touche une étoile pour le relire.</p>' +
     '<textarea id="wtext" maxlength="160" placeholder="Je souhaite…"></textarea>' +
-    '<button class="btn primary" id="wsend">Confier à une étoile ✨</button><p class="wcount" id="wcount"></p></div></div>';
-  const ws = body.querySelector("#wstars");
-  for(let i = 0; i < 70; i++){ const e = document.createElement("i"); e.style.left = Math.random() * 100 + "%"; e.style.top = Math.random() * 100 + "%"; e.style.animationDelay = -Math.random() * 3 + "s"; ws.appendChild(e); }
-  const cnt = () => body.querySelector("#wcount").textContent = n ? n + " vœu" + (n > 1 ? "x" : "") + " déjà envoyé" + (n > 1 ? "s" : "") + " 🌠" : "";
-  cnt();
-  body.querySelector("#wsend").onclick = () => {
-    const ta = body.querySelector("#wtext"), v = ta.value.trim();
+    '<div class="wcols">Couleur de l\'étoile ' + Object.entries(STARC).map(([k, c]) => '<button class="sw small' + (k === col ? " on" : "") + '" data-c="' + k + '" style="--c:' + c + '" aria-label="' + k + '"></button>').join("") + '</div>' +
+    '<button class="btn primary" id="wsend">Confier à une étoile ✨</button><p class="wcount" id="wcount"></p></div><div class="wbubble" id="wbubble"></div></div>';
+  const ws = q("#wstars", body);
+  for(let i = 0; i < 80; i++){ const e = document.createElement("i"); e.style.left = Math.random() * 100 + "%"; e.style.top = Math.random() * 100 + "%"; e.style.animationDelay = -Math.random() * 3 + "s"; ws.appendChild(e); }
+  const sky = q("#wsky", body), bubble = q("#wbubble", body), wrap = q(".wish", body);
+  function drawSky(){
+    sky.innerHTML = "";
+    if(wishes.length > 1){ const svg = document.createElementNS(NS, "svg"); svg.setAttribute("class", "wlines"); svg.setAttribute("viewBox", "0 0 100 100"); svg.setAttribute("preserveAspectRatio", "none");
+      svg.innerHTML = '<polyline points="' + wishes.map(w => w.x + "," + w.y).join(" ") + '" fill="none" stroke="rgba(255,255,255,.3)" stroke-width=".25" stroke-dasharray="1 1.2" vector-effect="non-scaling-stroke"/>'; sky.appendChild(svg); }
+    wishes.forEach((w, i) => { const b = document.createElement("button"); b.className = "wstar"; b.style.left = w.x + "%"; b.style.top = w.y + "%"; b.style.setProperty("--c", STARC[w.c] || "#ffd166"); b.style.animationDelay = (-i * .7) + "s";
+      b.setAttribute("aria-label", "Vœu " + (i + 1)); b.onclick = ev => { ev.stopPropagation(); bubble.innerHTML = "<small>Vœu n°" + (i + 1) + (w.d ? " · " + esc(w.d) : "") + "</small>" + esc(w.t);
+        const r = b.getBoundingClientRect(), pr = wrap.getBoundingClientRect(); bubble.style.left = Math.min(pr.width - 240, Math.max(10, r.left - pr.left - 100)) + "px"; bubble.style.top = (r.top - pr.top + 28) + "px"; bubble.classList.add("show"); };
+      sky.appendChild(b); });
+    const n = wishes.length; q("#wcount", body).textContent = n ? n + " étoile" + (n > 1 ? "s" : "") + " dans ton ciel 🌠" : "";
+  }
+  wrap.addEventListener("click", e => { if(!e.target.closest(".wstar")) bubble.classList.remove("show"); });
+  q(".wcols", body).addEventListener("click", e => { const b = e.target.closest(".sw"); if(!b) return; col = b.dataset.c; q(".wcols", body).querySelectorAll(".sw").forEach(x => x.classList.toggle("on", x === b)); });
+  drawSky();
+  q("#wsend", body).onclick = () => {
+    const ta = q("#wtext", body), v = ta.value.trim();
     if(!v) return toast("Écris d'abord ton vœu ✍️");
-    const r = ta.getBoundingClientRect(), f = document.createElement("div");
+    const p = paris(now()), w = {t: v, c: col, x: 8 + Math.random() * 74, y: 5 + Math.random() * 22, d: p.d + "/" + String(p.m).padStart(2, "0")};
+    const r = ta.getBoundingClientRect(), pr = wrap.getBoundingClientRect(), f = document.createElement("div");
     f.className = "wfly"; f.textContent = v; f.style.left = r.left + "px"; f.style.top = r.top + "px";
-    f.style.setProperty("--tx", (innerWidth - r.left + 40) + "px"); f.style.setProperty("--ty", (-r.top - 80) + "px");
+    f.style.setProperty("--tx", (pr.left + pr.width * w.x / 100 - r.left) + "px"); f.style.setProperty("--ty", (pr.top + pr.height * w.y / 100 - r.top) + "px");
     document.body.appendChild(f); setTimeout(() => f.remove(), 2300);
-    ta.value = ""; ta.blur(); n++; store.set("avent-wishes", n); cnt();
-    setTimeout(() => toast("Ton vœu est parti avec l'étoile filante 🌠"), 1500);
+    ta.value = ""; ta.blur(); wishes.push(w); store.set("avent-wishlist", wishes); store.set("avent-wishes", wishes.length);
+    setTimeout(() => { drawSky(); toast("Ton vœu brille maintenant dans le ciel 🌠"); }, 1900);
   };
 }
 
-/* --- la scène d'accueil --- */
+/* ===== 5. la boîte aux lettres : lettre au Père Noël ===== */
+function roomLettre(body){
+  const L = Object.assign({items: [], posted: false}, store.get("avent-lettre", {}));
+  body.innerHTML = '<div class="letterwrap"><div class="letter" id="letter"><div class="stamp">🎅<small>PÔLE NORD</small></div>' +
+    '<div class="lt-h">Cher Père Noël,</div><div class="lt-p">Cette année, j\'ai été très sage (enfin, presque). Voici ce qui me ferait plaisir :</div>' +
+    '<ul class="lt-list" id="ltList"></ul><div class="lt-add"><input id="ltIn" maxlength="60" placeholder="Ajoute une idée…"><button id="ltAdd" aria-label="Ajouter">＋</button></div>' +
+    '<div class="lt-sign">Bisous,<br>' + esc(CONFIG.herName || "moi") + ' ❤️</div></div>' +
+    '<button class="btn primary" id="ltPost">📮 Poster la lettre</button><p class="tip">Tu peux la modifier quand tu veux. Coche ce que tu as reçu 🎁</p></div>';
+  const list = q("#ltList", body), inp = q("#ltIn", body);
+  const save = () => store.set("avent-lettre", L);
+  function draw(){
+    list.innerHTML = L.items.length ? L.items.map((it, i) => '<li class="' + (it.ok ? "ok" : "") + '"><button class="ck" data-i="' + i + '" aria-label="Reçu">' + (it.ok ? "✓" : "") + '</button><span>' + esc(it.t) + '</span><button class="del" data-i="' + i + '" aria-label="Supprimer">×</button></li>').join("")
+      : '<li class="empty">…ta liste est vide pour l\'instant ✍️</li>';
+    q("#ltPost", body).textContent = L.posted ? "📮 Reposter la lettre" : "📮 Poster la lettre";
+  }
+  draw();
+  const add = () => { const v = inp.value.trim(); if(!v) return; L.items.push({t: v, ok: false}); inp.value = ""; save(); draw(); };
+  q("#ltAdd", body).onclick = add; inp.addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); add(); } });
+  list.addEventListener("click", e => { const ck = e.target.closest(".ck"), del = e.target.closest(".del");
+    if(ck){ const it = L.items[+ck.dataset.i]; it.ok = !it.ok; if(it.ok) hearts(ck, ["🎁","✨","❤️"]); }
+    if(del) L.items.splice(+del.dataset.i, 1); if(ck || del){ save(); draw(); } });
+  q("#ltPost", body).onclick = () => {
+    if(!L.items.length) return toast("Ajoute au moins une idée à ta liste ✍️");
+    const lt = q("#letter", body); lt.classList.remove("fly"); void lt.offsetWidth; lt.classList.add("fly");
+    setTimeout(() => { lt.classList.remove("fly"); L.posted = true; save(); draw(); toast("✉️ Ta lettre est partie au Pôle Nord !"); }, 1600);
+  };
+}
+
+/* ===== la scène d'accueil ===== */
 (function(){
   const intro = document.getElementById("intro");
   if(!intro) return;
@@ -1205,11 +1545,12 @@ function roomVoeu(body){
   document.getElementById("hotWindow").addEventListener("click", e => openRoom("Le salon", e.currentTarget, roomSalon));
   document.getElementById("hotChimney").addEventListener("click", e => openRoom("Sur le toit", e.currentTarget, roomToit));
   document.getElementById("hotSnow").addEventListener("click", e => openRoom("Habille-moi !", e.currentTarget, roomSnowman));
-  document.getElementById("moonBtn").addEventListener("click", e => openRoom("Fais un vœu", e.currentTarget, roomVoeu));
-  const UKO = MSG.uko || ["Miaou ! 🎄"];
+  document.getElementById("moonBtn").addEventListener("click", e => openRoom("Le ciel des vœux", e.currentTarget, roomVoeu));
+  document.getElementById("hotMail").addEventListener("click", e => openRoom("Lettre au Père Noël", e.currentTarget, roomLettre));
+  const UKO = MSG.uko || ["Miaou ! 🎄"]; let ukoN = 0;
   document.getElementById("ukoBtn").addEventListener("click", e => {
-    const b = e.currentTarget; b.classList.remove("purr"); void b.offsetWidth; b.classList.add("purr");
-    hearts(b); toast(UKO[Math.floor(Math.random() * UKO.length)]);
+    const b = e.currentTarget; b.classList.remove("purr"); void b.offsetWidth; b.classList.add("purr"); ukoN++;
+    hearts(b); toast(ukoN % 10 === 0 ? "Uko t'adore. Officiellement. 💕" : UKO[Math.floor(Math.random() * UKO.length)]);
   });
   if(location.hash === "#apercu"){ alive = false; intro.classList.add("gone"); document.body.classList.remove("intro-on"); }
 })();
